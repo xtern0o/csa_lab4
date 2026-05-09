@@ -63,7 +63,7 @@ it's META inf (raw info for dev only)
 | `d+` | `( al ah bl bh -- rl rh )` | сложение 2 64-битных чисел. Каждое занимает 2 ячейки стека (младшая и старшая части)
 | **Bitwise logic** | | |
 | `&` | `( a b -- res )` | TOS -> NOS & TOS |
-| `|` | `( a b -- res )` | TOS -> NOS or TOS |
+| `\|` | `( a b -- res )` | TOS -> NOS or TOS |
 | `^` | `( a b -- res )` | TOS -> NOS ^ TOS | 
 | `~` | `( a -- res )` | TOS -> ~TOS (not) |
 | **I/O** | | |
