@@ -12,7 +12,9 @@ class Opcode(str, Enum):
     CLR = "clr"
     NEG = "neg"
     ADD = "add"
+    ADC = "adc"
     SUB = "sub"
+    SBC = "sbc"
     MUL = "mul"
     DIV = "div"
     CMP = "cmp"
@@ -47,6 +49,9 @@ class Opcode(str, Enum):
     def __str__(self) -> str:
         return self.value
     
+
+# генерация порядковых номеров операций для микрокода
+OPCODE_NUM = {opcode: idx for idx, opcode in enumerate(Opcode)}
 
 OPCODE_NARG = {
     Opcode.MOVE: 2, Opcode.MOVEA: 2, 
@@ -90,3 +95,51 @@ class Instruction:
             raise ValueError(
                 f"Opcode {self.opcode}: expected: {expected_narg} args, but got: {len(self.operands)}"
             )
+    
+    def to_bytes(self) -> bytes:
+        """
+        Преобразование инструкции в бинарный код (immutable bytes sequence)
+        """
+        opcode_num = OPCODE_NUM[self.opcode]
+        src_byte = 0x00
+        dest_byte = 0x00
+        reserve_byte = 0x00
+
+        extra_words = bytearray()
+
+        if len(self.operands) >= 1:
+            op1 = self.operands[0]
+            
+            register_val = op1.value if op1.mode != AddrMode.IMMEDIATE else 0
+            src_byte = (op1.mode.value << 4) | (register_val & 0xF)
+
+            if op1.mode == AddrMode.IMMEDIATE:
+                extra_words.extend(
+                    op1.value.to_bytes(
+                        4, 
+                        byteorder='little', 
+                        signed=True,
+                    )
+                )
+            
+        if len(self.operands) == 2:
+            op2 = self.operands[1]
+
+            register_val = op2.value if op2.mode != AddrMode.IMMEDIATE else 0
+            dest_byte = (op2.mode.value << 4) | (register_val & 0xF)
+
+            if op2.mode == AddrMode.IMMEDIATE:
+                extra_words.extend(
+                    op2.value.to_bytes(
+                        4,
+                        byteorder='little',
+                        signed=True
+                    )
+                )
+        
+        result_word = bytes([opcode_num, reserve_byte, src_byte, dest_byte])
+        return result_word + bytes(extra_words)
+
+
+# instr = Instruction(Opcode.ADD, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.ADDR_REG_DIRECT, 4)])
+# print(list(instr.to_bytes()))
