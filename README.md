@@ -45,6 +45,8 @@ it's META inf (raw info for dev only)
 | `<name>` | `( -- addr )` | кладет на стек адрес объявленной переменной | 
 | `!` | `( val addr -- )` | `val -> mem[addr]` |
 | `@` | `( addr -- val )` | `mem[addr] -> TOS` |
+| `!+` | `( val addr -- addr+1 )` | `val -> mem[addr]; addr+1 -> TOS` | 
+| `@+` | `( addr -- addr+1 val)` | `mem[addr] -> TOS; addr+1 -> NOS` |
 | **Stack ops** | | |
 | `dup` | `( a -- a a )` | TOS -> TOS, NOS |
 | `drop` | `( a -- )` | TOS -> /dev/null |
