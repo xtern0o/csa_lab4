@@ -55,7 +55,9 @@ OPCODE_NUM = {opcode: idx for idx, opcode in enumerate(Opcode)}
 
 OPCODE_NARG = {
     Opcode.MOVE: 2, Opcode.MOVEA: 2, 
-    Opcode.ADD: 2, Opcode.SUB: 2, Opcode.MUL: 2, Opcode.DIV: 2, Opcode.CMP: 2,
+    Opcode.ADD: 2, Opcode.ADC: 2, Opcode.SUB: 2, Opcode.SBC: 2, 
+    Opcode.MUL: 2, Opcode.DIV: 2, Opcode.CMP: 2,
+    
     Opcode.AND_OP: 2, Opcode.OR_OP: 2, Opcode.XOR: 2,
     Opcode.ASL: 2, Opcode.ASR: 2, Opcode.LSL: 2, Opcode.LSR: 2,
     
