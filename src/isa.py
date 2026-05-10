@@ -17,6 +17,7 @@ class Opcode(str, Enum):
     SBC = "sbc"
     MUL = "mul"
     DIV = "div"
+    REM = "rem"
     CMP = "cmp"
     
     NOT_OP = "not"
@@ -29,21 +30,22 @@ class Opcode(str, Enum):
     LSL = "lsl"
     LSR = "lsr"
     
-    JUMP = "jump"
-    BCC  = "bcc"
-    BCS  = "bcs"
-    BEQ  = "beq"
-    BNE  = "bne"
-    BLT  = "blt"
-    BGT  = "bgt"
-    BLE  = "ble"
-    BGE  = "bge"
-    BMI  = "bmi"
-    BPL  = "bpl"
-    BVC  = "bvc"
-    BVS  = "bvs"
+    JMP = "jmp"
+    BCC = "bcc"
+    BCS = "bcs"
+    BEQ = "beq"
+    BNE = "bne"
+    BLT = "blt"
+    BGT = "bgt"
+    BLE = "ble"
+    BGE = "bge"
+    BMI = "bmi"
+    BPL = "bpl"
+    BVC = "bvc"
+    BVS = "bvs"
     
     JSR  = "jsr"
+    RET  = "ret"
     HALT = "halt"
 
     def __str__(self) -> str:
@@ -56,18 +58,18 @@ OPCODE_NUM = {opcode: idx for idx, opcode in enumerate(Opcode)}
 OPCODE_NARG = {
     Opcode.MOVE: 2, Opcode.MOVEA: 2, 
     Opcode.ADD: 2, Opcode.ADC: 2, Opcode.SUB: 2, Opcode.SBC: 2, 
-    Opcode.MUL: 2, Opcode.DIV: 2, Opcode.CMP: 2,
-    
+    Opcode.MUL: 2, Opcode.DIV: 2, Opcode.REM: 2, Opcode.CMP: 2,
+
     Opcode.AND_OP: 2, Opcode.OR_OP: 2, Opcode.XOR: 2,
     Opcode.ASL: 2, Opcode.ASR: 2, Opcode.LSL: 2, Opcode.LSR: 2,
     
     Opcode.CLR: 1, Opcode.NEG: 1, Opcode.NOT_OP: 1,
-    Opcode.JUMP: 1, Opcode.JSR: 1,
+    Opcode.JMP: 1, Opcode.JSR: 1,
     Opcode.BCC: 1, Opcode.BCS: 1, Opcode.BEQ: 1, Opcode.BNE: 1, 
     Opcode.BLT: 1, Opcode.BGT: 1, Opcode.BLE: 1, Opcode.BGE: 1, 
     Opcode.BMI: 1, Opcode.BPL: 1, Opcode.BVC: 1, Opcode.BVS: 1,
     
-    Opcode.HALT: 0
+    Opcode.HALT: 0, Opcode.RET: 0,
 }
 
 
@@ -101,6 +103,7 @@ class Instruction:
     def to_bytes(self) -> bytes:
         """
         Преобразование инструкции в бинарный код (immutable bytes sequence)
+        Little-Endian
         """
         opcode_num = OPCODE_NUM[self.opcode]
         src_byte = 0x00
@@ -141,7 +144,14 @@ class Instruction:
         
         result_word = bytes([opcode_num, reserve_byte, src_byte, dest_byte])
         return result_word + bytes(extra_words)
+    
+    def size_bytes(self) -> int:
+        return len(self.to_bytes())
+    
 
 
-# instr = Instruction(Opcode.ADD, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.ADDR_REG_DIRECT, 4)])
-# print(list(instr.to_bytes()))
+instr = Instruction(Opcode.ADD, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.IMMEDIATE, 4)])
+print(instr.size_bytes())
+# print(list(map(lambda x: int(x, 2), instr.to_bytes())))
+
+# print(OPCODE_NUM)

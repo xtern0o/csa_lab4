@@ -15,13 +15,13 @@ it's META inf (raw info for dev only)
 - `d1` - **NOS** value - stack oprimization
 - `d2,d3` - 64bit long arithmetics
 - `d4` - `I` (loop counter)
-- `d5..d7` - *free*
 
 ### `a0..a7`
 - `a6` - **DSP** (Data Stack Pointer)
 - `a7` - **RSP** (Return Stack Pointer)
 - `a0` - **String pointer** (удобно для печати чтобы не загружать строку целиком)
-- `a1..a5` - *free*
+
+> стек растет **вниз** (от большего адреса к меньшим)
 
 
 ## Instructions
