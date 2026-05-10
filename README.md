@@ -12,7 +12,6 @@ it's META inf (raw info for dev only)
 
 ### `d0..d7`
 - `d0` - **TOS** value - stack optimization
-- `d1` - **NOS** value - stack oprimization
 - `d2,d3` - 64bit long arithmetics
 - `d4` - `I` (loop counter)
 
@@ -22,6 +21,14 @@ it's META inf (raw info for dev only)
 - `a0` - **String pointer** (удобно для печати чтобы не загружать строку целиком)
 
 > стек растет **вниз** (от большего адреса к меньшим)
+
+**Data Stack выглядит так:**
+- `D0`
+- `(A6)`
+- `-(A6)`
+- `--(A6)`
+- ...
+> Первый элемент стека всегда находится в `D0`. Начиная со второго - размещаются в памяти.
 
 
 ## Instructions

@@ -87,6 +87,21 @@ class Operand:
     mode: AddrMode      # режим адресации
     value: int          # register number OR number (for imm)
 
+    def __str__(self) -> str:
+        if self.mode == AddrMode.DATA_REG_DIRECT:
+            return f"D{self.value}"
+        elif self.mode == AddrMode.ADDR_REG_DIRECT:
+            return f"A{self.value}"
+        elif self.mode == AddrMode.ADDR_REG_INDIRECT:
+            return f"(A{self.value})"
+        elif self.mode == AddrMode.POST_INC:
+            return f"(A{self.value})+"
+        elif self.mode == AddrMode.PRE_DEC:
+            return f"-(A{self.value})"
+        elif self.mode == AddrMode.IMMEDIATE:
+            return f"#{self.value}"
+        return str(self.value)
+
 
 @dataclass
 class Instruction:
@@ -146,8 +161,25 @@ class Instruction:
         return result_word + bytes(extra_words)
     
     def size_bytes(self) -> int:
-        return len(self.to_bytes())
+        """
+        Вычисление итогового размера инструкции без выполнения полного цикла превращения в байт-код
+        """
+        size = 4
+        if len(self.operands) >= 1:
+            size += (self.operands[0].mode == AddrMode.IMMEDIATE) * 4
+        if len(self.operands) == 2:
+            size += (self.operands[1].mode == AddrMode.IMMEDIATE) * 4
+        return size
     
+    def __str__(self):
+        opcode_str = str(self.opcode.value).upper()
+        if not self.operands:
+            return opcode_str
+        
+        operands_str = ", ".join(str(op) for op in self.operands)
+        return f"{opcode_str:<6} {operands_str}"
+
+
 
 
 instr = Instruction(Opcode.ADD, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.IMMEDIATE, 4)])

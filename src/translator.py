@@ -88,6 +88,8 @@ class Translator:
                 var_name = next(tokens_iter)
                 self.variables[var_name] = self.data_addr
                 self.data_addr += self.WORD_SIZE
+                self.data_memory.extend(b'\x00' * self.WORD_SIZE)
+
             
             elif token == ":":
                 func_name = next(tokens_iter)
@@ -157,12 +159,69 @@ class Translator:
             elif token == "~":
                 self.add_instruction(Opcode.NOT_OP, [Operand(AddrMode.DATA_REG_DIRECT, D0)])
 
-                
+            elif token == "d+":
+                # ( al ah bl bh -- rl rh )
+                # D0 = bh, (A6) = bl, -(A6) = ah, --(A6) = al
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D1)]) # D1 = bl
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D2)]) # D2 = ah
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D3)]) # D3 = al
+
+                # D0 = bh, D1 = bl
+                # +
+                # D2 = ah, D3 = al
+                self.add_instruction(Opcode.ADD, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D3)])
+                self.add_instruction(Opcode.ADC, [Operand(AddrMode.DATA_REG_DIRECT, D2), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+
+                # TOS = rh
+                # NOS <- D3 = rl
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D3), Operand(AddrMode.PRE_DEC, A6)])
+            
+            # comparison processing
+            elif token in {'=', '<', '>'}:
+                # D1 = a, D0 = b
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D1)])
+
+                # flags(D1 - D0) = flags(a - b)
+                self.add_instruction(Opcode.CMP, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.DATA_REG_DIRECT, D1)])
+
+                # clear D0 (default result is 0)
+                self.add_instruction(Opcode.CLR, [Operand(AddrMode.DATA_REG_DIRECT, D0)])
+
+                jmp_opcode = None
+                if token == '=': jmp_opcode = Opcode.BNE    # a != b -> jump away
+                elif token == '>': jmp_opcode = Opcode.BLE  # a <= b -> jump away
+                elif token == '<': jmp_opcode = Opcode.BGE  # a >= b -> jump away
+
+                # адрес-заглушка 0
+                jmp_inst = self.add_instruction(jmp_opcode, [Operand(AddrMode.IMMEDIATE, 0)])
+
+                # если мы не перепрыгнули, значит условие истинно (D0 = 1)
+                self.add_instruction(Opcode.ADD, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+
+                # записываем текущий адрес в инструкцию перехода
+                jmp_inst.operands[0].value = self.instr_addr
+
+
+            # variable processing
             elif token in self.variables:
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
                 addr = self.variables[token]
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, addr), Operand(AddrMode.DATA_REG_DIRECT, D0)])
 
+            # number processing
+            elif token.lstrip('-').isdigit():
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
+                val = int(token)
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, val), Operand(AddrMode.DATA_REG_DIRECT, D0)])
 
 
 
+prog = """
+1 2 >
+"""
+
+t = Translator()
+t.translate(Parser.tokenize(prog))
+
+print("\n".join([str(i) for i in t.instr_memory]))
+print(t.data_memory)
