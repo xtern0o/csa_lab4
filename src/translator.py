@@ -6,13 +6,14 @@ from isa import *
 class Parser:
     RESERVED_WORDS = {
         "var", "!", "@", "dup", "swap", "over", "drop",     # stack/memory
+        ">r", "r>", "r@",                                   # return stack
         "@+", "!+",                                         # stack/memory cisc features
         "&", "|", "^", "~",                                 # logical gates
         "+", "-", "*", "/", "mod", "=", ">", "<", "d+",     # arithmetic
-        ".", "key", "emit", '."',                           # io console
+        ".", "key", "emit", "type", "s.", '."',             # io console
         "if", "else", "endif", "begin", "until",            # control flow
         ":", ";",                                           # begin/end subroutine
-        "in", "out"                                         # custom port i/o
+        "in", "out",                                        # custom port i/o
         "(", ")", "\\",                                     # comments
     }
 
@@ -23,6 +24,7 @@ class Parser:
         - удаление комментариев вида '\\...'
         - замена символов переноса строк и табуляции на пробелы
         - удаление комментариев вида '(...)'
+
         -> возвращает готовый список токенов
         """
         src_code = re.sub(r'\\.*', '', src_code)
@@ -30,8 +32,12 @@ class Parser:
         src_code = re.sub(r'\(.*?\)', '', src_code)
 
         # паттерн для поиска любых непробельных символов: \S+
-        # паттерн для поиска '."..."': \."\s+.*?"
-        tokens = re.findall(r'\."\s+.*?"|\S+', src_code)
+        # паттерны для строковых литералов: ." ..." и "..."
+        tokens = re.findall(r'\."\s+.*?"|".*?"|\S+', src_code)
+
+        # все кроме строк - регистронезависимые токены
+        tokens = [t if (t.startswith('."') or t.startswith('"')) else t.lower() for t in tokens]
+
         return tokens
     
 
@@ -117,6 +123,21 @@ class Translator:
             elif token == "drop":
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
 
+            elif token == ">r":
+                # data: ( x -- ), return: ( -- x)
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A7)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+
+            elif token == "r>":
+                # data: ( -- x ), return: (x -- )
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A7), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+
+            elif token == "r@":
+                # data: ( -- x ), return: (x -- x)
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.ADDR_REG_INDIRECT, A7), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+
             elif token == "swap":
                 # ( a b -- b a )
                 # читаем а без сдвига указателя
@@ -183,29 +204,67 @@ class Translator:
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D3), Operand(AddrMode.PRE_DEC, A6)])
             
             # comparison processing
+            elif token == "begin":
+                # mark loop start
+                loop_addr = self.instr_addr
+                self.control_flow_stack.append(('begin', loop_addr))
+            
+            elif token == "until":
+                # ( flag -- )
+                # if flag == 0, loop back to begin; else exit
+                if not self.control_flow_stack or self.control_flow_stack[-1][0] != 'begin':
+                    raise Exception("until without matching begin")
+                
+                _, loop_addr = self.control_flow_stack.pop()
+                
+                self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, loop_addr)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+
             elif token in {'=', '<', '>'}:
-                # D1 = a, D0 = b
+                # ( a b -- flag )
+                # D0 = b (TOS), (A6) = a (NOS)
+                
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D1)])
-
-                # flags(D1 - D0) = flags(a - b)
                 self.add_instruction(Opcode.CMP, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.DATA_REG_DIRECT, D1)])
-
-                # clear D0 (default result is 0)
                 self.add_instruction(Opcode.CLR, [Operand(AddrMode.DATA_REG_DIRECT, D0)])
-
+                
                 jmp_opcode = None
-                if token == '=': jmp_opcode = Opcode.BNE    # a != b -> jump away
-                elif token == '>': jmp_opcode = Opcode.BLE  # a <= b -> jump away
-                elif token == '<': jmp_opcode = Opcode.BGE  # a >= b -> jump away
-
-                # адрес-заглушка 0
+                if token == '=': jmp_opcode = Opcode.BNE    # if a != b, jump (condition false)
+                elif token == '>': jmp_opcode = Opcode.BLE  # if a <= b, jump (condition false)  
+                elif token == '<': jmp_opcode = Opcode.BGE  # if a >= b, jump (condition false)
+                
                 jmp_inst = self.add_instruction(jmp_opcode, [Operand(AddrMode.IMMEDIATE, 0)])
-
-                # если мы не перепрыгнули, значит условие истинно (D0 = 1)
                 self.add_instruction(Opcode.ADD, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
-
-                # записываем текущий адрес в инструкцию перехода
+                
                 jmp_inst.operands[0].value = self.instr_addr
+
+            elif token == "if":
+                # ( flag -- )
+                # if D0 == 0, jump to else/endif
+                jmp_inst = self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, 0)])
+                self.control_flow_stack.append(('if', jmp_inst))
+
+            elif token == "else":
+                if not self.control_flow_stack or self.control_flow_stack[-1][0] != 'if':
+                    raise Exception("else without matching if")
+                
+                _, if_jmp = self.control_flow_stack.pop()
+                
+                if_jmp.operands[0].value = self.instr_addr
+                
+                else_jmp = self.add_instruction(Opcode.JMP, [Operand(AddrMode.IMMEDIATE, 0)])
+                self.control_flow_stack.append(('else', else_jmp))
+
+            elif token == "endif":
+                if not self.control_flow_stack or self.control_flow_stack[-1][0] not in ('if', 'else'):
+                    raise Exception("endif without matching if/else")
+                
+                _, jmp_inst = self.control_flow_stack.pop()
+                
+                jmp_inst.operands[0].value = self.instr_addr
+                
+                # drop flag after if/else
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
 
             # variable processing
             elif token in self.variables:
@@ -216,7 +275,7 @@ class Translator:
             elif token == "out":
                 # D0 = port, (A6) = value
 
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Opcode(AddrMode.DATA_REG_DIRECT, D1)]) # D1 = val
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D1)]) # D1 = val
                 self.add_instruction(Opcode.OUT, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
 
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
@@ -242,59 +301,113 @@ class Translator:
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
             
             elif token == "emit":
-                # print char from TOS to port 1
-                self.add_instruction(Opcode.OUT, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.IMMEDIATE, 1)])
+                # print char from TOS to port 2
+                self.add_instruction(Opcode.OUT, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.IMMEDIATE, 2)])
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
             
             elif token == "key":
-                # read char from port 2 to TOS
+                # read char from port 3 to TOS
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
-                self.add_instruction(Opcode.IN, [Operand(AddrMode.IMMEDIATE, 2), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.IN, [Operand(AddrMode.IMMEDIATE, 3), Operand(AddrMode.DATA_REG_DIRECT, D0)])
             
-            elif token.startswith('."'):
-                # string literal format: ." Hello"
-                
-                match = re.search(r'\."\s+(.*)"', token)
-                text = match.group(1) if match else ""
-                
-                # pstr: length in the first word + chars
-                str_addr = self.data_addr
-                self.data_memory.extend(len(text).to_bytes(self.WORD_SIZE, 'little', signed=True))
-                self.data_addr += self.WORD_SIZE
-                
-                for char in text:
-                    self.data_memory.extend(ord(char).to_bytes(self.WORD_SIZE, 'little', signed=True))
-                    self.data_addr += self.WORD_SIZE
-                
-                # A0 = string pointer
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, str_addr), Operand(AddrMode.ADDR_REG_DIRECT, A0)])
-                # D4 = i loop counter
+            elif token == "type" or token == "s.":
+                # print string from address in TOS to port 2
+                # D0 = string address (pstr)
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.ADDR_REG_DIRECT, A0)])
+                # D4 = length
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A0), Operand(AddrMode.DATA_REG_DIRECT, D4)])
                 
                 # loop:
                 loop_start = self.instr_addr
-                
-                # check if counter == 0
                 self.add_instruction(Opcode.CMP, [Operand(AddrMode.IMMEDIATE, 0), Operand(AddrMode.DATA_REG_DIRECT, D4)])
-                exit_jmp = self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, 0)]) # will patch later
+                exit_jmp = self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, 0)])
                 
-                # read char into D1
+                # read char
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A0), Operand(AddrMode.DATA_REG_DIRECT, D1)])
                 # output char
-                self.add_instruction(Opcode.OUT, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.IMMEDIATE, 1)])
+                self.add_instruction(Opcode.OUT, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.IMMEDIATE, 2)])
                 
-                # decrement counter D4
+                # decrement
                 self.add_instruction(Opcode.SUB, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.DATA_REG_DIRECT, D4)])
                 # jump back
                 self.add_instruction(Opcode.JMP, [Operand(AddrMode.IMMEDIATE, loop_start)])
                 
                 exit_jmp.operands[0].value = self.instr_addr
+                # pop address from data stack
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+            
+            elif token.startswith('."'):
+                # string literal to out; format: ." Hello"
+
+                match = re.search(r'\."\s+(.*)"', token)
+                text = match.group(1) if match else ""
+
+                # pstr: length in the first word + chars
+                str_addr = self.data_addr
+                self.data_memory.extend(len(text).to_bytes(self.WORD_SIZE, 'little', signed=True))
+                self.data_addr += self.WORD_SIZE
+
+                for char in text:
+                    self.data_memory.extend(ord(char).to_bytes(self.WORD_SIZE, 'little', signed=True))
+                    self.data_addr += self.WORD_SIZE
+
+                # A0 = string pointer
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, str_addr), Operand(AddrMode.ADDR_REG_DIRECT, A0)])
+                # D4 = i loop counter
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A0), Operand(AddrMode.DATA_REG_DIRECT, D4)])
+
+                # loop:
+                loop_start = self.instr_addr
+
+                # check if counter == 0
+                self.add_instruction(Opcode.CMP, [Operand(AddrMode.IMMEDIATE, 0), Operand(AddrMode.DATA_REG_DIRECT, D4)])
+                exit_jmp = self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, 0)]) # will patch later
+
+                # read char into D1
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A0), Operand(AddrMode.DATA_REG_DIRECT, D1)])
+                # output char
+                self.add_instruction(Opcode.OUT, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.IMMEDIATE, 2)])
+
+                # decrement counter D4
+                self.add_instruction(Opcode.SUB, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.DATA_REG_DIRECT, D4)])
+                # jump back
+                self.add_instruction(Opcode.JMP, [Operand(AddrMode.IMMEDIATE, loop_start)])
+
+                exit_jmp.operands[0].value = self.instr_addr
+
+            elif token.startswith('"') and token.endswith('"'):
+                # string literal value: "..." -> place pstr in data memory and push its address
+                text = token[1:-1]
+
+                str_addr = self.data_addr
+                self.data_memory.extend(len(text).to_bytes(self.WORD_SIZE, 'little', signed=True))
+                self.data_addr += self.WORD_SIZE
+
+                for char in text:
+                    self.data_memory.extend(ord(char).to_bytes(self.WORD_SIZE, 'little', signed=True))
+                    self.data_addr += self.WORD_SIZE
+
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, str_addr), Operand(AddrMode.DATA_REG_DIRECT, D0)])
 
 
 
 
 prog = """
-." 12abc3"
+: read-name-echo
+  begin
+    key
+    dup 10 = if
+      drop 1
+    else
+      emit
+      0
+    endif
+  until
+;
+
+." Hello, "
+read-name-echo
 """
 
 t = Translator()
