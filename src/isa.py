@@ -26,6 +26,8 @@ class Opcode(str, Enum):
     DIV = "div"
     REM = "rem"
     CMP = "cmp"
+    NADD = "nadd"
+    NMUL = "nmul"
     
     NOT_OP = "not"
     AND_OP = "and"
@@ -70,6 +72,8 @@ OPCODE_NARG = {
     Opcode.ADD: 2, Opcode.ADC: 2, Opcode.SUB: 2, Opcode.SBC: 2, 
     Opcode.MUL: 2, Opcode.DIV: 2, Opcode.REM: 2, Opcode.CMP: 2,
     Opcode.IN: 2, Opcode.OUT: 2,
+
+    Opcode.NADD: -1, Opcode.NMUL: -1,
 
     Opcode.AND_OP: 2, Opcode.OR_OP: 2, Opcode.XOR: 2,
     Opcode.ASL: 2, Opcode.ASR: 2, Opcode.LSL: 2, Opcode.LSR: 2,
@@ -122,7 +126,7 @@ class Instruction:
 
     def __post_init__(self):
         expected_narg = OPCODE_NARG[self.opcode]
-        if expected_narg != len(self.operands):
+        if expected_narg != -1 and expected_narg != len(self.operands):
             raise ValueError(
                 f"Opcode {self.opcode}: expected: {expected_narg} args, but got: {len(self.operands)}"
             )
@@ -138,23 +142,32 @@ class Instruction:
         reserve_byte = 0x00
 
         extra_words = bytearray()
-
-        if len(self.operands) >= 1:
-            op1 = self.operands[0]
-            
-            register_val = op1.value if op1.mode != AddrMode.IMMEDIATE else 0
-            src_byte = (op1.mode.value << 4) | (register_val & 0xF)
-
-            if op1.mode == AddrMode.IMMEDIATE:
-                extra_words.extend(
-                    op1.value.to_bytes(
-                        4, 
-                        byteorder='little', 
-                        signed=True,
+        
+        if OPCODE_NARG[self.opcode] == -1:
+            reserve_byte = len(self.operands) & 0xFF
+            for op in self.operands:
+                if op.mode == AddrMode.IMMEDIATE:
+                    extra_words.extend(
+                        op.value.to_bytes(4, byteorder='little', signed=True)
                     )
-                )
-            
-        if len(self.operands) == 2:
+        else:
+            if len(self.operands) >= 1:
+                op1 = self.operands[0]
+                
+                register_val = op1.value if op1.mode != AddrMode.IMMEDIATE else 0
+                src_byte = (op1.mode.value << 4) | (register_val & 0xF)
+
+                if op1.mode == AddrMode.IMMEDIATE:
+                    extra_words.extend(
+                        op1.value.to_bytes(
+                            4, 
+                            byteorder='little', 
+                            signed=True,
+                        )
+                    )
+                
+            if len(self.operands) == 2:
+                op2 = self.operands[1]
             op2 = self.operands[1]
 
             register_val = op2.value if op2.mode != AddrMode.IMMEDIATE else 0

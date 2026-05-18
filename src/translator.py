@@ -10,6 +10,7 @@ class Parser:
         "@+", "!+",                                         # stack/memory cisc features
         "&", "|", "^", "~",                                 # logical gates
         "+", "-", "*", "/", "mod", "=", ">", "<", "d+",     # arithmetic
+        "n+", "n-"
         ".", "key", "emit", "type", "s.", '."',             # io console
         "if", "else", "endif", "begin", "until",            # control flow
         ":", ";",                                           # begin/end subroutine
@@ -100,7 +101,6 @@ class Translator:
                 self.data_addr += self.WORD_SIZE
                 self.data_memory.extend(b'\x00' * self.WORD_SIZE)
 
-            
             elif token == ":":
                 func_name = next(tokens_iter)
                 self.functions[func_name] = self.instr_addr
@@ -180,6 +180,37 @@ class Translator:
                     self.add_instruction(Opcode.REM, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.DATA_REG_DIRECT, D1)])
 
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+
+            elif token in {"n+", "n*"}:
+                # 3 n+ -> POP the N literal, then POP the N operands
+                
+                # pop literal n
+                n_inst = self.instr_memory.pop()
+                self.instr_addr -= n_inst.size_bytes()
+                
+                d0_push_inst = self.instr_memory.pop()
+                self.instr_addr -= d0_push_inst.size_bytes()
+
+                if n_inst.opcode != Opcode.MOVE or n_inst.operands[0].mode != AddrMode.IMMEDIATE:
+                    raise Exception(f"Expected immediate value for N before {token}")
+
+                num_args = n_inst.operands[0].value
+                n_op_list = []
+
+                for _ in range(num_args):
+                    arg_val_inst = self.instr_memory.pop()
+                    self.instr_addr -= arg_val_inst.size_bytes()
+                    
+                    arg_push_inst = self.instr_memory.pop()
+                    self.instr_addr -= arg_push_inst.size_bytes()
+                    
+                    if arg_val_inst.opcode != Opcode.MOVE or arg_val_inst.operands[0].mode != AddrMode.IMMEDIATE:
+                        raise Exception(f"Only immediate values are supported for {token} arguments in hardware mapping")
+                    n_op_list.insert(0, arg_val_inst.operands[0])
+
+                opcode = Opcode.NADD if token == "n+" else Opcode.NMUL
+                
+                self.add_instruction(opcode, n_op_list)
 
             elif token == "~":
                 self.add_instruction(Opcode.NOT_OP, [Operand(AddrMode.DATA_REG_DIRECT, D0)])
@@ -295,6 +326,7 @@ class Translator:
                 func_addr = self.functions[token]
                 self.add_instruction(Opcode.JSR, [Operand(AddrMode.IMMEDIATE, func_addr)])
 
+            # port-mapped i/o control
             elif token == ".":
                 # print numeric from TOS to port 0
                 self.add_instruction(Opcode.OUT, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.IMMEDIATE, 0)])
