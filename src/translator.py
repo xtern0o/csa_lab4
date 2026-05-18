@@ -10,10 +10,10 @@ class Parser:
         "@+", "!+",                                         # stack/memory cisc features
         "&", "|", "^", "~",                                 # logical gates
         "+", "-", "*", "/", "mod", "=", ">", "<", "d+",     # arithmetic
-        "n+", "n-"
+        "n+", "n-",
         ".", "key", "emit", "type", "s.", '."',             # io console
         "if", "else", "endif", "begin", "until",            # control flow
-        ":", ";",                                           # begin/end subroutine
+        ":", ";", "'", "execute",                           # begin/end subroutine
         "in", "out",                                        # custom port i/o
         "(", ")", "\\",                                     # comments
     }
@@ -325,6 +325,18 @@ class Translator:
             elif token in self.functions:
                 func_addr = self.functions[token]
                 self.add_instruction(Opcode.JSR, [Operand(AddrMode.IMMEDIATE, func_addr)])
+            
+            elif token == "'":
+                func_name = next(tokens_iter)
+                func_addr = self.functions.get(func_name)
+                if func_addr is None:
+                    raise Exception(f"Unknown subroutine '{func_name}' for execution token")
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, func_addr), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+            
+            elif token == "execute":
+                self.add_instruction(Opcode.JSR, [Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
 
             # port-mapped i/o control
             elif token == ".":
@@ -426,20 +438,15 @@ class Translator:
 
 
 prog = """
-: read-name-echo
-  begin
-    key
-    dup 10 = if
-      drop 1
-    else
-      emit
-      0
-    endif
-  until
+var a
+var b
+
+: my_func
+    ." hello"
 ;
 
-." Hello, "
-read-name-echo
+' my_func execute
+
 """
 
 t = Translator()
