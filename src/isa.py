@@ -168,19 +168,18 @@ class Instruction:
                 
             if len(self.operands) == 2:
                 op2 = self.operands[1]
-            op2 = self.operands[1]
 
-            register_val = op2.value if op2.mode != AddrMode.IMMEDIATE else 0
-            dest_byte = (op2.mode.value << 4) | (register_val & 0xF)
+                register_val = op2.value if op2.mode != AddrMode.IMMEDIATE else 0
+                dest_byte = (op2.mode.value << 4) | (register_val & 0xF)
 
-            if op2.mode == AddrMode.IMMEDIATE:
-                extra_words.extend(
-                    op2.value.to_bytes(
-                        4,
-                        byteorder='little',
-                        signed=True
+                if op2.mode == AddrMode.IMMEDIATE:
+                    extra_words.extend(
+                        op2.value.to_bytes(
+                            4,
+                            byteorder='little',
+                            signed=True
+                        )
                     )
-                )
         
         result_word = bytes([opcode_num, reserve_byte, src_byte, dest_byte])
         return result_word + bytes(extra_words)
