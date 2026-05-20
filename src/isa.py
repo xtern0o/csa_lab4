@@ -1,14 +1,13 @@
 from dataclasses import dataclass
-from enum import Enum
+from enum import StrEnum, IntEnum
 
 
-class Opcode(str, Enum):
+class Opcode(StrEnum):
     """
     Структура команд CISC-процессора
     """
     
     MOVE = "move"
-    MOVEA = "movea"
     
     CLR = "clr"
     NEG = "neg"
@@ -62,7 +61,7 @@ class Opcode(str, Enum):
 OPCODE_NUM = {opcode: idx for idx, opcode in enumerate(Opcode)}
 
 OPCODE_NARG = {
-    Opcode.MOVE: 2, Opcode.MOVEA: 2, 
+    Opcode.MOVE: 2, 
     Opcode.ADD: 2, Opcode.ADC: 2, Opcode.SUB: 2, Opcode.SBC: 2, 
     Opcode.MUL: 2, Opcode.DIV: 2, Opcode.REM: 2, Opcode.CMP: 2,
     Opcode.IN: 2, Opcode.OUT: 2,
@@ -83,13 +82,12 @@ OPCODE_NARG = {
 }
 
 
-class AddrMode(int, Enum):
-    DATA_REG_DIRECT = 0     # d0-d7
-    ADDR_REG_DIRECT = 1     # a0-a7
-    ADDR_REG_INDIRECT = 2   # (An)
-    POST_INC = 3            # (An)+
-    PRE_DEC = 4             # -(An)
-    IMMEDIATE = 5           # 42
+class AddrMode(IntEnum):
+    REG_DIRECT   = 0    # Rn
+    REG_INDIRECT = 1    # (Rn)
+    POST_INC     = 2    # (Rn)+
+    PRE_DEC      = 3    # -(Rn)
+    IMMEDIATE    = 4    # #value
 
 
 @dataclass
@@ -97,17 +95,16 @@ class Operand:
     mode: AddrMode      # режим адресации
     value: int          # register number OR number (for imm)
 
+    # TODO: a0, a1
     def __str__(self) -> str:
-        if self.mode == AddrMode.DATA_REG_DIRECT:
-            return f"D{self.value}"
-        elif self.mode == AddrMode.ADDR_REG_DIRECT:
-            return f"A{self.value}"
-        elif self.mode == AddrMode.ADDR_REG_INDIRECT:
-            return f"(A{self.value})"
+        if self.mode == AddrMode.REG_DIRECT:
+            return f"R{self.value}"
+        elif self.mode == AddrMode.REG_INDIRECT:
+            return f"(R{self.value})"
         elif self.mode == AddrMode.POST_INC:
-            return f"(A{self.value})+"
+            return f"(R{self.value})+"
         elif self.mode == AddrMode.PRE_DEC:
-            return f"-(A{self.value})"
+            return f"-(R{self.value})"
         elif self.mode == AddrMode.IMMEDIATE:
             return f"#{self.value}"
         return str(self.value)

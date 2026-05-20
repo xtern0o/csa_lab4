@@ -3,9 +3,15 @@ import re
 from isa import *
 
 
+R0, R1, R2, R3, R4, R5 = range(6)
+DSP = 7
+RSP = 8
+
+
 class Parser:
     RESERVED_WORDS = {
         "var", "!", "@", "dup", "swap", "over", "drop",     # stack/memory
+        "n!",
         ">r", "r>", "r@",                                   # return stack
         "@+", "!+",                                         # stack/memory cisc features
         "&", "|", "^", "~",                                 # logical gates
@@ -41,11 +47,6 @@ class Parser:
 
         return tokens
     
-
-# general-purpose registers numbers (depends on addrmode)
-D0, D1, D2, D3, D4, D5, D6, D7 = range(8)
-A0, A1, A2, A3, A4, A5, A6, A7 = range(8)
-
 
 class Translator:
     WORD_SIZE = 4
@@ -86,9 +87,9 @@ class Translator:
             - при встрече if запоминаем адрес инструкции
             - когда встречаем endif - вычисляем теккущий instr_addr
             - достаем из стека индекс, и меняем адрес перехода соответствующего if на текущий
-        D1:     TOS:    stack[0]
-        (A6):   NOS:    stack[1]
-        -(A6):          stack[2]
+        R1:         TOS:    stack[0]
+        (DSP):      NOS:    stack[1]
+        -(DSP):             stack[2]
         """
 
         tokens_iter = iter(tokens)
@@ -109,90 +110,85 @@ class Translator:
                 self.add_instruction(Opcode.RET)
 
             elif token == "!":
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.ADDR_REG_DIRECT, A0)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.ADDR_REG_INDIRECT, A0)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R1)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.REG_INDIRECT, R0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)])
             
             elif token == "@":
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.ADDR_REG_DIRECT, A0)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.ADDR_REG_INDIRECT, A0), Operand(AddrMode.DATA_REG_DIRECT, D0)])
-            
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_INDIRECT, R0), Operand(AddrMode.REG_DIRECT, R0)])
+
             elif token == "@+":
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.ADDR_REG_DIRECT, A0)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A0), Operand(AddrMode.DATA_REG_DIRECT, D1)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.ADDR_REG_DIRECT, A0), Operand(AddrMode.DATA_REG_DIRECT, D0)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, R0), Operand(AddrMode.REG_DIRECT, R1)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, DSP)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.REG_DIRECT, R0)])
             
             elif token == "!+":
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D1)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.ADDR_REG_DIRECT, A0)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.POST_INC, A0)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.ADDR_REG_DIRECT, A0), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R1)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.POST_INC, R0)])
 
             elif token == "dup":
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, DSP)])
 
             elif token == "drop":
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)])
 
             elif token == ">r":
                 # data: ( x -- ), return: ( -- x)
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A7)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, RSP)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)])
 
             elif token == "r>":
                 # data: ( -- x ), return: (x -- )
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A7), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, DSP)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, RSP), Operand(AddrMode.REG_DIRECT, R0)])
 
             elif token == "r@":
                 # data: ( -- x ), return: (x -- x)
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.ADDR_REG_INDIRECT, A7), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, DSP)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_INDIRECT, RSP), Operand(AddrMode.REG_DIRECT, R0)])
 
             elif token == "swap":
                 # ( a b -- b a )
                 # читаем а без сдвига указателя
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.ADDR_REG_INDIRECT, A6), Operand(AddrMode.DATA_REG_DIRECT, D1)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_INDIRECT, DSP), Operand(AddrMode.REG_DIRECT, R1)])
                 # пишем b на место а в память 
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.ADDR_REG_INDIRECT, A6)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.REG_INDIRECT, DSP)])
                 # делаем a новым TOS 
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D0)])      
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.REG_DIRECT, R0)])      
 
             elif token == "over":
                 # ( a b -- a b a )
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.ADDR_REG_INDIRECT, A6), Operand(AddrMode.DATA_REG_DIRECT, D1)]) 
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])  
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D0)])    
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_INDIRECT, DSP), Operand(AddrMode.REG_DIRECT, R1)]) 
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, DSP)])  
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.REG_DIRECT, R0)])    
 
             # коммутативная логика и арифмеика
             elif token in {'+', '*', '&', '|', '^'}:
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D1)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R1)])
 
                 if token == "+":
-                    self.add_instruction(Opcode.ADD, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                    self.add_instruction(Opcode.ADD, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.REG_DIRECT, R0)])
                 elif token == "*":
-                    self.add_instruction(Opcode.MUL, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                    self.add_instruction(Opcode.MUL, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.REG_DIRECT, R0)])
                 elif token == "&":
-                    self.add_instruction(Opcode.AND_OP, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                    self.add_instruction(Opcode.AND_OP, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.REG_DIRECT, R0)])
                 elif token == "|":
-                    self.add_instruction(Opcode.OR_OP, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                    self.add_instruction(Opcode.OR_OP, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.REG_DIRECT, R0)])
                 elif token == "^":
-                    self.add_instruction(Opcode.XOR, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                    self.add_instruction(Opcode.XOR, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.REG_DIRECT, R0)])
             
             # некоммутативная логика и арифметика
             elif token in {'-', '/', 'mod'}:
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D1)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R1)])
 
                 if token == "-":
-                    self.add_instruction(Opcode.SUB, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.DATA_REG_DIRECT, D1)])
+                    self.add_instruction(Opcode.SUB, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.REG_DIRECT, R1)])
                 elif token == "/":
-                    self.add_instruction(Opcode.DIV, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.DATA_REG_DIRECT, D1)])
+                    self.add_instruction(Opcode.DIV, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.REG_DIRECT, R1)])
                 elif token == "mod":
-                    self.add_instruction(Opcode.REM, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.DATA_REG_DIRECT, D1)])
+                    self.add_instruction(Opcode.REM, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.REG_DIRECT, R1)])
 
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.REG_DIRECT, R0)])
 
             elif token in {"n+", "n*"}:
                 # 3 n+ -> POP the N literal, then POP the N operands
@@ -201,8 +197,8 @@ class Translator:
                 n_inst = self.instr_memory.pop()
                 self.instr_addr -= n_inst.size_bytes()
                 
-                d0_push_inst = self.instr_memory.pop()
-                self.instr_addr -= d0_push_inst.size_bytes()
+                R0_push_inst = self.instr_memory.pop()
+                self.instr_addr -= R0_push_inst.size_bytes()
 
                 if n_inst.opcode != Opcode.MOVE or n_inst.operands[0].mode != AddrMode.IMMEDIATE:
                     raise Exception(f"Expected immediate value for N before {token}")
@@ -226,26 +222,26 @@ class Translator:
                 self.add_instruction(opcode, n_op_list)
 
             elif token == "~":
-                self.add_instruction(Opcode.NOT_OP, [Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.NOT_OP, [Operand(AddrMode.REG_DIRECT, R0)])
 
             elif token == "d+":
                 # ( al ah bl bh -- rl rh )
-                # D0 = bh, (A6) = bl, -(A6) = ah, --(A6) = al
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D1)]) # D1 = bl
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D2)]) # D2 = ah
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D3)]) # D3 = al
+                # R0 = bh, (DSP) = bl, -(DSP) = ah, --(DSP) = al
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R1)]) # R1 = bl
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R2)]) # R2 = ah
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R3)]) # R3 = al
 
-                # D0 = bh, D1 = bl
+                # R0 = bh, R1 = bl
                 # +
-                # D2 = ah, D3 = al
+                # R2 = ah, R3 = al
                 # ----------------
-                # D0 = rh, (A6) = rl
-                self.add_instruction(Opcode.ADD, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D3)])
-                self.add_instruction(Opcode.ADC, [Operand(AddrMode.DATA_REG_DIRECT, D2), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                # R0 = rh, (DSP) = rl
+                self.add_instruction(Opcode.ADD, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.REG_DIRECT, R3)])
+                self.add_instruction(Opcode.ADC, [Operand(AddrMode.REG_DIRECT, R2), Operand(AddrMode.REG_DIRECT, R0)])
 
                 # TOS = rh
-                # NOS <- D3 = rl
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D3), Operand(AddrMode.PRE_DEC, A6)])
+                # NOS <- R3 = rl
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R3), Operand(AddrMode.PRE_DEC, DSP)])
             
             # comparison processing
             elif token == "begin":
@@ -262,15 +258,15 @@ class Translator:
                 _, loop_addr = self.control_flow_stack.pop()
                 
                 self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, loop_addr)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)])
 
             elif token in {'=', '<', '>'}:
                 # ( a b -- flag )
-                # D0 = b (TOS), (A6) = a (NOS)
+                # R0 = b (TOS), (DSP) = a (NOS)
                 
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D1)])
-                self.add_instruction(Opcode.CMP, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.DATA_REG_DIRECT, D1)])
-                self.add_instruction(Opcode.CLR, [Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R1)])
+                self.add_instruction(Opcode.CMP, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.REG_DIRECT, R1)])
+                self.add_instruction(Opcode.CLR, [Operand(AddrMode.REG_DIRECT, R0)])
                 
                 jmp_opcode = None
                 if token == '=': jmp_opcode = Opcode.BNE    # if a != b, jump (condition false)
@@ -278,13 +274,13 @@ class Translator:
                 elif token == '<': jmp_opcode = Opcode.BGE  # if a >= b, jump (condition false)
                 
                 jmp_inst = self.add_instruction(jmp_opcode, [Operand(AddrMode.IMMEDIATE, 0)])
-                self.add_instruction(Opcode.ADD, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.ADD, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.REG_DIRECT, R0)])
                 
                 jmp_inst.operands[0].value = self.instr_addr
 
             elif token == "if":
                 # ( flag -- )
-                # if D0 == 0, jump to else/endif
+                # if R0 == 0, jump to else/endif
                 jmp_inst = self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, 0)])
                 self.control_flow_stack.append(('if', jmp_inst))
 
@@ -308,31 +304,31 @@ class Translator:
                 jmp_inst.operands[0].value = self.instr_addr
                 
                 # drop flag after if/else
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)])
 
             # variable processing
             elif token in self.variables:
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, DSP)])
                 addr = self.variables[token]
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, addr), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, addr), Operand(AddrMode.REG_DIRECT, R0)])
             
             elif token == "out":
-                # D0 = port, (A6) = value
+                # R0 = port, (DSP) = value
 
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D1)]) # D1 = val
-                self.add_instruction(Opcode.OUT, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R1)]) # R1 = val
+                self.add_instruction(Opcode.OUT, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.REG_DIRECT, R0)])
 
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)])
 
             elif token == "in":
-                # D0 = port_number, D0 <- ports[port_number]
-                self.add_instruction(Opcode.IN, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                # R0 = port_number, R0 <- ports[port_number]
+                self.add_instruction(Opcode.IN, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.REG_DIRECT, R0)])
             
             # number processing
             elif token.lstrip('-').isdigit():
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, DSP)])
                 val = int(token)
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, val), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, val), Operand(AddrMode.REG_DIRECT, R0)])
             
             # procedure processing
             elif token in self.functions:
@@ -344,54 +340,47 @@ class Translator:
                 func_addr = self.functions.get(func_name)
                 if func_addr is None:
                     raise Exception(f"Unknown subroutine '{func_name}' for execution token")
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, func_addr), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, DSP)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, func_addr), Operand(AddrMode.REG_DIRECT, R0)])
             
             elif token == "execute":
-                self.add_instruction(Opcode.JSR, [Operand(AddrMode.DATA_REG_DIRECT, D0)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.JSR, [Operand(AddrMode.REG_DIRECT, R0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)])
 
             # port-mapped i/o control
             elif token == ".":
                 # print numeric from TOS to port 0
-                self.add_instruction(Opcode.OUT, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.IMMEDIATE, 0)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.OUT, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.IMMEDIATE, 0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)])
             
             elif token == "emit":
                 # print char from TOS to port 2
-                self.add_instruction(Opcode.OUT, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.IMMEDIATE, 2)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.OUT, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.IMMEDIATE, 2)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)])
             
             elif token == "key":
                 # read char from port 3 to TOS
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
-                self.add_instruction(Opcode.IN, [Operand(AddrMode.IMMEDIATE, 3), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, DSP)])
+                self.add_instruction(Opcode.IN, [Operand(AddrMode.IMMEDIATE, 3), Operand(AddrMode.REG_DIRECT, R0)])
             
             elif token == "type" or token == "s.":
                 # print string from address in TOS to port 2
-                # D0 = string address (pstr)
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.ADDR_REG_DIRECT, A0)])
-                # D4 = length
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A0), Operand(AddrMode.DATA_REG_DIRECT, D4)])
-                
-                # loop:
+                # R0 = string address (pstr)
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, R0), Operand(AddrMode.REG_DIRECT, R4)])   # R4 = length, R0 += 4
+
                 loop_start = self.instr_addr
-                self.add_instruction(Opcode.CMP, [Operand(AddrMode.IMMEDIATE, 0), Operand(AddrMode.DATA_REG_DIRECT, D4)])
+                self.add_instruction(Opcode.CMP, [Operand(AddrMode.IMMEDIATE, 0), Operand(AddrMode.REG_DIRECT, R4)])
                 exit_jmp = self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, 0)])
-                
-                # read char
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A0), Operand(AddrMode.DATA_REG_DIRECT, D1)])
-                # output char
-                self.add_instruction(Opcode.OUT, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.IMMEDIATE, 2)])
-                
-                # decrement
-                self.add_instruction(Opcode.SUB, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.DATA_REG_DIRECT, D4)])
-                # jump back
+
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, R0), Operand(AddrMode.REG_DIRECT, R1)])   # R1 = char
+                self.add_instruction(Opcode.OUT, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.IMMEDIATE, 2)])
+
+                self.add_instruction(Opcode.SUB, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.REG_DIRECT, R4)])
                 self.add_instruction(Opcode.JMP, [Operand(AddrMode.IMMEDIATE, loop_start)])
-                
+
                 exit_jmp.operands[0].value = self.instr_addr
                 # pop address from data stack
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)])
             
             elif token.startswith('."'):
                 # string literal to out; format: ." Hello"
@@ -403,31 +392,23 @@ class Translator:
                 str_addr = self.data_addr
                 self.data_memory.extend(len(text).to_bytes(self.WORD_SIZE, 'little', signed=True))
                 self.data_addr += self.WORD_SIZE
-
                 for char in text:
                     self.data_memory.extend(ord(char).to_bytes(self.WORD_SIZE, 'little', signed=True))
                     self.data_addr += self.WORD_SIZE
 
-                # A0 = string pointer
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, str_addr), Operand(AddrMode.ADDR_REG_DIRECT, A0)])
-                # D4 = i loop counter
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A0), Operand(AddrMode.DATA_REG_DIRECT, D4)])
+                # R0 = string pointer
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, str_addr), Operand(AddrMode.REG_DIRECT, R0)])
+                # R4 = length
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, R0), Operand(AddrMode.REG_DIRECT, R4)])
 
-                # loop:
                 loop_start = self.instr_addr
+                self.add_instruction(Opcode.CMP, [Operand(AddrMode.IMMEDIATE, 0), Operand(AddrMode.REG_DIRECT, R4)])
+                exit_jmp = self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, 0)])
 
-                # check if counter == 0
-                self.add_instruction(Opcode.CMP, [Operand(AddrMode.IMMEDIATE, 0), Operand(AddrMode.DATA_REG_DIRECT, D4)])
-                exit_jmp = self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, 0)]) # will patch later
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, R0), Operand(AddrMode.REG_DIRECT, R1)])   # char
+                self.add_instruction(Opcode.OUT, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.IMMEDIATE, 2)])
 
-                # read char into D1
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A0), Operand(AddrMode.DATA_REG_DIRECT, D1)])
-                # output char
-                self.add_instruction(Opcode.OUT, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.IMMEDIATE, 2)])
-
-                # decrement counter D4
-                self.add_instruction(Opcode.SUB, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.DATA_REG_DIRECT, D4)])
-                # jump back
+                self.add_instruction(Opcode.SUB, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.REG_DIRECT, R4)])
                 self.add_instruction(Opcode.JMP, [Operand(AddrMode.IMMEDIATE, loop_start)])
 
                 exit_jmp.operands[0].value = self.instr_addr
@@ -444,26 +425,6 @@ class Translator:
                     self.data_memory.extend(ord(char).to_bytes(self.WORD_SIZE, 'little', signed=True))
                     self.data_addr += self.WORD_SIZE
 
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, str_addr), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, DSP)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, str_addr), Operand(AddrMode.REG_DIRECT, R0)])
 
-
-
-
-prog = """
-var a
-var b
-
-: my_func
-    ." hello"
-;
-
-' my_func execute
-
-"""
-
-t = Translator()
-t.translate(Parser.tokenize(prog))
-
-print("\n".join([str(i) for i in t.instr_memory]))
-print(t.data_memory)

@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import IntEnum
 
 
 WORD32_MASK = 0xFFFFFFFF
@@ -16,7 +16,7 @@ def to_signed(value: int) -> int:
     return value
 
 
-class RegWrSel(Enum):
+class RegWrSel(IntEnum):
     INPUT_DATA = 0
     MEM_OUT = 1
     ALU_RES = 2
@@ -24,13 +24,13 @@ class RegWrSel(Enum):
     INSTR_WORD = 4
     ALU_OUT = 5
 
-class Alu1Sel(Enum):
+class Tmp1Sel(IntEnum):
     ALU_RES = 0
     DST_REG = 1
     INSTR_WORD = 2
     MEM_OUT = 3
 
-class Alu2Sel(Enum):
+class Tmp2Sel(IntEnum):
     SRC_REG = 0
     INSTR_WORD = 1
     MEM_OUT = 2
@@ -38,13 +38,13 @@ class Alu2Sel(Enum):
     ONE = 4
     FOUR = 5
 
-class MemAddrSel(Enum):
+class MemAddrSel(IntEnum):
     INSTR_WORD = 0
     SRC_REG = 1
     DST_REG = 2
     ALU_OUT = 3
 
-class MemDataSel(Enum):
+class MemDataSel(IntEnum):
     SRC_REG = 0
     DST_REG = 1
     ALU_OUT = 2
@@ -52,18 +52,18 @@ class MemDataSel(Enum):
     INSTR_WORD = 4
     PC = 5
 
-class PcSel(Enum):
+class PcSel(IntEnum):
     PC_INC = 0
     DST_REG = 1
     MEM_OUT = 2
     INSTR_WORD = 3
 
-class OutSel(Enum):
+class OutSel(IntEnum):
     SRC_REG = 0
     MEM_OUT = 1
     INSTR_WORD = 2
 
-class AluOp(Enum):
+class AluOp(IntEnum):
     ADD = 0     # l + r
     SUB = 1     # l - r
     MUL = 2     # l * r
@@ -163,14 +163,17 @@ class DataPath:
         
         self.io_controller = io_controller
         
-        # D0-D7 (0-7), A0-A7 (8-15)
-        self.registers = [0] * 16
+        # R0-R4 + DSP + RSP
+        self.registers = [0] * 8
         self.src_sel = 0
         self.dst_sel = 0
         
         self.ar = 0
 
         self.pc = 0
+
+        self.tmp1 = 0
+        self.tmp2 = 0
         
         self._alu_out = 0
         self.alu_res = 0
@@ -252,6 +255,7 @@ class DataPath:
         """Выставить линии выбора регистров"""
         self.src_sel = src & 0xF
         self.dst_sel = dst & 0xF
+    
 
     def signal_latch_reg(self, wr_sel: RegWrSel):
         """Защелкнуть данные в целевой регистр (dst_reg) из выбранного источника"""
@@ -323,6 +327,36 @@ class DataPath:
         else:
             raise ValueError(f"Unknown PcSel: {pc_sel}")
         self.pc = mask_word(value)
+    
+    def signal_latch_tmp1(self, sel: Tmp1Sel):
+        if sel == Tmp1Sel.ALU_RES:
+            value = self.alu_res
+        elif sel == Tmp1Sel.DST_REG:
+            value = self.dst_reg
+        elif sel == Tmp1Sel.INSTR_WORD:
+            value = self.instr_word
+        elif sel == Tmp1Sel.MEM_OUT:
+            value = self.mem_out
+        else:
+            raise ValueError(f"Unknown Tmp1Sel: {sel}")
+        self.tmp1 = mask_word(value)
+
+    def signal_latch_tmp2(self, sel: Tmp2Sel):
+        if sel == Tmp2Sel.SRC_REG:
+            value = self.src_reg
+        elif sel == Tmp2Sel.INSTR_WORD:
+            value = self.instr_word
+        elif sel == Tmp2Sel.MEM_OUT:
+            value = self.mem_out
+        elif sel == Tmp2Sel.ZERO:
+            value = 0
+        elif sel == Tmp2Sel.ONE:
+            value = 1
+        elif sel == Tmp2Sel.FOUR:
+            value = 4
+        else:
+            raise ValueError(f"Unknown Tmp2Sel: {sel}")
+        self.tmp2 = mask_word(value)
 
     def _eval_alu(self, alu_op: AluOp, left: int, right: int) -> tuple[int, int]:
         """
@@ -395,37 +429,9 @@ class DataPath:
         nzvc = (n << 3) | (z << 2) | (v << 1) | c
         return res, nzvc
 
-    def signal_alu(self, alu_op: AluOp, in1_sel: Alu1Sel, in2_sel: Alu2Sel):
-        """Left MUX, Right MUX -> ALU"""
-        # левая нога
-        if in1_sel == Alu1Sel.ALU_RES:
-            left = self.alu_res
-        elif in1_sel == Alu1Sel.DST_REG:
-            left = self.dst_reg
-        elif in1_sel == Alu1Sel.INSTR_WORD:
-            left = self.instr_word
-        elif in1_sel == Alu1Sel.MEM_OUT:
-            left = self.mem_out
-        else:
-            raise ValueError(f"Unknown Alu1Sel: {in1_sel}")
-
-        # правая нога
-        if in2_sel == Alu2Sel.SRC_REG:
-            right = self.src_reg
-        elif in2_sel == Alu2Sel.INSTR_WORD:
-            right = self.instr_word
-        elif in2_sel == Alu2Sel.MEM_OUT:
-            right = self.mem_out
-        elif in2_sel == Alu2Sel.ZERO:
-            right = 0
-        elif in2_sel == Alu2Sel.ONE:
-            right = 1
-        elif in2_sel == Alu2Sel.FOUR:
-            right = 4
-        else:
-            raise ValueError(f"Unknown Alu2Sel: {in2_sel}")
-
-        self._alu_out, self._alu_out_nzvc = self._eval_alu(alu_op, left, right)
+    def signal_alu(self, alu_op: AluOp):
+        """Выполнить операцию ALU над TMP1 (левый) и TMP2 (правый)"""
+        self._alu_out, self._alu_out_nzvc = self._eval_alu(alu_op, self.tmp1, self.tmp2)
 
     def signal_latch_nzvc(self):
         """NZVC latch"""
@@ -461,47 +467,3 @@ class DataPath:
         """Эмуляция порта Ввода (IN_DATA latch) — чтение из потока IO"""
         token_value = self.io_controller.read_token(self.port)
         self.in_data = mask_word(token_value)
-
-if __name__ == "__main__":
-    print("--- Testing DataPath Memory (Little-Endian) ---")
-    
-    # 1. Дамп программы в байтах (2 инструкции по 32 бита)
-    # 0x78563412 и 0xEFCDAB90
-    test_prog = [0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF]
-    
-    io_ctrl = IOController()
-    dp = DataPath(instr_memory=test_prog, io_controller=io_ctrl)
-    
-    # --- Тест 1: Чтение Instruction Memory ---
-    dp.pc = 0
-    word1 = dp.instr_word
-    print(f"[Instr PC=0] Expected: 0x78563412, Got: {hex(word1)}")
-    assert word1 == 0x78563412
-    
-    dp.pc = 4
-    word2 = dp.instr_word
-    print(f"[Instr PC=4] Expected: 0xEFCDAB90, Got: {hex(word2)}")
-    assert word2 == 0xEFCDAB90
-
-    # --- Тест 2: Запись и чтение Data Memory ---
-    dp.ar = 10
-    # Сымитируем, что у нас на линии ALU_OUT есть число 0xDEADBEEF
-    dp._alu_out = 0xDEADBEEF
-    
-    # Записываем его в память по адресу в AR
-    dp.signal_mem_write(MemDataSel.ALU_OUT)
-    
-    # Проверяем, как оно легло в `data_memory` (ожидаем little-endian)
-    mem_slice = [hex(b) for b in dp.data_memory[10:14]]
-    print(f"[Data  AR=10 bytes] Expected: ['0xef', '0xbe', '0xad', '0xde'], Got: {mem_slice}")
-    assert dp.data_memory[10] == 0xEF
-    assert dp.data_memory[11] == 0xBE
-    assert dp.data_memory[12] == 0xAD
-    assert dp.data_memory[13] == 0xDE
-    
-    # Проверяем обратное чтение через mem_out
-    read_back = dp.mem_out
-    print(f"[Data  AR=10 word ] Expected: 0xdeadbeef, Got: {hex(read_back)}")
-    assert read_back == 0xDEADBEEF
-    
-    print("Memory test passed successfully!")

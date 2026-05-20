@@ -14,9 +14,13 @@ class MicroInstruction:
     reg_wr_sel: int = 0
     latch_reg: int = 0
 
+    # Tmp Registers
+    tmp1_sel: int = 0
+    tmp2_sel: int = 0
+    latch_tmp1: int = 0
+    latch_tmp2: int = 0
+
     # ALU
-    alu1_sel: int = 0
-    alu2_sel: int = 0
     alu_op: int = 0
     nzvc_latch: int = 0
     alu_res_latch: int = 0
@@ -54,7 +58,8 @@ class MicroInstruction:
         """
         bin_str = (
             f"{self.reg_src_sel:02b}{self.reg_dst_sel:02b}{self.reg_wr_sel:03b}{self.latch_reg:01b}"
-            f"{self.alu1_sel:02b}{self.alu2_sel:03b}{self.alu_op:05b}{self.nzvc_latch:01b}{self.alu_res_latch:01b}"
+            f"{self.tmp1_sel:03b}{self.tmp2_sel:03b}{self.latch_tmp1:01b}{self.latch_tmp2:01b}"
+            f"{self.alu_op:05b}{self.nzvc_latch:01b}{self.alu_res_latch:01b}"
             f"{self.mem_addr_sel:02b}{self.mem_data_sel:03b}{self.mem_rd:01b}{self.mem_wr:01b}"
             f"{self.pc_sel:02b}{self.pc_latch:01b}{self.ir_latch:01b}"
             f"{self.port_latch:01b}{self.out_sel:02b}{self.out_latch:01b}{self.in_latch:01b}"
@@ -64,7 +69,7 @@ class MicroInstruction:
         return bin_str.zfill(56)
 
 
-class BranchCode(int, Enum):
+class BranchCode(IntEnum):
     NEXT = 0
     JMP = 1
     JZ = 2      # Z=1
@@ -107,6 +112,7 @@ class ControlUnit:
         self,
         dp: DataPath,
         microcode_memory: list[MicroInstruction],
+        opcode_to_mpc: dict[Opcode, int],
     ):
         self.dp = dp
         self.io = dp.io_controller
@@ -124,7 +130,7 @@ class ControlUnit:
             self.mir = None        
 
         # маппинг для опкодов на микрокоманды в памяти
-        self.opcode_to_mpc: dict[Opcode, int]
+        self.opcode_to_mpc = opcode_to_mpc
 
     @property
     def current_micro(self) -> MicroInstruction | None:
@@ -252,21 +258,21 @@ class ControlUnit:
         mir = self.current_micro
         if not mir:
             raise RuntimeError("MicroInstruction is None -> halt")
+        
+        # ======================================= ВРЕМЕННЫЙ КОСТЫЛЬ
+        if mir.seq_branch == 99:
+            raise StopIteration("HALT")
 
         # Фаза 1 - Сигналы
 
         self.dp.signal_select_regs(mir.reg_src_sel, mir.reg_dst_sel)
-        
-        try:
-            alu_op = AluOp(mir.alu_op)
-        except ValueError:
-            alu_op = AluOp.ADD # fallback or raise, using ADD to avoid crashes
 
-        self.dp.signal_alu(
-            alu_op=alu_op,
-            in1_sel=Alu1Sel(mir.alu1_sel),
-            in2_sel=Alu2Sel(mir.alu2_sel)
-        )
+        if mir.latch_tmp1:
+            self.dp.signal_latch_tmp1(Tmp1Sel(mir.tmp1_sel))
+        if mir.latch_tmp2:
+            self.dp.signal_latch_tmp2(Tmp2Sel(mir.tmp2_sel))
+
+        self.dp.signal_alu(AluOp(mir.alu_op))
 
         # Фаза 2 - Сохранение (защелки)
         
@@ -295,10 +301,10 @@ class ControlUnit:
             self.dp.signal_latch_in_data()
 
         # instr memory
-        if mir.pc_latch:
-            self.dp.signal_latch_pc(PcSel(mir.pc_sel))
         if mir.ir_latch:
             self.ir = self.dp.instr_word
+        if mir.pc_latch:
+            self.dp.signal_latch_pc(PcSel(mir.pc_sel))
             
         # control unit -> counter
         if mir.latch_cnt:
