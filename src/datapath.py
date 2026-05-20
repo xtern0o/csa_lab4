@@ -2,9 +2,12 @@ from enum import Enum
 
 
 WORD32_MASK = 0xFFFFFFFF
+BYTE_MASK = 0xFF
+
 
 def mask_word(word: int) -> int:
     return word & WORD32_MASK
+
 
 def to_signed(value: int) -> int:
     value &= WORD32_MASK
@@ -12,12 +15,14 @@ def to_signed(value: int) -> int:
         return value - 0x100000000
     return value
 
+
 class RegWrSel(Enum):
     INPUT_DATA = 0
     MEM_OUT = 1
     ALU_RES = 2
     NZVC = 3
     INSTR_WORD = 4
+    ALU_OUT = 5
 
 class Alu1Sel(Enum):
     ALU_RES = 0
@@ -31,6 +36,7 @@ class Alu2Sel(Enum):
     MEM_OUT = 2
     ZERO = 3
     ONE = 4
+    FOUR = 5
 
 class MemAddrSel(Enum):
     INSTR_WORD = 0
@@ -118,16 +124,30 @@ class IOController:
         if port == 0:
             self.output_buffer.append(str(to_signed(value)))
         elif port == 2:
-            self.output_buffer.append(chr(value & 0xFF))
+            self.output_buffer.append(chr(value & BYTE_MASK))
         else:
             # остальной вывод пока игнорится
             pass
 
 
 class DataPath:
+    """
+    Модель DataPath
+
+    DataMemory (little-endian):
+      - Байтовая адресация. 
+        Представляет собой список из (data_memory_size) чисел-байтов от 0 до 255
+      - При чтении возвращает 32-битный набор i, i+1, i+2, i+3 байтов на линию mem_out
+      - При записи перетирает i, i+1, i+2, i+3 байты
+    InstrMemory (little-endian):
+      - Байтовая адресация.
+        Аналогично с DataMemory хранит числа-байты
+      - При чтении возвращает данные на 32-битную шину instr_word
+
+    """
     def __init__(
             self, 
-            instr_memory: list[int],
+            instr_memory: list[int] | bytes,
             io_controller: IOController,
             data_memory_size: int = 1024, 
             instr_memory_size: int = 1024,
@@ -136,7 +156,10 @@ class DataPath:
         self.data_memory = [0] * data_memory_size
 
         self.instr_memory_size = instr_memory_size
-        self.instr_memory = [mask_word(w) for w in instr_memory]
+        self.instr_memory = [0] * instr_memory_size
+        for i, b in enumerate(instr_memory):
+            if i < instr_memory_size:
+                self.instr_memory[i] = b & BYTE_MASK
         
         self.io_controller = io_controller
         
@@ -165,7 +188,7 @@ class DataPath:
 
     def latch_register(self, reg_idx: int, value: int):
         """Записать новое значение в регистр (открыть latch_reg)"""
-        self.registers[reg_idx] = value & 0xFFFFFFFF
+        self.registers[reg_idx] = value & WORD32_MASK
 
     def assert_data_address(self, addr: int) -> None:
         """Проверка корректности адреса памяти"""
@@ -194,17 +217,31 @@ class DataPath:
     def instr_word(self) -> int:
         """Значение линии instr_word"""
         self.assert_instr_address(self.pc)
-        return self.instr_memory[self.pc]
+        self.assert_instr_address(self.pc + 3)
+        # little-endian сборка
+        return (
+            self.instr_memory[self.pc] |
+            (self.instr_memory[self.pc + 1] << 8) |
+            (self.instr_memory[self.pc + 2] << 16) |
+            (self.instr_memory[self.pc + 3] << 24)
+        )
     
     @property
     def mem_out(self) -> int:
         self.assert_data_address(self.ar)
-        return self.data_memory[self.ar]
+        self.assert_data_address(self.ar + 3)
+        # little-endian сборка
+        return (
+            self.data_memory[self.ar] |
+            (self.data_memory[self.ar + 1] << 8) |
+            (self.data_memory[self.ar + 2] << 16) |
+            (self.data_memory[self.ar + 3] << 24)
+        )
     
     @property
     def pc_inc(self) -> int:
-        """Значение линии pc+1"""
-        return self.pc + 1
+        """Значение линии pc+4"""
+        return self.pc + 4
     
     @property
     def input_data(self) -> int:
@@ -228,6 +265,8 @@ class DataPath:
             value = self.nzvc
         elif wr_sel == RegWrSel.INSTR_WORD:
             value = self.instr_word
+        elif wr_sel == RegWrSel.ALU_OUT:
+            value = self.alu_out
         else:
             raise ValueError(f"Unknown RegWrSel: {wr_sel}")
         self.registers[self.dst_sel] = mask_word(value)
@@ -249,6 +288,7 @@ class DataPath:
     def signal_mem_write(self, data_sel: MemDataSel):
         """Data MUX -> write mem (front mem_wr)"""
         self.assert_data_address(self.ar)
+        self.assert_data_address(self.ar + 3)
         if data_sel == MemDataSel.SRC_REG:
             value = self.src_reg
         elif data_sel == MemDataSel.DST_REG:
@@ -263,7 +303,12 @@ class DataPath:
             value = self.pc
         else:
             raise ValueError(f"Unknown MemDataSel: {data_sel}")
-        self.data_memory[self.ar] = mask_word(value)
+        
+        value = mask_word(value)
+        self.data_memory[self.ar] = value & BYTE_MASK
+        self.data_memory[self.ar + 1] = (value >> 8) & BYTE_MASK
+        self.data_memory[self.ar + 2] = (value >> 16) & BYTE_MASK
+        self.data_memory[self.ar + 3] = (value >> 24) & BYTE_MASK
 
     def signal_latch_pc(self, pc_sel: PcSel):
         """PC MUX -> PC"""
@@ -280,8 +325,13 @@ class DataPath:
         self.pc = mask_word(value)
 
     def _eval_alu(self, alu_op: AluOp, left: int, right: int) -> tuple[int, int]:
+        """
+        Расчет результата на левой и правой ноге через ALU
+        при текущих условиях (текущих контрольных сигналах)
+        """
         a = to_signed(left)
         b = to_signed(right)
+
         res, c, v = 0, 0, 0
         
         if alu_op == AluOp.ADD:
@@ -370,6 +420,8 @@ class DataPath:
             right = 0
         elif in2_sel == Alu2Sel.ONE:
             right = 1
+        elif in2_sel == Alu2Sel.FOUR:
+            right = 4
         else:
             raise ValueError(f"Unknown Alu2Sel: {in2_sel}")
 
@@ -410,14 +462,46 @@ class DataPath:
         token_value = self.io_controller.read_token(self.port)
         self.in_data = mask_word(token_value)
 
-
-
 if __name__ == "__main__":
-    io = IOController()
-    io.input_tokens = [100, 200]
+    print("--- Testing DataPath Memory (Little-Endian) ---")
+    
+    # 1. Дамп программы в байтах (2 инструкции по 32 бита)
+    # 0x78563412 и 0xEFCDAB90
+    test_prog = [0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF]
+    
+    io_ctrl = IOController()
+    dp = DataPath(instr_memory=test_prog, io_controller=io_ctrl)
+    
+    # --- Тест 1: Чтение Instruction Memory ---
+    dp.pc = 0
+    word1 = dp.instr_word
+    print(f"[Instr PC=0] Expected: 0x78563412, Got: {hex(word1)}")
+    assert word1 == 0x78563412
+    
+    dp.pc = 4
+    word2 = dp.instr_word
+    print(f"[Instr PC=4] Expected: 0xEFCDAB90, Got: {hex(word2)}")
+    assert word2 == 0xEFCDAB90
 
-    dp = DataPath(
-        instr_memory=[0] * 128,
-        io_controller=io,
-        data_memory_size=64
-    )
+    # --- Тест 2: Запись и чтение Data Memory ---
+    dp.ar = 10
+    # Сымитируем, что у нас на линии ALU_OUT есть число 0xDEADBEEF
+    dp._alu_out = 0xDEADBEEF
+    
+    # Записываем его в память по адресу в AR
+    dp.signal_mem_write(MemDataSel.ALU_OUT)
+    
+    # Проверяем, как оно легло в `data_memory` (ожидаем little-endian)
+    mem_slice = [hex(b) for b in dp.data_memory[10:14]]
+    print(f"[Data  AR=10 bytes] Expected: ['0xef', '0xbe', '0xad', '0xde'], Got: {mem_slice}")
+    assert dp.data_memory[10] == 0xEF
+    assert dp.data_memory[11] == 0xBE
+    assert dp.data_memory[12] == 0xAD
+    assert dp.data_memory[13] == 0xDE
+    
+    # Проверяем обратное чтение через mem_out
+    read_back = dp.mem_out
+    print(f"[Data  AR=10 word ] Expected: 0xdeadbeef, Got: {hex(read_back)}")
+    assert read_back == 0xDEADBEEF
+    
+    print("Memory test passed successfully!")

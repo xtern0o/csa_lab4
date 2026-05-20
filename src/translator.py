@@ -116,6 +116,19 @@ class Translator:
             elif token == "@":
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.ADDR_REG_DIRECT, A0)])
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.ADDR_REG_INDIRECT, A0), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+            
+            elif token == "@+":
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.ADDR_REG_DIRECT, A0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A0), Operand(AddrMode.DATA_REG_DIRECT, D1)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.ADDR_REG_DIRECT, A0), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.DATA_REG_DIRECT, D0)])
+            
+            elif token == "!+":
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, A6), Operand(AddrMode.DATA_REG_DIRECT, D1)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.ADDR_REG_DIRECT, A0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D1), Operand(AddrMode.POST_INC, A0)])
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.ADDR_REG_DIRECT, A0), Operand(AddrMode.DATA_REG_DIRECT, D0)])
 
             elif token == "dup":
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.DATA_REG_DIRECT, D0), Operand(AddrMode.PRE_DEC, A6)])

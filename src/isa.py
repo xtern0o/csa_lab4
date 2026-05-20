@@ -5,12 +5,6 @@ from enum import Enum
 class Opcode(str, Enum):
     """
     Структура команд CISC-процессора
-
-    Порты по умолчанию:
-    0 - числовой вывод
-    1 - числовой ввод
-    2 - симольный вывод
-    3 - символьный ввод
     """
     
     MOVE = "move"
@@ -181,7 +175,7 @@ class Instruction:
                         )
                     )
         
-        result_word = bytes([opcode_num, reserve_byte, src_byte, dest_byte])
+        result_word = bytes([dest_byte, src_byte, reserve_byte, opcode_num])
         return result_word + bytes(extra_words)
     
     def size_bytes(self) -> int:
