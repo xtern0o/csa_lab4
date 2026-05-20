@@ -51,12 +51,15 @@ class MicroInstruction:
     # AR
     ar_latch: int = 0
 
+    hlt: int = 0
+
     def to_binary_string(self) -> str:
         """
-        Конвертация микрокоманды в 51-битную бинарную строку
+        Конвертация микрокоманды в 56-битную бинарную строку
         (выравнивается до 56 бит == 7 байт)
         """
         bin_str = (
+            f"{self.hlt:01b}"
             f"{self.reg_src_sel:02b}{self.reg_dst_sel:02b}{self.reg_wr_sel:03b}{self.latch_reg:01b}"
             f"{self.tmp1_sel:03b}{self.tmp2_sel:03b}{self.latch_tmp1:01b}{self.latch_tmp2:01b}"
             f"{self.alu_op:05b}{self.nzvc_latch:01b}{self.alu_res_latch:01b}"
@@ -259,8 +262,7 @@ class ControlUnit:
         if not mir:
             raise RuntimeError("MicroInstruction is None -> halt")
         
-        # ======================================= ВРЕМЕННЫЙ КОСТЫЛЬ
-        if mir.seq_branch == 99:
+        if mir.hlt:
             raise StopIteration("HALT")
 
         # Фаза 1 - Сигналы
