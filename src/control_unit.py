@@ -9,7 +9,7 @@ class MicroInstruction:
     label: str = ""
 
     # Register File
-    reg_src_sel: int = 0    # 0xF => take from IR
+    reg_src_sel: int = 0    # 0xF => take from IR.src; 0xE => take from IR.dst
     reg_dst_sel: int = 0
     reg_wr_sel: int = 0
     latch_reg: int = 0
@@ -24,6 +24,7 @@ class MicroInstruction:
     alu_op: int = 0
     nzvc_latch: int = 0
     alu_res_latch: int = 0
+    alu_right_sel: int = 0
 
     # Data Memory
     mem_addr_sel: int = 0
@@ -55,21 +56,58 @@ class MicroInstruction:
 
     def to_binary_string(self) -> str:
         """
-        Конвертация микрокоманды в 56-битную бинарную строку
-        (выравнивается до 56 бит == 7 байт)
+        Конвертация микрокоманды в 64-битную бинарную строку (58 бит + 6 на выравнивание)
         """
+
         bin_str = (
             f"{self.hlt:01b}"
-            f"{self.reg_src_sel:02b}{self.reg_dst_sel:02b}{self.reg_wr_sel:03b}{self.latch_reg:01b}"
-            f"{self.tmp1_sel:03b}{self.tmp2_sel:03b}{self.latch_tmp1:01b}{self.latch_tmp2:01b}"
-            f"{self.alu_op:05b}{self.nzvc_latch:01b}{self.alu_res_latch:01b}"
-            f"{self.mem_addr_sel:02b}{self.mem_data_sel:03b}{self.mem_rd:01b}{self.mem_wr:01b}"
-            f"{self.pc_sel:02b}{self.pc_latch:01b}{self.ir_latch:01b}"
-            f"{self.port_latch:01b}{self.out_sel:02b}{self.out_latch:01b}{self.in_latch:01b}"
-            f"{self.latch_cnt:01b}{self.counter_dec:01b}{self.seq_branch:05b}{self.next_addr:08b}"
+
+            # Register File
+            f"{self.reg_src_sel:04b}"
+            f"{self.reg_dst_sel:04b}"
+            f"{self.reg_wr_sel:03b}"
+            f"{self.latch_reg:01b}"
+
+            # TMP
+            f"{self.tmp1_sel:03b}"
+            f"{self.tmp2_sel:03b}"
+            f"{self.latch_tmp1:01b}"
+            f"{self.latch_tmp2:01b}"
+
+            # ALU
+            f"{self.alu_op:05b}"
+            f"{self.nzvc_latch:01b}"
+            f"{self.alu_res_latch:01b}"
+            f"{self.alu_right_sel:02b}"
+
+            # Memory
+            f"{self.mem_addr_sel:02b}"
+            f"{self.mem_data_sel:03b}"
+            f"{self.mem_rd:01b}"
+            f"{self.mem_wr:01b}"
+
+            # PC / IR
+            f"{self.pc_sel:02b}"
+            f"{self.pc_latch:01b}"
+            f"{self.ir_latch:01b}"
+
+            # IO
+            f"{self.port_latch:01b}"
+            f"{self.out_sel:02b}"
+            f"{self.out_latch:01b}"
+            f"{self.in_latch:01b}"
+
+            # Sequencer
+            f"{self.latch_cnt:01b}"
+            f"{self.counter_dec:01b}"
+            f"{self.seq_branch:05b}"
+            f"{self.next_addr:08b}"
+
+            # AR
             f"{self.ar_latch:01b}"
         )
-        return bin_str.zfill(56)
+
+        return bin_str.zfill(64)
 
 
 class BranchCode(IntEnum):
@@ -164,13 +202,13 @@ class ControlUnit:
         """Шина next_addr из поля текущей микрокоманды (MIR)"""
         return self.mir.next_addr if self.mir else 0
     
-    @property
-    def start_addr(self) -> int:
-        """
-        Шина start_addr: выход Instruction Decoder'а (маппинг opcode -> mpc).
-        """
-        flat = self.decode_instruction(self.ir)
-        return self.opcode_to_mpc[flat.opcode]
+    # @property
+    # def start_addr(self) -> int:
+    #     """
+    #     Шина start_addr: выход Instruction Decoder'а (маппинг opcode -> mpc).
+    #     """
+    #     flat = self.decode_instruction(self.ir)
+    #     return self.opcode_to_mpc[flat.opcode]
 
     @property
     def instr_word(self) -> int:
@@ -270,8 +308,6 @@ class ControlUnit:
         if code == BranchCode.DISPATCH_WB:
             return self.wb_dispatch_table[self.decoded.dst_mode]
         
-            
-        
         return self.mpc + 1
     
     def tick(self):
@@ -307,7 +343,10 @@ class ControlUnit:
             self.dp.signal_latch_tmp2(Tmp2Sel(mir.tmp2_sel))
 
         # alu & flags
-        self.dp.signal_alu(AluOp(mir.alu_op)) 
+        self.dp.signal_alu(
+            AluOp(mir.alu_op),
+            AluRightSel(mir.alu_right_sel)
+        )
 
         if mir.nzvc_latch:
             self.dp.signal_latch_nzvc()

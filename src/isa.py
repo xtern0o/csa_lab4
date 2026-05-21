@@ -88,6 +88,7 @@ class AddrMode(IntEnum):
     POST_INC     = 2    # (Rn)+
     PRE_DEC      = 3    # -(Rn)
     IMMEDIATE    = 4    # #value
+    REG_OFFSET   = 5    # disp(Rn)
 
 
 @dataclass
@@ -95,16 +96,21 @@ class Operand:
     mode: AddrMode      # режим адресации
     value: int          # register number OR number (for imm)
 
-    # TODO: a0, a1
     def __str__(self) -> str:
+        sym = "R"
+        if self.value == 6:
+            sym += "[DSP]"
+        elif self.value == 7:
+            sym += "[RSP]"
+
         if self.mode == AddrMode.REG_DIRECT:
-            return f"R{self.value}"
+            return f"{sym}{self.value}"
         elif self.mode == AddrMode.REG_INDIRECT:
-            return f"(R{self.value})"
+            return f"({sym}{self.value})"
         elif self.mode == AddrMode.POST_INC:
-            return f"(R{self.value})+"
+            return f"({sym}{self.value})+"
         elif self.mode == AddrMode.PRE_DEC:
-            return f"-(R{self.value})"
+            return f"-({sym}{self.value})"
         elif self.mode == AddrMode.IMMEDIATE:
             return f"#{self.value}"
         return str(self.value)
@@ -193,12 +199,3 @@ class Instruction:
         
         operands_str = ", ".join(str(op) for op in self.operands)
         return f"{opcode_str:<6} {operands_str}"
-
-
-
-
-instr = Instruction(Opcode.CLR, [Operand(AddrMode.REG_DIRECT, 1)])
-print(instr.operands)
-# print(list(map(lambda x: int(x, 2), instr.to_bytes())))
-
-# print(OPCODE_NUM)

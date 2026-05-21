@@ -35,9 +35,12 @@ class Tmp2Sel(IntEnum):
     SRC_REG = 0
     INSTR_WORD = 1
     MEM_OUT = 2
-    ZERO = 3
-    ONE = 4
-    FOUR = 5
+
+class AluRightSel(IntEnum):
+    TMP2 = 0
+    ZERO = 1
+    ONE = 2
+    FOUR = 3
 
 class MemAddrSel(IntEnum):
     INSTR_WORD = 0
@@ -351,12 +354,6 @@ class DataPath:
             value = self.instr_word
         elif sel == Tmp2Sel.MEM_OUT:
             value = self.mem_out
-        elif sel == Tmp2Sel.ZERO:
-            value = 0
-        elif sel == Tmp2Sel.ONE:
-            value = 1
-        elif sel == Tmp2Sel.FOUR:
-            value = 4
         else:
             raise ValueError(f"Unknown Tmp2Sel: {sel}")
         self.tmp2 = mask_word(value)
@@ -432,9 +429,17 @@ class DataPath:
         nzvc = (n << 3) | (z << 2) | (v << 1) | c
         return res, nzvc
 
-    def signal_alu(self, alu_op: AluOp):
-        """Выполнить операцию ALU над TMP1 (левый) и TMP2 (правый)"""
-        self._alu_out, self._alu_out_nzvc = self._eval_alu(alu_op, self.tmp1, self.tmp2)
+    def signal_alu(self, alu_op: AluOp, right_sel: AluRightSel):
+        if right_sel == AluRightSel.TMP2:
+            right = self.tmp2
+        elif right_sel == AluRightSel.ZERO:
+            right = 0
+        elif right_sel == AluRightSel.ONE:
+            right = 1
+        elif right_sel == AluRightSel.FOUR:
+            right = 4
+
+        self._alu_out, self._alu_out_nzvc = self._eval_alu(alu_op, self.tmp1, right)
 
     def signal_latch_nzvc(self):
         """NZVC latch"""
