@@ -29,6 +29,7 @@ class Tmp1Sel(IntEnum):
     DST_REG = 1
     INSTR_WORD = 2
     MEM_OUT = 3
+    ZERO = 4
 
 class Tmp2Sel(IntEnum):
     SRC_REG = 0
@@ -337,6 +338,8 @@ class DataPath:
             value = self.instr_word
         elif sel == Tmp1Sel.MEM_OUT:
             value = self.mem_out
+        elif sel == Tmp1Sel.ZERO:
+            value = 0
         else:
             raise ValueError(f"Unknown Tmp1Sel: {sel}")
         self.tmp1 = mask_word(value)

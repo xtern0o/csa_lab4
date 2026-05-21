@@ -9,7 +9,7 @@ class MicroInstruction:
     label: str = ""
 
     # Register File
-    reg_src_sel: int = 0
+    reg_src_sel: int = 0    # 0xF => take from IR
     reg_dst_sel: int = 0
     reg_wr_sel: int = 0
     latch_reg: int = 0
@@ -73,23 +73,29 @@ class MicroInstruction:
 
 
 class BranchCode(IntEnum):
-    NEXT = 0
-    JMP = 1
+    NEXT = 0    # mpc+1
+
+    JMP = 1     # jmp anyway
     JZ = 2      # Z=1
     JNZ = 3     # Z=0
     JN = 4      # N=1
     JC = 5      # C=1
     JV = 6      # V=1
-    END_MICRO = 7
-    JCNT_Z = 8  # counter == 0
-    JNN = 9     # N=0
-    JNC = 10    # C=0
-    JNV = 11    # V=0
-    JGE = 12    # N == V
-    JLT = 13    # N != V
-    JLE = 14    # Z=1 or N != V
-    JGT = 15    # Z=0 and N == V
-    DECODE = 16 # декодирование текущего IR и переход на нужный адрес
+    
+    JCNT_Z = 7  # counter == 0
+    JNN = 8     # N=0
+    JNC = 9    # C=0
+    JNV = 10    # V=0
+    JGE = 11    # N == V
+    JLT = 12    # N != V
+    JLE = 13    # Z=1 or N != V
+    JGT = 14    # Z=0 and N == V
+    
+    END_MICRO = 15
+    DISPATCH_SRC = 16
+    DISPATCH_DST = 17
+    DISPATCH_WB = 18
+    DISPATCH_OP = 19
     
 
 @dataclass
@@ -116,15 +122,19 @@ class ControlUnit:
         dp: DataPath,
         microcode_memory: list[MicroInstruction],
         opcode_to_mpc: dict[Opcode, int],
+        src_dispatch_table: dict[AddrMode, int], 
+        dst_dispatch_table: dict[AddrMode, int], 
+        wb_dispatch_table: dict[AddrMode, int],
     ):
         self.dp = dp
         self.io = dp.io_controller
 
         self.microcode_memory = microcode_memory
-        
+
         self.mpc = 0
         self.ir = 0
         self.counter = 0
+        self.decoded: FlatInstruction | None = None
 
         self.mir: MicroInstruction | None
         if self.microcode_memory:
@@ -134,6 +144,10 @@ class ControlUnit:
 
         # маппинг для опкодов на микрокоманды в памяти
         self.opcode_to_mpc = opcode_to_mpc
+        self.src_dispatch_table = src_dispatch_table
+        self.dst_dispatch_table = dst_dispatch_table
+        self.wb_dispatch_table = wb_dispatch_table
+        
 
     @property
     def current_micro(self) -> MicroInstruction | None:
@@ -244,12 +258,19 @@ class ControlUnit:
         
         # конец микропрограммы
         if code == BranchCode.END_MICRO:
-            # в нашей схеме END_MICRO можно использовать для перехода в начало FETCH цикла
-            # Но если у нас DECODE сразу прыгает - то вот так:
-            return 0  # пусть 0 - адрес FETCH цикла по умолчанию
+            return 0  # 0 - адрес FETCH цикла
+        
+        # диспетчеризация для корректного флоу исполнения микрокоманды
+        if code == BranchCode.DISPATCH_SRC:
+            return self.src_dispatch_table[self.decoded.src_mode]
+        if code == BranchCode.DISPATCH_DST:
+            return self.dst_dispatch_table[self.decoded.dst_mode]
+        if code == BranchCode.DISPATCH_OP:
+            return self.opcode_to_mpc[self.decoded.opcode]
+        if code == BranchCode.DISPATCH_WB:
+            return self.wb_dispatch_table[self.decoded.dst_mode]
+        
             
-        if code == BranchCode.DECODE:
-            return self.start_addr
         
         return self.mpc + 1
     
@@ -264,27 +285,30 @@ class ControlUnit:
         
         if mir.hlt:
             raise StopIteration("HALT")
+        
+        src = self.decoded.src_reg if (mir.reg_src_sel == 0xF and self.decoded) else mir.reg_src_sel
+        if mir.reg_dst_sel == 0xE and self.decoded:
+            dst = self.decoded.src_reg
+        elif mir.reg_dst_sel == 0xF and self.decoded:
+            if OPCODE_NARG[self.decoded.opcode] == 1:
+                dst = self.decoded.src_reg
+            else:
+                dst = self.decoded.dst_reg
+        else:
+            dst = mir.reg_dst_sel
+        self.dp.signal_select_regs(src, dst)   
 
-        # Фаза 1 - Сигналы
-
-        self.dp.signal_select_regs(mir.reg_src_sel, mir.reg_dst_sel)
-
+        if mir.ar_latch:
+            self.dp.signal_latch_ar(MemAddrSel(mir.mem_addr_sel))
+        
         if mir.latch_tmp1:
             self.dp.signal_latch_tmp1(Tmp1Sel(mir.tmp1_sel))
         if mir.latch_tmp2:
             self.dp.signal_latch_tmp2(Tmp2Sel(mir.tmp2_sel))
 
-        self.dp.signal_alu(AluOp(mir.alu_op))
-
-        # Фаза 2 - Сохранение (защелки)
-        
-        # data mem
-        if mir.ar_latch:
-            self.dp.signal_latch_ar(MemAddrSel(mir.mem_addr_sel))
-        if mir.mem_wr:
-            self.dp.signal_mem_write(MemDataSel(mir.mem_data_sel))
-            
         # alu & flags
+        self.dp.signal_alu(AluOp(mir.alu_op)) 
+
         if mir.nzvc_latch:
             self.dp.signal_latch_nzvc()
         if mir.alu_res_latch:
@@ -293,6 +317,16 @@ class ControlUnit:
         # register file
         if mir.latch_reg:
             self.dp.signal_latch_reg(RegWrSel(mir.reg_wr_sel))
+        
+        if mir.mem_wr:
+            self.dp.signal_mem_write(MemDataSel(mir.mem_data_sel))
+
+        # PC & IR
+        if mir.ir_latch:
+            self.ir = self.dp.instr_word
+            self.decoded = self.decode_instruction(self.ir)
+        if mir.pc_latch:
+            self.dp.signal_latch_pc(PcSel(mir.pc_sel))
             
         # io controller
         if mir.port_latch:
@@ -302,12 +336,6 @@ class ControlUnit:
         if mir.in_latch:
             self.dp.signal_latch_in_data()
 
-        # instr memory
-        if mir.ir_latch:
-            self.ir = self.dp.instr_word
-        if mir.pc_latch:
-            self.dp.signal_latch_pc(PcSel(mir.pc_sel))
-            
         # control unit -> counter
         if mir.latch_cnt:
             flat = self.decode_instruction(self.ir)
@@ -315,8 +343,7 @@ class ControlUnit:
         if mir.counter_dec:
             self.counter -= 1
 
-        # Фаза 3 - секвенсор
-
+        # секвенсор
         self.mpc = self.next_micro_addr()
         
         # MIR.next()

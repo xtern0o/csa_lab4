@@ -197,8 +197,8 @@ class Instruction:
 
 
 
-instr = Instruction(Opcode.ADD, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.IMMEDIATE, 4)])
-print(instr.size_bytes())
+instr = Instruction(Opcode.CLR, [Operand(AddrMode.REG_DIRECT, 1)])
+print(instr.operands)
 # print(list(map(lambda x: int(x, 2), instr.to_bytes())))
 
 # print(OPCODE_NUM)
