@@ -11,13 +11,12 @@ RSP = 7
 class Parser:
     RESERVED_WORDS = {
         "var", "!", "@", "dup", "swap", "over", "drop",     # stack/memory
-        "n!",
         ">r", "r>", "r@",                                   # return stack
         "@+", "!+",                                         # stack/memory cisc features
         "&", "|", "^", "~",                                 # logical gates
         "+", "-", "*", "/", "mod", "=", ">", "<", "d+",     # arithmetic
         "n+", "n-",
-        ".", "key", "emit", "type", "s.", '."',             # io console
+        ".", "key", "nkey", "emit", "type", "s.", '."',     # pmio
         "if", "else", "endif", "begin", "until",            # control flow
         ":", ";", "'", "execute",                           # begin/end subroutine
         "in", "out",                                        # custom port i/o
@@ -313,7 +312,7 @@ class Translator:
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.IMMEDIATE, addr), Operand(AddrMode.REG_DIRECT, R0)])
             
             elif token == "out":
-                # R0 = port, (DSP) = value
+                # ( data port -- )
 
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R1)]) # R1 = val
                 self.add_instruction(Opcode.OUT, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.REG_DIRECT, R0)])
@@ -363,6 +362,10 @@ class Translator:
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, DSP)])
                 self.add_instruction(Opcode.IN, [Operand(AddrMode.IMMEDIATE, 3), Operand(AddrMode.REG_DIRECT, R0)])
             
+            elif token == "nkey":
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, DSP)])
+                self.add_instruction(Opcode.IN, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.REG_DIRECT, R0)])
+            
             elif token == "type" or token == "s.":
                 # print string from address in TOS to port 2
                 # R0 = string address (pstr)
@@ -383,7 +386,7 @@ class Translator:
                 self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)])
             
             elif token.startswith('."'):
-                # string literal to out; format: ." Hello"
+                # immediate print str; format: ." Hello"
 
                 match = re.search(r'\."\s+(.*)"', token)
                 text = match.group(1) if match else ""
@@ -405,7 +408,7 @@ class Translator:
                 self.add_instruction(Opcode.CMP, [Operand(AddrMode.IMMEDIATE, 0), Operand(AddrMode.REG_DIRECT, R4)])
                 exit_jmp = self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, 0)])
 
-                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, R0), Operand(AddrMode.REG_DIRECT, R1)])   # char
+                self.add_instruction(Opcode.MOVE, [Operand(AddrMode.POST_INC, R0), Operand(AddrMode.REG_DIRECT, R1)])
                 self.add_instruction(Opcode.OUT, [Operand(AddrMode.REG_DIRECT, R1), Operand(AddrMode.IMMEDIATE, 2)])
 
                 self.add_instruction(Opcode.SUB, [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.REG_DIRECT, R4)])

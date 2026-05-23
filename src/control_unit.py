@@ -9,7 +9,7 @@ class MicroInstruction:
     label: str = ""
 
     # Register File
-    reg_src_sel: int = 0    # 0xF => take from IR.src; 0xE => take from IR.dst
+    reg_src_sel: int = 0
     reg_dst_sel: int = 0
     reg_wr_sel: int = 0
     latch_reg: int = 0
@@ -202,14 +202,6 @@ class ControlUnit:
     def next_addr(self) -> int:
         """Шина next_addr из поля текущей микрокоманды (MIR)"""
         return self.mir.next_addr if self.mir else 0
-    
-    # @property
-    # def start_addr(self) -> int:
-    #     """
-    #     Шина start_addr: выход Instruction Decoder'а (маппинг opcode -> mpc).
-    #     """
-    #     flat = self.decode_instruction(self.ir)
-    #     return self.opcode_to_mpc[flat.opcode]
 
     @property
     def instr_word(self) -> int:

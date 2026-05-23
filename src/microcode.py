@@ -3,6 +3,8 @@ from datapath import *
 from isa import *
 
 
+# static microcode memory
+# code below is filling this memory
 microcode_memory = []
 
 
@@ -17,7 +19,7 @@ def add_block(label_prefix: str, instructions: list[MicroInstruction]) -> int:
     return start_index
 
 
-def branch2(skip_branch_code):
+def branch2(skip_branch_code: BranchCode):
     """
     Генератор микрокод для 2-тактового branch'инга: 
       - такт 1: вычисляет адрес и пропускает если условие НЕ выполнено
@@ -128,7 +130,7 @@ SRC_POST_INC = add_block("SRC_POST_INC_FETCH", [
         ar_latch=1, mem_addr_sel=MemAddrSel.SRC_REG,
         latch_tmp2=1, tmp2_sel=Tmp2Sel.MEM_OUT,
     ),
-    # TMP1 = Rsrc (через 0xE); ALU = Rsrc + 4; Rsrc = ALU_OUT  (TMP2 не трогаем)
+    # TMP1 = Rsrc (0xE); ALU = Rsrc + 4; Rsrc = ALU_OUT
     MicroInstruction(
         reg_dst_sel=0xE,
         latch_tmp1=1, tmp1_sel=Tmp1Sel.DST_REG,
