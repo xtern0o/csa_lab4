@@ -67,6 +67,7 @@ class OutSel(IntEnum):
     SRC_REG = 0
     MEM_OUT = 1
     INSTR_WORD = 2
+    ALU_RES = 3
 
 class AluOp(IntEnum):
     ADD = 0     # l + r
@@ -90,8 +91,8 @@ class AluOp(IntEnum):
 class IOController:
     """I/O stream controller"""
     def __init__(self):
-        self.input_tokens: list[object] = []
-        self.output_buffer: list[str] = []
+        self.input_tokens: list[any] = []
+        self.output_buffer: list[any] = []
 
     def load_input_from_file(self, filepath: str) -> None:
         """Load tokens from file"""
@@ -131,7 +132,7 @@ class IOController:
         elif port == 2:
             self.output_buffer.append(chr(value & BYTE_MASK))
         else:
-            # остальной вывод пока игнорится
+            # -> /dev/null
             pass
 
 
@@ -191,8 +192,6 @@ class DataPath:
         self.flag_c = False
         
         self.port = 0
-        self.out_data = 0
-        self.in_data = 0
 
     def latch_register(self, reg_idx: int, value: int):
         """Записать новое значение в регистр (открыть latch_reg)"""
@@ -250,11 +249,6 @@ class DataPath:
     def pc_inc(self) -> int:
         """Значение линии pc+4"""
         return self.pc + 4
-    
-    @property
-    def input_data(self) -> int:
-        """Значение линии input_data"""
-        return self.in_data
 
     def signal_select_regs(self, src: int, dst: int):
         """Выставить линии выбора регистров"""
@@ -265,7 +259,8 @@ class DataPath:
     def signal_latch_reg(self, wr_sel: RegWrSel):
         """Защелкнуть данные в целевой регистр (dst_reg) из выбранного источника"""
         if wr_sel == RegWrSel.INPUT_DATA:
-            value = self.input_data
+            # допущение в рамках симулятора: i/o работает на частоте процессора
+            value = self.io_controller.read_token(self.port) 
         elif wr_sel == RegWrSel.MEM_OUT:
             value = self.mem_out
         elif wr_sel == RegWrSel.ALU_RES:
@@ -458,7 +453,7 @@ class DataPath:
 
     def signal_latch_port(self):
         """PORT latch"""
-        self.port = mask_word(self.instr_word)
+        self.port = mask_word(self.alu_out)
 
     def signal_latch_out_data(self, out_sel: OutSel):
         """Out MUX select и немедленная отправка """
@@ -468,13 +463,8 @@ class DataPath:
             value = self.mem_out
         elif out_sel == OutSel.INSTR_WORD:
             value = self.instr_word
+        elif out_sel == OutSel.ALU_RES:
+            value = self.alu_res
         else:
             raise ValueError(f"Unknown OutSel: {out_sel}")
-        
-        self.out_data = mask_word(value)
-        self.io_controller.write_token(self.port, self.out_data)
-
-    def signal_latch_in_data(self):
-        """Эмуляция порта Ввода (IN_DATA latch) - чтение из потока IO"""
-        token_value = self.io_controller.read_token(self.port)
-        self.in_data = mask_word(token_value)
+        self.io_controller.write_token(self.port, mask_word(value))

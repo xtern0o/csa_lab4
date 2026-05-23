@@ -41,7 +41,6 @@ class MicroInstruction:
     port_latch: int = 0
     out_sel: int = 0
     out_latch: int = 0
-    in_latch: int = 0
 
     # Control Unit (Sequencer & Counter)
     latch_cnt: int = 0
@@ -95,7 +94,6 @@ class MicroInstruction:
             f"{self.port_latch:01b}"
             f"{self.out_sel:02b}"
             f"{self.out_latch:01b}"
-            f"{self.in_latch:01b}"
 
             # Sequencer
             f"{self.latch_cnt:01b}"
@@ -368,8 +366,6 @@ class ControlUnit:
             self.dp.signal_latch_port()
         if mir.out_latch:
             self.dp.signal_latch_out_data(OutSel(mir.out_sel))
-        if mir.in_latch:
-            self.dp.signal_latch_in_data()
 
         # control unit -> counter
         if mir.latch_cnt:

@@ -262,7 +262,7 @@ WB_PRE_DEC = add_block("WB_PRE_DEC", [
 
 
 WB_POST_INC = add_block("WB_POST_INC", [
-    # AR содержит оригинальный адрес dst (с DST_POST_INC шага 1)
+    # AR contains original address of dst
     MicroInstruction(
         mem_wr=1,
         mem_data_sel=MemDataSel.ALU_RES,
@@ -492,6 +492,42 @@ EXEC_BGE = add_block("EXEC_BGE", branch2(BranchCode.JLT))
 EXEC_BLE = add_block("EXEC_BLE", branch2(BranchCode.JGT))
 EXEC_BGT = add_block("EXEC_BGT", branch2(BranchCode.JLE))
 
+EXEC_OUT = add_block("EXEC_OUT", [
+    # 1) port = ALU_OUT = TMP1
+    MicroInstruction(
+        alu_right_sel=AluRightSel.ZERO,
+        alu_op=AluOp.ADD,
+        port_latch=1,
+        seq_branch=BranchCode.NEXT
+    ),
+    # 2) data = 0+TMP2 -> ALU_RES -> out...
+    MicroInstruction(
+        latch_tmp1=1, tmp1_sel=Tmp1Sel.ZERO,
+        alu_right_sel=AluRightSel.TMP2,
+        alu_op=AluOp.ADD,
+        alu_res_latch=1,
+        out_sel=OutSel.ALU_RES,
+        out_latch=1,
+        seq_branch=BranchCode.END_MICRO
+    ),
+])
+
+EXEC_IN = add_block("EXEC_IN", [
+    # 1) port = TMP1
+    MicroInstruction(
+        alu_right_sel=AluRightSel.ZERO,
+        alu_op=AluOp.ADD,       # ALU_OUT = TMP1 + 0 = порт
+        port_latch=1,
+        seq_branch=BranchCode.NEXT
+    ),
+    # 2) in[port] -> src_reg
+    MicroInstruction(
+        reg_dst_sel=0xE,
+        latch_reg=1, reg_wr_sel=RegWrSel.INPUT_DATA,
+        seq_branch=BranchCode.END_MICRO
+    ),
+])
+
 src_dispatch_table = {
     AddrMode.REG_DIRECT:   SRC_REG,
     AddrMode.IMMEDIATE:    SRC_IMM,
@@ -549,4 +585,6 @@ opcode_to_mpc = {
     Opcode.BGE:     EXEC_BGE,
     Opcode.BLE:     EXEC_BLE,
     Opcode.BGT:     EXEC_BGT,
+    Opcode.IN:      EXEC_IN,
+    Opcode.OUT:     EXEC_OUT,
 }
