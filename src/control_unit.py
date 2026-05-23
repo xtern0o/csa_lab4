@@ -133,7 +133,8 @@ class BranchCode(IntEnum):
     DISPATCH_SRC = 16
     DISPATCH_DST = 17
     DISPATCH_WB = 18
-    DISPATCH_OP = 19
+    DISPATCH_WB_UNARY = 19
+    DISPATCH_OP = 20
     
 
 @dataclass
@@ -307,6 +308,9 @@ class ControlUnit:
             return self.opcode_to_mpc[self.decoded.opcode]
         if code == BranchCode.DISPATCH_WB:
             return self.wb_dispatch_table[self.decoded.dst_mode]
+        if code == BranchCode.DISPATCH_WB_UNARY:
+            # так как unary ops пишут аргумент в src, а не в dst
+            return self.wb_dispatch_table[self.decoded.src_mode]
         
         return self.mpc + 1
     

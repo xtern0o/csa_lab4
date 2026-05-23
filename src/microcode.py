@@ -17,6 +17,28 @@ def add_block(label_prefix: str, instructions: list[MicroInstruction]) -> int:
     return start_index
 
 
+def branch2(skip_branch_code):
+    """
+    Генератор микрокод для 2-тактового branch'инга: 
+      - такт 1: вычисляет адрес и пропускает если условие НЕ выполнено
+      - такт 2: защёлкивает PC (условие выполнено)
+    """
+    return [
+        MicroInstruction(
+            latch_tmp1=1, tmp1_sel=Tmp1Sel.ZERO,
+            alu_right_sel=AluRightSel.TMP2,
+            alu_op=AluOp.ADD,
+            alu_res_latch=1,
+            seq_branch=skip_branch_code,
+            next_addr=0
+        ),
+        MicroInstruction(
+            pc_sel=PcSel.ALU_RES, pc_latch=1,
+            seq_branch=BranchCode.END_MICRO
+        ),
+    ]
+
+
 
 # --- FETCH
 
@@ -80,7 +102,7 @@ SRC_INDIRECT = add_block("SRC_INDIRECT_FETCH", [
 
 
 SRC_PRE_DEC = add_block("SRC_PRE_DEC_FETCH", [
-    # TMP1 = Rsrc (через 0xE); ALU = Rsrc - 4; Rsrc = ALU_OUT
+    # TMP1 = Rsrc; ALU = Rsrc - 4; Rsrc = ALU_OUT
     MicroInstruction(
         reg_dst_sel=0xE,
         latch_tmp1=1, tmp1_sel=Tmp1Sel.DST_REG,
@@ -166,7 +188,7 @@ DST_PRE_DEC = add_block("DST_PRE_DEC_FETCH", [
         latch_reg=1, reg_wr_sel=RegWrSel.ALU_OUT,
         alu_res_latch=1,
     ),
-    # AR = Rdst (уже dec); TMP1 = MEM[AR]
+    # AR = --Rdst; TMP1 = MEM[AR]
     MicroInstruction(
         reg_dst_sel=0xF,
         ar_latch=1, mem_addr_sel=MemAddrSel.DST_REG,
@@ -183,7 +205,7 @@ DST_POST_INC = add_block("DST_POST_INC_FETCH", [
         ar_latch=1, mem_addr_sel=MemAddrSel.DST_REG,
         latch_tmp1=1, tmp1_sel=Tmp1Sel.MEM_OUT,
     ),
-    # Rdst += 4  (используем TMP1 временно — потом восстановим)
+    # Rdst += 4
     MicroInstruction(
         reg_dst_sel=0xF,
         latch_tmp1=1, tmp1_sel=Tmp1Sel.DST_REG,
@@ -192,7 +214,7 @@ DST_POST_INC = add_block("DST_POST_INC_FETCH", [
         latch_reg=1, reg_wr_sel=RegWrSel.ALU_OUT,
         alu_res_latch=1,
     ),
-    # Восстанавливаем TMP1 = MEM[AR] (AR не менялся с шага 1)
+    # TMP1 = MEM[AR]
     MicroInstruction(
         latch_tmp1=1, tmp1_sel=Tmp1Sel.MEM_OUT,
         seq_branch=BranchCode.DISPATCH_OP
@@ -225,7 +247,7 @@ WB_INDIRECT = add_block("WB_INDIRECT", [
 
 
 WB_PRE_DEC = add_block("WB_PRE_DEC", [
-    # Rdst уже декрементирован, AR = Rdst
+    # AR = --Rdst
     MicroInstruction(
         reg_dst_sel=0xF,
         ar_latch=1,
@@ -267,7 +289,7 @@ EXEC_CLR = add_block("EXEC_CLR", [
         alu_op=AluOp.ADD,
         alu_res_latch=1,
         nzvc_latch=1,
-        seq_branch=BranchCode.DISPATCH_WB
+        seq_branch=BranchCode.DISPATCH_WB_UNARY
     ),
 ])
 
@@ -278,7 +300,7 @@ EXEC_NEG = add_block("EXEC_NEG", [
         alu_op=AluOp.SUB,
         alu_res_latch=1,
         nzvc_latch=1,
-        seq_branch=BranchCode.DISPATCH_WB
+        seq_branch=BranchCode.DISPATCH_WB_UNARY
     ),
 ])
 
@@ -361,6 +383,112 @@ EXEC_CMP = add_block("EXEC_CMP", [
     ),
 ])
 
+EXEC_NOT = add_block("EXEC_NOT", [
+    MicroInstruction(
+        alu_right_sel=AluRightSel.TMP2,
+        alu_op=AluOp.NOT_B,
+        alu_res_latch=1,
+        nzvc_latch=1,
+        seq_branch=BranchCode.DISPATCH_WB_UNARY
+    ),
+])
+ 
+EXEC_AND = add_block("EXEC_AND", [
+    MicroInstruction(
+        alu_right_sel=AluRightSel.TMP2,
+        alu_op=AluOp.AND,
+        alu_res_latch=1,
+        nzvc_latch=1,
+        seq_branch=BranchCode.DISPATCH_WB
+    ),
+])
+ 
+EXEC_OR = add_block("EXEC_OR", [
+    MicroInstruction(
+        alu_right_sel=AluRightSel.TMP2,
+        alu_op=AluOp.OR,
+        alu_res_latch=1,
+        nzvc_latch=1,
+        seq_branch=BranchCode.DISPATCH_WB
+    ),
+])
+ 
+EXEC_XOR = add_block("EXEC_XOR", [
+    MicroInstruction(
+        alu_right_sel=AluRightSel.TMP2,
+        alu_op=AluOp.XOR,
+        alu_res_latch=1,
+        nzvc_latch=1,
+        seq_branch=BranchCode.DISPATCH_WB
+    ),
+])
+ 
+EXEC_ASL = add_block("EXEC_ASL", [
+    # TMP1 = значение (dst), TMP2 = сдвиг (src)
+    MicroInstruction(
+        alu_right_sel=AluRightSel.TMP2,
+        alu_op=AluOp.ASL,
+        alu_res_latch=1,
+        nzvc_latch=1,
+        seq_branch=BranchCode.DISPATCH_WB
+    ),
+])
+ 
+EXEC_ASR = add_block("EXEC_ASR", [
+    MicroInstruction(
+        alu_right_sel=AluRightSel.TMP2,
+        alu_op=AluOp.ASR,
+        alu_res_latch=1,
+        nzvc_latch=1,
+        seq_branch=BranchCode.DISPATCH_WB
+    ),
+])
+ 
+EXEC_LSL = add_block("EXEC_LSL", [
+    MicroInstruction(
+        alu_right_sel=AluRightSel.TMP2,
+        alu_op=AluOp.LSL,
+        alu_res_latch=1,
+        nzvc_latch=1,
+        seq_branch=BranchCode.DISPATCH_WB
+    ),
+])
+ 
+EXEC_LSR = add_block("EXEC_LSR", [
+    MicroInstruction(
+        alu_right_sel=AluRightSel.TMP2,
+        alu_op=AluOp.LSR,
+        alu_res_latch=1,
+        nzvc_latch=1,
+        seq_branch=BranchCode.DISPATCH_WB
+    ),
+])
+
+# control-flow
+
+EXEC_JMP = add_block("EXEC_JMP", [
+    MicroInstruction(
+        latch_tmp1=1, tmp1_sel=Tmp1Sel.ZERO,
+        alu_right_sel=AluRightSel.TMP2,
+        alu_op=AluOp.ADD,
+        alu_res_latch=1,
+        pc_sel=PcSel.ALU_RES, pc_latch=1,
+        seq_branch=BranchCode.END_MICRO
+    ),
+])
+
+EXEC_BEQ = add_block("EXEC_BEQ", branch2(BranchCode.JNZ))
+EXEC_BNE = add_block("EXEC_BNE", branch2(BranchCode.JZ))
+EXEC_BMI = add_block("EXEC_BMI", branch2(BranchCode.JNN))
+EXEC_BPL = add_block("EXEC_BPL", branch2(BranchCode.JN))
+EXEC_BCS = add_block("EXEC_BCS", branch2(BranchCode.JNC))
+EXEC_BCC = add_block("EXEC_BCC", branch2(BranchCode.JC))
+EXEC_BVS = add_block("EXEC_BVS", branch2(BranchCode.JNV))
+EXEC_BVC = add_block("EXEC_BVC", branch2(BranchCode.JV))
+EXEC_BLT = add_block("EXEC_BLT", branch2(BranchCode.JGE))
+EXEC_BGE = add_block("EXEC_BGE", branch2(BranchCode.JLT))
+EXEC_BLE = add_block("EXEC_BLE", branch2(BranchCode.JGT))
+EXEC_BGT = add_block("EXEC_BGT", branch2(BranchCode.JLE))
 
 src_dispatch_table = {
     AddrMode.REG_DIRECT:   SRC_REG,
@@ -386,16 +514,37 @@ wb_dispatch_table = {
 }
 
 opcode_to_mpc = {
-    Opcode.MOVE: EXEC_MOVE,
-    Opcode.CLR:  EXEC_CLR,
-    Opcode.NEG:  EXEC_NEG,
-    Opcode.ADD:  EXEC_ADD,
-    Opcode.ADC:  EXEC_ADC,
-    Opcode.SUB:  EXEC_SUB,
-    Opcode.SBC:  EXEC_SBC,
-    Opcode.MUL:  EXEC_MUL,
-    Opcode.DIV:  EXEC_DIV,
-    Opcode.REM:  EXEC_REM,
-    Opcode.CMP:  EXEC_CMP,
-    Opcode.HALT: HALT_ADDR,
+    Opcode.MOVE:    EXEC_MOVE,
+    Opcode.CLR:     EXEC_CLR,
+    Opcode.NEG:     EXEC_NEG,
+    Opcode.ADD:     EXEC_ADD,
+    Opcode.ADC:     EXEC_ADC,
+    Opcode.SUB:     EXEC_SUB,
+    Opcode.SBC:     EXEC_SBC,
+    Opcode.MUL:     EXEC_MUL,
+    Opcode.DIV:     EXEC_DIV,
+    Opcode.REM:     EXEC_REM,
+    Opcode.CMP:     EXEC_CMP,
+    Opcode.HALT:    HALT_ADDR,
+    Opcode.NOT_OP:  EXEC_NOT,
+    Opcode.AND_OP:  EXEC_AND,
+    Opcode.OR_OP:   EXEC_OR,
+    Opcode.XOR:     EXEC_XOR,
+    Opcode.ASL:     EXEC_ASL,
+    Opcode.ASR:     EXEC_ASR,
+    Opcode.LSL:     EXEC_LSL,
+    Opcode.LSR:     EXEC_LSR,
+    Opcode.JMP:     EXEC_JMP,
+    Opcode.BEQ:     EXEC_BEQ,
+    Opcode.BNE:     EXEC_BNE,
+    Opcode.BMI:     EXEC_BMI,
+    Opcode.BPL:     EXEC_BPL,
+    Opcode.BCS:     EXEC_BCS,
+    Opcode.BCC:     EXEC_BCC,
+    Opcode.BVS:     EXEC_BVS,
+    Opcode.BVC:     EXEC_BVC,
+    Opcode.BLT:     EXEC_BLT,
+    Opcode.BGE:     EXEC_BGE,
+    Opcode.BLE:     EXEC_BLE,
+    Opcode.BGT:     EXEC_BGT,
 }

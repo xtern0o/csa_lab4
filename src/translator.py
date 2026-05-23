@@ -4,8 +4,8 @@ from isa import *
 
 
 R0, R1, R2, R3, R4, R5 = range(6)
-DSP = 7
-RSP = 8
+DSP = 6
+RSP = 7
 
 
 class Parser:

@@ -61,6 +61,7 @@ class PcSel(IntEnum):
     DST_REG = 1
     MEM_OUT = 2
     INSTR_WORD = 3
+    ALU_RES = 4
 
 class OutSel(IntEnum):
     SRC_REG = 0
@@ -328,6 +329,8 @@ class DataPath:
             value = self.mem_out
         elif pc_sel == PcSel.INSTR_WORD:
             value = self.instr_word
+        elif pc_sel == PcSel.ALU_RES:
+            value = self.alu_res
         else:
             raise ValueError(f"Unknown PcSel: {pc_sel}")
         self.pc = mask_word(value)
@@ -472,6 +475,6 @@ class DataPath:
         self.io_controller.write_token(self.port, self.out_data)
 
     def signal_latch_in_data(self):
-        """Эмуляция порта Ввода (IN_DATA latch) — чтение из потока IO"""
+        """Эмуляция порта Ввода (IN_DATA latch) - чтение из потока IO"""
         token_value = self.io_controller.read_token(self.port)
         self.in_data = mask_word(token_value)

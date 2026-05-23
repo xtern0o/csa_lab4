@@ -19,6 +19,7 @@ class Opcode(StrEnum):
     DIV = "div"
     REM = "rem"
     CMP = "cmp"
+    
     NADD = "nadd"
     NMUL = "nmul"
     
