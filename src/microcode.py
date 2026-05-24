@@ -754,18 +754,22 @@ def make_cu(prog, initial_regs=None, data_memory_setup=None,
     return cu, dp
 
 
-def run(cu, dp, limit=500):
+def run(cu: ControlUnit, dp, limit=500):
     tick = 0
+    tt = 0
     try:
         while True:
             if cu.current_micro is None:
                 break
             cu.tick()
             tick += 1
+            if cu.decoded.opcode != Opcode.HALT:
+                tt += 1
             if tick > limit:
                 raise RuntimeError(f"Tick limit exceeded at {tick}")
     except StopIteration:
         pass
+    print(tt)
     return dp
 
 
