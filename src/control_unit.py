@@ -29,7 +29,6 @@ class MicroInstruction:
     # Data Memory
     mem_addr_sel: int = 0
     mem_data_sel: int = 0
-    mem_rd: int = 0
     mem_wr: int = 0
 
     # Instruction Memory
@@ -47,7 +46,7 @@ class MicroInstruction:
     counter_dec: int = 0
     seq_branch: int = 0
     next_addr: int = 0
-    
+
     # AR
     ar_latch: int = 0
 
@@ -55,52 +54,43 @@ class MicroInstruction:
 
     def to_binary_string(self) -> str:
         """
-        Конвертация микрокоманды в 64-битную бинарную строку (58 бит + 6 на выравнивание)
+        Конвертация микрокоманды в 64-битную бинарную строку
         """
 
         bin_str = (
             f"{self.hlt:01b}"
-
             # Register File
             f"{self.reg_src_sel:04b}"
             f"{self.reg_dst_sel:04b}"
             f"{self.reg_wr_sel:03b}"
             f"{self.latch_reg:01b}"
-
             # TMP
             f"{self.tmp1_sel:03b}"
             f"{self.tmp2_sel:03b}"
             f"{self.latch_tmp1:01b}"
             f"{self.latch_tmp2:01b}"
-
             # ALU
             f"{self.alu_op:05b}"
             f"{self.nzvc_latch:01b}"
             f"{self.alu_res_latch:01b}"
             f"{self.alu_right_sel:02b}"
-
             # Memory
             f"{self.mem_addr_sel:02b}"
             f"{self.mem_data_sel:03b}"
-            f"{self.mem_rd:01b}"
             f"{self.mem_wr:01b}"
-
             # PC / IR
-            f"{self.pc_sel:02b}"
+            f"{self.pc_sel:03b}"
             f"{self.pc_latch:01b}"
             f"{self.ir_latch:01b}"
-
             # IO
             f"{self.port_latch:01b}"
             f"{self.out_sel:02b}"
             f"{self.out_latch:01b}"
-
             # Sequencer
             f"{self.latch_cnt:01b}"
             f"{self.counter_dec:01b}"
             f"{self.seq_branch:05b}"
             f"{self.next_addr:08b}"
-
             # AR
             f"{self.ar_latch:01b}"
         )
@@ -108,32 +98,32 @@ class MicroInstruction:
         return bin_str.zfill(64)
 
 
-class BranchCode(IntEnum):
-    NEXT = 0    # mpc+1
+class BranchCode(int, Enum):
+    NEXT = 0  # mpc+1
 
-    JMP = 1     # jmp anyway
-    JZ = 2      # Z=1
-    JNZ = 3     # Z=0
-    JN = 4      # N=1
-    JC = 5      # C=1
-    JV = 6      # V=1
-    
+    JMP = 1  # jmp anyway
+    JZ = 2  # Z=1
+    JNZ = 3  # Z=0
+    JN = 4  # N=1
+    JC = 5  # C=1
+    JV = 6  # V=1
+
     JCNT_Z = 7  # counter == 0
-    JNN = 8     # N=0
-    JNC = 9    # C=0
-    JNV = 10    # V=0
-    JGE = 11    # N == V
-    JLT = 12    # N != V
-    JLE = 13    # Z=1 or N != V
-    JGT = 14    # Z=0 and N == V
-    
+    JNN = 8  # N=0
+    JNC = 9  # C=0
+    JNV = 10  # V=0
+    JGE = 11  # N == V
+    JLT = 12  # N != V
+    JLE = 13  # Z=1 or N != V
+    JGT = 14  # Z=0 and N == V
+
     END_MICRO = 15
     DISPATCH_SRC = 16
     DISPATCH_DST = 17
     DISPATCH_WB = 18
     DISPATCH_WB_UNARY = 19
     DISPATCH_OP = 20
-    
+
 
 @dataclass
 class FlatInstruction:
@@ -141,6 +131,7 @@ class FlatInstruction:
     Плоское представление инструкции для удобной обработки
     (по сути обычное чтение нужных битов с IR)
     """
+
     opcode: Opcode
 
     src_mode: int | None
@@ -148,20 +139,20 @@ class FlatInstruction:
     src_reg: int | None
     dst_reg: int | None
 
-    n: int | None           # для n-арных инструкций
+    n: int | None  # для n-арных инструкций
     has_src_imm: bool = False
     has_dst_imm: bool = False
-   
+
 
 class ControlUnit:
     def __init__(
         self,
         dp: DataPath,
-        microcode_memory: list[MicroInstruction],
+        microcode_memory,
         opcode_to_mpc: dict[Opcode, int],
-        src_dispatch_table: dict[AddrMode, int], 
-        dst_dispatch_table: dict[AddrMode, int], 
-        wb_dispatch_table: dict[AddrMode, int],
+        src_dispatch_table: dict[int, int],  # addrMode -> int
+        dst_dispatch_table: dict[int, int],  # addrMode -> int
+        wb_dispatch_table: dict[int, int],  # addrMode -> int
     ):
         self.dp = dp
         self.io = dp.io_controller
@@ -177,20 +168,19 @@ class ControlUnit:
         if self.microcode_memory:
             self.mir = self.microcode_memory[self.mpc]
         else:
-            self.mir = None        
+            self.mir = None
 
         # маппинг для опкодов на микрокоманды в памяти
         self.opcode_to_mpc = opcode_to_mpc
         self.src_dispatch_table = src_dispatch_table
         self.dst_dispatch_table = dst_dispatch_table
         self.wb_dispatch_table = wb_dispatch_table
-        
 
     @property
     def current_micro(self) -> MicroInstruction | None:
         """Шина current_micro: идет от MIR на Sequencer и другие компоненты"""
         return self.mir
-    
+
     @property
     def mpc_inc(self) -> int:
         """Шина mpc_inc: значение mpc + 1"""
@@ -205,13 +195,13 @@ class ControlUnit:
     def instr_word(self) -> int:
         """Шина instr_word: приходит с DataPath"""
         return self.dp.instr_word
-    
+
     def decode_instruction(self, ir: int) -> FlatInstruction:
         """
         Декодирование инструкции на ir для обработки
         """
         opcode_val = (ir >> 24) & 0xFF
-        opcode = list(Opcode)[opcode_val] 
+        opcode = list(Opcode)[opcode_val]
         reserve = (ir >> 16) & 0xFF
         src_desc = (ir >> 8) & 0xFF
         dst_desc = ir & 0xFF
@@ -224,9 +214,9 @@ class ControlUnit:
         n = None
         if opcode in {Opcode.NADD, Opcode.NMUL}:
             n = reserve
-        
-        has_src_imm = (src_mode == AddrMode.IMMEDIATE.value)
-        has_dst_imm = (dst_mode == AddrMode.IMMEDIATE.value)
+
+        has_src_imm = src_mode == AddrMode.IMMEDIATE.value
+        has_dst_imm = dst_mode == AddrMode.IMMEDIATE.value
 
         return FlatInstruction(
             opcode=opcode,
@@ -238,7 +228,7 @@ class ControlUnit:
             has_src_imm=has_src_imm,
             has_dst_imm=has_dst_imm,
         )
-    
+
     def next_micro_addr(self) -> int:
         """
         Логика Sequencer
@@ -248,47 +238,52 @@ class ControlUnit:
         Выходы:
           - линия next_addr
         """
-        code = self.current_micro.seq_branch
+        mir: MicroInstruction | None = self.current_micro
+        code: int = mir.seq_branch
 
         if code == BranchCode.JMP:
-            return self.current_micro.next_addr
+            return mir.next_addr
 
         # условные переходы
         if code == BranchCode.JZ and self.dp.flag_z:
-            return self.current_micro.next_addr
+            return mir.next_addr
         if code == BranchCode.JNZ and not self.dp.flag_z:
-            return self.current_micro.next_addr
+            return mir.next_addr
         if code == BranchCode.JN and self.dp.flag_n:
-            return self.current_micro.next_addr
+            return mir.next_addr
         if code == BranchCode.JC and self.dp.flag_c:
-            return self.current_micro.next_addr
+            return mir.next_addr
         if code == BranchCode.JV and self.dp.flag_v:
-            return self.current_micro.next_addr
+            return mir.next_addr
         if code == BranchCode.JNN and not self.dp.flag_n:
-            return self.current_micro.next_addr
+            return mir.next_addr
         if code == BranchCode.JNC and not self.dp.flag_c:
-            return self.current_micro.next_addr
+            return mir.next_addr
         if code == BranchCode.JNV and not self.dp.flag_v:
-            return self.current_micro.next_addr
-        
+            return mir.next_addr
+
         # комбинированные условия для сравнений
         if code == BranchCode.JGE and (self.dp.flag_n == self.dp.flag_v):
-            return self.current_micro.next_addr
+            return mir.next_addr
         if code == BranchCode.JLT and (self.dp.flag_n != self.dp.flag_v):
-            return self.current_micro.next_addr
-        if code == BranchCode.JLE and (self.dp.flag_z or (self.dp.flag_n != self.dp.flag_v)):
-            return self.current_micro.next_addr
-        if code == BranchCode.JGT and (not self.dp.flag_z and (self.dp.flag_n == self.dp.flag_v)):
-            return self.current_micro.next_addr
-        
+            return mir.next_addr
+        if code == BranchCode.JLE and (
+            self.dp.flag_z or (self.dp.flag_n != self.dp.flag_v)
+        ):
+            return mir.next_addr
+        if code == BranchCode.JGT and (
+            not self.dp.flag_z and (self.dp.flag_n == self.dp.flag_v)
+        ):
+            return mir.next_addr
+
         # счетчик 0
         if code == BranchCode.JCNT_Z and self.counter == 0:
-            return self.current_micro.next_addr
-        
+            return mir.next_addr
+
         # конец микропрограммы
         if code == BranchCode.END_MICRO:
             return 0  # 0 - адрес FETCH цикла
-        
+
         # диспетчеризация для корректного флоу исполнения микрокоманды
         if code == BranchCode.DISPATCH_SRC:
             return self.src_dispatch_table[self.decoded.src_mode]
@@ -301,9 +296,9 @@ class ControlUnit:
         if code == BranchCode.DISPATCH_WB_UNARY:
             # так как unary ops пишут аргумент в src, а не в dst
             return self.wb_dispatch_table[self.decoded.src_mode]
-        
+
         return self.mpc + 1
-    
+
     def tick(self):
         """
         Моделирование одного такта процессора
@@ -312,11 +307,15 @@ class ControlUnit:
         mir = self.current_micro
         if not mir:
             raise RuntimeError("MicroInstruction is None -> halt")
-        
+
         if mir.hlt:
             raise StopIteration("HALT")
-        
-        src = self.decoded.src_reg if (mir.reg_src_sel == 0xF and self.decoded) else mir.reg_src_sel
+
+        src = (
+            self.decoded.src_reg
+            if (mir.reg_src_sel == 0xF and self.decoded)
+            else mir.reg_src_sel
+        )
         if mir.reg_dst_sel == 0xE and self.decoded:
             dst = self.decoded.src_reg
         elif mir.reg_dst_sel == 0xF and self.decoded:
@@ -326,31 +325,28 @@ class ControlUnit:
                 dst = self.decoded.dst_reg
         else:
             dst = mir.reg_dst_sel
-        self.dp.signal_select_regs(src, dst)   
+        self.dp.signal_select_regs(src, dst)
 
         if mir.ar_latch:
             self.dp.signal_latch_ar(MemAddrSel(mir.mem_addr_sel))
-        
+
         if mir.latch_tmp1:
             self.dp.signal_latch_tmp1(Tmp1Sel(mir.tmp1_sel))
         if mir.latch_tmp2:
             self.dp.signal_latch_tmp2(Tmp2Sel(mir.tmp2_sel))
 
         # alu & flags
-        self.dp.signal_alu(
-            AluOp(mir.alu_op),
-            AluRightSel(mir.alu_right_sel)
-        )
+        self.dp.signal_alu(AluOp(mir.alu_op), AluRightSel(mir.alu_right_sel))
 
         if mir.nzvc_latch:
             self.dp.signal_latch_nzvc()
         if mir.alu_res_latch:
             self.dp.signal_latch_alu_res()
-            
+
         # register file
         if mir.latch_reg:
             self.dp.signal_latch_reg(RegWrSel(mir.reg_wr_sel))
-        
+
         if mir.mem_wr:
             self.dp.signal_mem_write(MemDataSel(mir.mem_data_sel))
 
@@ -360,7 +356,7 @@ class ControlUnit:
             self.decoded = self.decode_instruction(self.ir)
         if mir.pc_latch:
             self.dp.signal_latch_pc(PcSel(mir.pc_sel))
-            
+
         # io controller
         if mir.port_latch:
             self.dp.signal_latch_port()
@@ -376,7 +372,7 @@ class ControlUnit:
 
         # секвенсор
         self.mpc = self.next_micro_addr()
-        
+
         # MIR.next()
         if 0 <= self.mpc < len(self.microcode_memory):
             self.mir = self.microcode_memory[self.mpc]

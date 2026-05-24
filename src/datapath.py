@@ -1,6 +1,5 @@
 from enum import IntEnum
 
-
 WORD32_MASK = 0xFFFFFFFF
 BYTE_MASK = 0xFF
 
@@ -24,6 +23,7 @@ class RegWrSel(IntEnum):
     INSTR_WORD = 4
     ALU_OUT = 5
 
+
 class Tmp1Sel(IntEnum):
     ALU_RES = 0
     DST_REG = 1
@@ -31,10 +31,12 @@ class Tmp1Sel(IntEnum):
     MEM_OUT = 3
     ZERO = 4
 
+
 class Tmp2Sel(IntEnum):
     SRC_REG = 0
     INSTR_WORD = 1
     MEM_OUT = 2
+
 
 class AluRightSel(IntEnum):
     TMP2 = 0
@@ -42,11 +44,13 @@ class AluRightSel(IntEnum):
     ONE = 2
     FOUR = 3
 
+
 class MemAddrSel(IntEnum):
     INSTR_WORD = 0
     SRC_REG = 1
     DST_REG = 2
     ALU_OUT = 3
+
 
 class MemDataSel(IntEnum):
     SRC_REG = 0
@@ -56,6 +60,7 @@ class MemDataSel(IntEnum):
     INSTR_WORD = 4
     PC = 5
 
+
 class PcSel(IntEnum):
     PC_INC = 0
     DST_REG = 1
@@ -63,41 +68,47 @@ class PcSel(IntEnum):
     INSTR_WORD = 3
     ALU_RES = 4
 
+
 class OutSel(IntEnum):
     SRC_REG = 0
     MEM_OUT = 1
     INSTR_WORD = 2
     ALU_RES = 3
 
+
 class AluOp(IntEnum):
-    ADD = 0     # l + r
-    SUB = 1     # l - r
-    MUL = 2     # l * r
-    DIV = 3     # l // r
-    REM = 4     # l % r
-    AND = 5     # l & r
-    OR = 6      # l | r
-    XOR = 7     # l ^ r
-    NOT_A = 8   # ~l
-    NOT_B = 9   # ~r
+    ADD = 0  # l + r
+    SUB = 1  # l - r
+    MUL = 2  # l * r
+    DIV = 3  # l // r
+    REM = 4  # l % r
+    AND = 5  # l & r
+    OR = 6  # l | r
+    XOR = 7  # l ^ r
+    NOT_A = 8  # ~l
+    NOT_B = 9  # ~r
     ASL = 10
     ASR = 11
     LSL = 12
     LSR = 13
-    ADC = 16    # l + r + C
-    SBC = 17    # l - r - C
+    ADC = 16  # l + r + C
+    SBC = 17  # l - r - C
+
+    PASS_L = 18
+    PASS_R = 19
 
 
 class IOController:
     """I/O stream controller"""
+
     def __init__(self):
-        self.input_tokens: list[any] = []
-        self.output_buffer: list[any] = []
+        self.input_tokens = []
+        self.output_buffer = []
 
     def load_input_from_file(self, filepath: str) -> None:
         """Load tokens from file"""
         pass
-    
+
     def dump_output_to_file(self, filepath: str) -> None:
         """Flush tokens biffer to file"""
         pass
@@ -141,7 +152,7 @@ class DataPath:
     Модель DataPath
 
     DataMemory (little-endian):
-      - Байтовая адресация. 
+      - Байтовая адресация.
         Представляет собой список из (data_memory_size) чисел-байтов от 0 до 255
       - При чтении возвращает 32-битный набор i, i+1, i+2, i+3 байтов на линию mem_out
       - При записи перетирает i, i+1, i+2, i+3 байты
@@ -151,13 +162,14 @@ class DataPath:
       - При чтении возвращает данные на 32-битную шину instr_word
 
     """
+
     def __init__(
-            self, 
-            instr_memory: list[int] | bytes,
-            io_controller: IOController,
-            data_memory_size: int = 1024, 
-            instr_memory_size: int = 1024,
-        ):
+        self,
+        instr_memory: list[int] | bytes,
+        io_controller: IOController,
+        data_memory_size: int = 1024,
+        instr_memory_size: int = 1024,
+    ):
         self.data_memory_size = data_memory_size
         self.data_memory = [0] * data_memory_size
 
@@ -166,31 +178,31 @@ class DataPath:
         for i, b in enumerate(instr_memory):
             if i < instr_memory_size:
                 self.instr_memory[i] = b & BYTE_MASK
-        
+
         self.io_controller = io_controller
-        
+
         # R0-R4 + DSP + RSP
         self.registers = [0] * 8
         self.src_sel = 0
         self.dst_sel = 0
-        
+
         self.ar = 0
 
         self.pc = 0
 
         self.tmp1 = 0
         self.tmp2 = 0
-        
+
         self._alu_out = 0
         self.alu_res = 0
         self.nzvc = 0
-        
+
         # nzvc unpacked
         self.flag_n = False
         self.flag_z = False
         self.flag_v = False
         self.flag_c = False
-        
+
         self.port = 0
 
     def latch_register(self, reg_idx: int, value: int):
@@ -199,17 +211,21 @@ class DataPath:
 
     def assert_data_address(self, addr: int) -> None:
         """Проверка корректности адреса памяти"""
-        assert 0 <= addr < self.data_memory_size, "data addr out of bounds of memory"
-    
+        if 0 <= addr < self.data_memory_size:
+            return
+        raise IndexError("data addr out of bounds of memory")
+
     def assert_instr_address(self, addr: int) -> None:
         """Проверка корректности адреса памяти инструкций"""
-        assert 0 <= addr < self.instr_memory_size, "instr addr out of bounds of memory"
+        if 0 <= addr < self.instr_memory_size:
+            return
+        raise IndexError("instr addr out of bounds of memory")
 
     @property
     def src_reg(self) -> int:
         """Текущее значение линии src_reg"""
         return self.registers[self.src_sel]
-    
+
     @property
     def dst_reg(self) -> int:
         """Текущее значение линии dst_reg"""
@@ -219,32 +235,32 @@ class DataPath:
     def alu_out(self) -> int:
         """Значение линии alu_out"""
         return self._alu_out
-    
-    @property    
+
+    @property
     def instr_word(self) -> int:
         """Значение линии instr_word"""
         self.assert_instr_address(self.pc)
         self.assert_instr_address(self.pc + 3)
         # little-endian сборка
         return (
-            self.instr_memory[self.pc] |
-            (self.instr_memory[self.pc + 1] << 8) |
-            (self.instr_memory[self.pc + 2] << 16) |
-            (self.instr_memory[self.pc + 3] << 24)
+            self.instr_memory[self.pc]
+            | (self.instr_memory[self.pc + 1] << 8)
+            | (self.instr_memory[self.pc + 2] << 16)
+            | (self.instr_memory[self.pc + 3] << 24)
         )
-    
+
     @property
     def mem_out(self) -> int:
         self.assert_data_address(self.ar)
         self.assert_data_address(self.ar + 3)
         # little-endian сборка
         return (
-            self.data_memory[self.ar] |
-            (self.data_memory[self.ar + 1] << 8) |
-            (self.data_memory[self.ar + 2] << 16) |
-            (self.data_memory[self.ar + 3] << 24)
+            self.data_memory[self.ar]
+            | (self.data_memory[self.ar + 1] << 8)
+            | (self.data_memory[self.ar + 2] << 16)
+            | (self.data_memory[self.ar + 3] << 24)
         )
-    
+
     @property
     def pc_inc(self) -> int:
         """Значение линии pc+4"""
@@ -254,13 +270,12 @@ class DataPath:
         """Выставить линии выбора регистров"""
         self.src_sel = src & 0xF
         self.dst_sel = dst & 0xF
-    
 
     def signal_latch_reg(self, wr_sel: RegWrSel):
         """Защелкнуть данные в целевой регистр (dst_reg) из выбранного источника"""
         if wr_sel == RegWrSel.INPUT_DATA:
             # допущение в рамках симулятора: i/o работает на частоте процессора
-            value = self.io_controller.read_token(self.port) 
+            value = self.io_controller.read_token(self.port)
         elif wr_sel == RegWrSel.MEM_OUT:
             value = self.mem_out
         elif wr_sel == RegWrSel.ALU_RES:
@@ -307,7 +322,7 @@ class DataPath:
             value = self.pc
         else:
             raise ValueError(f"Unknown MemDataSel: {data_sel}")
-        
+
         value = mask_word(value)
         self.data_memory[self.ar] = value & BYTE_MASK
         self.data_memory[self.ar + 1] = (value >> 8) & BYTE_MASK
@@ -329,7 +344,7 @@ class DataPath:
         else:
             raise ValueError(f"Unknown PcSel: {pc_sel}")
         self.pc = mask_word(value)
-    
+
     def signal_latch_tmp1(self, sel: Tmp1Sel):
         if sel == Tmp1Sel.ALU_RES:
             value = self.alu_res
@@ -365,7 +380,7 @@ class DataPath:
         b = to_signed(right)
 
         res, c, v = 0, 0, 0
-        
+
         if alu_op == AluOp.ADD:
             ans = left + right
             res = mask_word(ans)
@@ -389,13 +404,16 @@ class DataPath:
         elif alu_op == AluOp.MUL:
             res = mask_word(a * b)
         elif alu_op == AluOp.DIV:
-            assert b != 0, "Division by zero"
+            if b == 0:
+                raise ValueError("division by zero")
             sign = -1 if (a < 0) ^ (b < 0) else 1
             res = mask_word(sign * (abs(a) // abs(b)))
         elif alu_op == AluOp.REM:
-            assert b != 0, "Division by zero"
+            if b == 0:
+                raise ValueError("division by zero")
             val = abs(a) % abs(b)
-            if a < 0: val = -val
+            if a < 0:
+                val = -val
             res = mask_word(val)
         elif alu_op == AluOp.AND:
             res = mask_word(left & right)
@@ -419,6 +437,10 @@ class DataPath:
             shift = right & 0x1F
             c = 1 if (left & (1 << (shift - 1))) else 0
             res = mask_word(left >> shift)
+        elif alu_op == AluOp.PASS_L:
+            res = mask_word(left)
+        elif alu_op == AluOp.PASS_R:
+            res = mask_word(right)
         else:
             raise ValueError(f"Unknown AluOp: {alu_op}")
 
@@ -456,7 +478,7 @@ class DataPath:
         self.port = mask_word(self.alu_out)
 
     def signal_latch_out_data(self, out_sel: OutSel):
-        """Out MUX select и немедленная отправка """
+        """Out MUX select и немедленная отправка"""
         if out_sel == OutSel.SRC_REG:
             value = self.src_reg
         elif out_sel == OutSel.MEM_OUT:
