@@ -1,6 +1,9 @@
 import re
 
-from isa import AddrMode, Instruction, Opcode, Operand
+from isa import *
+
+
+STATIC_DATA_START = 0x100
 
 R0, R1, R2, R3, R4, R5 = range(6)
 DSP = 6
@@ -96,7 +99,7 @@ class Translator:
 
         # статическая память данных
         self.data_memory: bytearray = bytearray()
-        self.data_addr = 0
+        self.data_addr = STATIC_DATA_START
 
         # linking maps
         self.variables: dict[str, int] = {}  # name: data_addr
@@ -138,9 +141,10 @@ class Translator:
         for token in tokens_iter:
             if token == "var":
                 var_name = next(tokens_iter)
-                self.variables[var_name] = self.data_addr
-                self.data_addr += self.WORD_SIZE
-                self.data_memory.extend(b"\x00" * self.WORD_SIZE)
+                if var_name not in self.variables:
+                    self.variables[var_name] = self.data_addr
+                    self.data_addr += self.WORD_SIZE
+                    self.data_memory.extend(b"\x00" * self.WORD_SIZE)
 
             elif token == ":":
                 func_name = next(tokens_iter)
@@ -498,37 +502,24 @@ class Translator:
                 )
 
             elif token in {"=", "<", ">"}:
-                # ( a b -- flag )
-                # R0 = b (TOS), (DSP) = a (NOS)
+                self.add_instruction(Opcode.MOVE, [
+                    Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R1)
+                ])
+                self.add_instruction(Opcode.CMP, [
+                    Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.REG_DIRECT, R1)
+                ])
 
-                self.add_instruction(
-                    Opcode.MOVE,
-                    [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R1)],
-                )
-                self.add_instruction(
-                    Opcode.CMP,
-                    [
-                        Operand(AddrMode.REG_DIRECT, R0),
-                        Operand(AddrMode.REG_DIRECT, R1),
-                    ],
-                )
+                jmp_opcode = None
+                if token == "=":  jmp_opcode = Opcode.BNE
+                elif token == ">": jmp_opcode = Opcode.BLE
+                elif token == "<": jmp_opcode = Opcode.BGE
+
+                jmp_inst = self.add_instruction(jmp_opcode, [Operand(AddrMode.IMMEDIATE, 0)])
+
                 self.add_instruction(Opcode.CLR, [Operand(AddrMode.REG_DIRECT, R0)])
-
-                jmp_opcode: Opcode | None = None
-                if token == "=":
-                    jmp_opcode = Opcode.BNE  # if a != b, jump (condition false)
-                elif token == ">":
-                    jmp_opcode = Opcode.BLE  # if a <= b, jump (condition false)
-                elif token == "<":
-                    jmp_opcode = Opcode.BGE  # if a >= b, jump (condition false)
-
-                jmp_inst = self.add_instruction(
-                    jmp_opcode, [Operand(AddrMode.IMMEDIATE, 0)]
-                )
-                self.add_instruction(
-                    Opcode.ADD,
-                    [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.REG_DIRECT, R0)],
-                )
+                self.add_instruction(Opcode.ADD, [
+                    Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.REG_DIRECT, R0)
+                ])
 
                 jmp_inst.operands[0].value = self.instr_addr
 
@@ -548,12 +539,8 @@ class Translator:
                     raise Exception("else without matching if")
 
                 _, if_jmp = self.control_flow_stack.pop()
-
+                else_jmp = self.add_instruction(Opcode.JMP, [Operand(AddrMode.IMMEDIATE, 0)])
                 if_jmp.operands[0].value = self.instr_addr
-
-                else_jmp = self.add_instruction(
-                    Opcode.JMP, [Operand(AddrMode.IMMEDIATE, 0)]
-                )
                 self.control_flow_stack.append(("else", else_jmp))
 
             elif token == "endif":
