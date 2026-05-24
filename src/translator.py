@@ -1,4 +1,6 @@
+import argparse
 import re
+import sys
 
 from isa import *
 
@@ -825,3 +827,72 @@ class Translator:
                         Operand(AddrMode.REG_DIRECT, R0),
                     ],
                 )
+
+        self.add_instruction(Opcode.HALT)
+
+
+if __name__ == "__main__":
+    parser_cli = argparse.ArgumentParser(description="Forth -> CISC binary translator")
+    parser_cli.add_argument("source", help="source .forth file")
+    parser_cli.add_argument("output", help="output binary file")
+    parser_cli.add_argument("--listing", help="human-readable listing file (.txt)")
+    parser_cli.add_argument("--data", help="output static data binary file")
+    args = parser_cli.parse_args()
+
+    # читаем исходник
+    try:
+        with open(args.source, "r", encoding="utf-8") as f:
+            src = f.read()
+    except FileNotFoundError:
+        print(f"[!] error: src file '{args.source}' not found :((((", file=sys.stderr)
+        sys.exit(1)
+
+    # транслируем
+    tokens = Parser.tokenize(src)
+    t = Translator()
+    try:
+        t.translate(tokens)
+    except Exception as e:
+        print(f"[!] translation error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    # бинарник инструкций
+    binary = bytearray()
+    for instr in t.instr_memory:
+        binary.extend(instr.to_bytes())
+
+    with open(args.output, "wb") as f:
+        f.write(binary)
+    print(f"written: {args.output} ({len(binary)} bytes, {len(t.instr_memory)} instructions)")
+
+    # бинарник статических данных
+    if args.data:
+        with open(args.data, "wb") as f:
+            f.write(t.data_memory)
+        print(f"data written:   {args.data} ({len(t.data_memory)} bytes)")
+
+    # человекочитаемый листинг
+    if args.listing:
+        with open(args.listing, "w", encoding="utf-8") as f:
+            f.write(f"; source: {args.source}\n")
+            f.write(f"; instructions: {len(t.instr_memory)}, binary size: {len(binary)} bytes\n")
+
+            if t.variables:
+                f.write("\n; variables (static data):\n")
+                for name, addr in t.variables.items():
+                    f.write(f";   {name} @ 0x{addr:04x} ({addr})\n")
+
+            if t.functions:
+                f.write("\n; functions:\n")
+                for name, addr in t.functions.items():
+                    f.write(f";   {name} @ 0x{addr:04x} ({addr})\n")
+
+            f.write("\n; instructions:\n")
+            addr = 0
+            for instr in t.instr_memory:
+                size = instr.size_bytes()
+                raw = instr.to_bytes().hex(" ")
+                f.write(f"  0x{addr:04x}  {str(instr):<30}  ; {raw}\n")
+                addr += size
+
+        print(f"listing written: {args.listing}")

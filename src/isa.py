@@ -105,6 +105,22 @@ OPCODE_NARG = {
     Opcode.OUT: 2,
 }
 
+BRANCH_OPCODES = {
+    Opcode.JMP,
+    Opcode.BCC,
+    Opcode.BCS,
+    Opcode.BEQ,
+    Opcode.BNE,
+    Opcode.BLT,
+    Opcode.BGT,
+    Opcode.BLE,
+    Opcode.BGE,
+    Opcode.BMI,
+    Opcode.BPL,
+    Opcode.BVC,
+    Opcode.BVS,
+}
+
 
 class AddrMode(int, Enum):
     REG_DIRECT = 0  # Rn
@@ -220,3 +236,8 @@ class Instruction:
 
         operands_str = ", ".join(str(op) for op in self.operands)
         return f"{opcode_str:<6} {operands_str}"
+
+
+if __name__ == "__main__":
+    for opcode, num in OPCODE_NUM.items():
+        print(f"{opcode}: {bin(num)}")

@@ -1,0 +1,13 @@
+; source: ../programs/1+1.fth
+; instructions: 9, binary size: 48 bytes
+
+; instructions:
+  0x0000  MOVE   R0, -(R[DSP]6)           ; 36 00 00 00
+  0x0004  MOVE   #1, R0                   ; 00 40 00 00 01 00 00 00
+  0x000c  MOVE   R0, -(R[DSP]6)           ; 36 00 00 00
+  0x0010  MOVE   #1, R0                   ; 00 40 00 00 01 00 00 00
+  0x0018  MOVE   (R[DSP]6)+, R1           ; 01 26 00 00
+  0x001c  ADD    R1, R0                   ; 00 01 00 03
+  0x0020  OUT    R0, #0                   ; 40 00 00 26 00 00 00 00
+  0x0028  MOVE   (R[DSP]6)+, R0           ; 00 26 00 00
+  0x002c  HALT                            ; 00 00 00 24
