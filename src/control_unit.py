@@ -123,6 +123,7 @@ class BranchCode(int, Enum):
     DISPATCH_WB = 18
     DISPATCH_WB_UNARY = 19
     DISPATCH_OP = 20
+    DISPATCH_FAST = 21 # fast_exec_table lookup
 
 
 @dataclass
@@ -153,6 +154,7 @@ class ControlUnit:
         src_dispatch_table: dict[int, int],  # addrMode -> int
         dst_dispatch_table: dict[int, int],  # addrMode -> int
         wb_dispatch_table: dict[int, int],  # addrMode -> int
+        fast_exec_table,
     ):
         self.dp = dp
         self.io = dp.io_controller
@@ -175,6 +177,7 @@ class ControlUnit:
         self.src_dispatch_table = src_dispatch_table
         self.dst_dispatch_table = dst_dispatch_table
         self.wb_dispatch_table = wb_dispatch_table
+        self.fast_exec_table = fast_exec_table
 
     @property
     def current_micro(self) -> MicroInstruction | None:
@@ -285,6 +288,12 @@ class ControlUnit:
             return 0  # 0 - адрес FETCH цикла
 
         # диспетчеризация для корректного флоу исполнения микрокоманды
+        if code == BranchCode.DISPATCH_FAST:
+            key = (self.decoded.opcode, self.decoded.src_mode, self.decoded.dst_mode)
+            fast = self.fast_exec_table.get(key)
+            if fast is not None:
+                return fast
+            return self.src_dispatch_table[self.decoded.src_mode]
         if code == BranchCode.DISPATCH_SRC:
             # TODO: сделать fast path для бренчей (долго выполняются)
             return self.src_dispatch_table[self.decoded.src_mode]

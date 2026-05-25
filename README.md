@@ -366,7 +366,7 @@ a @ type            \ получаем значение переменной a (
 > В реализованной мной CISC-овой системе команд **нет ограничений по режимам адресации** для опкодов.
 > Все команды на микропрограммном уровне проходят **одинаковый цикл исполнения**, зависящий от адресации операндов. Подробнее в [Микропрограммном устройстве](TODO: мпу)
 
-Если в команду передается *Immediate*-аргумент, то он записывается следующим словом после микрокоманды и занимает целове слово 32 бит. Таких аргументов может быть 1 или 2 - в этом случае в режиме адресации `dst` и/или `src` кодируется Immediate-адресация, и читается следующее слово или 2 следующих слова (если оба аргумента переданы непосредственно).
+Если в команду передается *Immediate*-аргумент, то он записывается следующим словом после микрокоманды и занимает целове слово 32 бит. Таким образом, размер одной инструкции может занимать от 4 до 12 байт. Таких аргументов может быть 1 или 2 - в этом случае в режиме адресации `dst` и/или `src` кодируется Immediate-адресация, и читается следующее слово или 2 следующих слова (если оба аргумента переданы непосредственно).
 ```
 byte:   0             4                8                12
         +-------------+ +--------------+ +--------------+
@@ -392,38 +392,38 @@ byte:   0             4                8                12
 
 | Мнемоника | Opcode | Аргументы | Описание | Такты |
 |------------|--------|------------|------------|--------|
-| MOVE | 0x00 | src, dst | `dst <- src`; set `nzvc` | 4-8 |
-| CLR | 0x01 | dst | `dst <- 0`; set `nzvc` | 3-7 |
-| NEG | 0x02 | dst | `dst <- -dst`; set `nzvc` | 3-7 |
-| ADD | 0x03 | src, dst | `dst <- dst + src`; set `nzvc` | 4-8 |
-| ADC | 0x04 | src, dst | `dst <- dst + src + C`; set `nzvc` | 4-8 |
-| SUB | 0x05 | src, dst | `dst <- dst - src`; set `nzvc` | 4-8 |
-| SBC | 0x06 | src, dst | `dst <- dst - src - C`; set `nzvc` | 4-8 |
-| MUL | 0x07 | src, dst | `dst <- dst * src`; set `nzvc` | 4-8 |
-| DIV | 0x08 | src, dst | `dst <- dst / src`; set `nzvc` | 4-8 |
-| REM | 0x09 | src, dst | `dst <- dst mod src`; set `nzvc` | 4-8 |
-| CMP | 0x0A | src, dst | `tmp <- dst - src`; set `nzvc` | 3-7 |
+| MOVE | 0x00 | src, dst | `dst <- src`; set `nzvc` | 2-7 |
+| CLR | 0x01 | dst | `dst <- 0`; set `nzvc` | 2-7 |
+| NEG | 0x02 | dst | `dst <- -dst`; set `nzvc` | 2-7 |
+| ADD | 0x03 | src, dst | `dst <- dst + src`; set `nzvc` | 2-8 |
+| ADC | 0x04 | src, dst | `dst <- dst + src + C`; set `nzvc` | 2-8 |
+| SUB | 0x05 | src, dst | `dst <- dst - src`; set `nzvc` | 2-8 |
+| SBC | 0x06 | src, dst | `dst <- dst - src - C`; set `nzvc` | 2-8 |
+| MUL | 0x07 | src, dst | `dst <- dst * src`; set `nzvc` | 2-8 |
+| DIV | 0x08 | src, dst | `dst <- dst / src`; set `nzvc` | 2-8 |
+| REM | 0x09 | src, dst | `dst <- dst mod src`; set `nzvc` | 2-8 |
+| CMP | 0x0A | src, dst | `tmp <- dst - src`; set `nzvc` | 2-7 |
 | NOT | 0x0D | dst | `dst <- ~dst`; set `nzvc` | 3-7 |
-| AND | 0x0E | src, dst | `dst <- dst & src`; set `nzvc` | 4-8 |
-| OR | 0x0F | src, dst | `dst <- dst \| src`; set `nzvc` | 4-8 |
-| XOR | 0x10 | src, dst | `dst <- dst ^ src`; set `nzvc` | 4-8 |
-| ASL | 0x11 | src, dst | `dst <- dst <<< src`; set `nzvc` | 4-8 |
-| ASR | 0x12 | src, dst | `dst <- dst >>> src`; set `nzvc` | 4-8 |
-| LSL | 0x13 | src, dst | `dst <- dst << src`; set `nzvc` | 4-8 |
-| LSR | 0x14 | src, dst | `dst <- dst >> src`; set `nzvc` | 4-8 |
+| AND | 0x0E | src, dst | `dst <- dst & src`; set `nzvc` | 2-8 |
+| OR | 0x0F | src, dst | `dst <- dst \| src`; set `nzvc` | 2-8 |
+| XOR | 0x10 | src, dst | `dst <- dst ^ src`; set `nzvc` | 2-8 |
+| ASL | 0x11 | src, dst | `dst <- dst <<< src`; set `nzvc` | 2-8 |
+| ASR | 0x12 | src, dst | `dst <- dst >>> src`; set `nzvc` | 2-8 |
+| LSL | 0x13 | src, dst | `dst <- dst << src`; set `nzvc` | 2-8 |
+| LSR | 0x14 | src, dst | `dst <- dst >> src`; set `nzvc` | 2-8 |
 | JMP | 0x15 | src | `PC <- src` | 4-6 |
-| BCC | 0x16 | src | `if C=0: PC <- src` | 5-7 |
-| BCS | 0x17 | src | `if C=1: PC <- src` | 5-7 |
-| BEQ | 0x18 | src | `if Z=1: PC <- src` | 5-7 |
-| BNE | 0x19 | src | `if Z=0: PC <- src` | 5-7 |
-| BLT | 0x1A | src | `if N xor V = 1: PC <- src` | 5-7 |
-| BGT | 0x1B | src | `if Z=0 and N xor V=0: PC <- src` | 5-7 |
-| BLE | 0x1C | src | `if Z=1 or N xor V=1: PC <- src` | 5-7 |
-| BGE | 0x1D | src | `if N xor V = 0: PC <- src` | 5-7 |
-| BMI | 0x1E | src | `if N=1: PC <- src` | 5-7 |
-| BPL | 0x1F | src | `if N=0: PC <- src` | 5-7 |
-| BVC | 0x20 | src | `if V=0: PC <- src` | 5-7 |
-| BVS | 0x21 | src | `if V=1: PC <- src` | 5-7 |
+| BCC | 0x16 | src | `if C=0: PC <- src` | 2-7 |
+| BCS | 0x17 | src | `if C=1: PC <- src` | 2-7 |
+| BEQ | 0x18 | src | `if Z=1: PC <- src` | 2-7 |
+| BNE | 0x19 | src | `if Z=0: PC <- src` | 2-7 |
+| BLT | 0x1A | src | `if N xor V = 1: PC <- src` | 2-7 |
+| BGT | 0x1B | src | `if Z=0 and N xor V=0: PC <- src` | 2-7 |
+| BLE | 0x1C | src | `if Z=1 or N xor V=1: PC <- src` | 2-7 |
+| BGE | 0x1D | src | `if N xor V = 0: PC <- src` | 2-7 |
+| BMI | 0x1E | src | `if N=1: PC <- src` | 2-7 |
+| BPL | 0x1F | src | `if N=0: PC <- src` | 2-7 |
+| BVC | 0x20 | src | `if V=0: PC <- src` | 2-7 |
+| BVS | 0x21 | src | `if V=1: PC <- src` | 2-7 |
 | IN | 0x25 | port, dst | `dst <- IN[port]` | 4-8 |
 | OUT | 0x26 | src, port | `OUT[port] <- src` | 4-8 |
 | HALT | 0x24 | - | `stop` | 2 |
