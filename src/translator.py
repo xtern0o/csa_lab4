@@ -491,6 +491,9 @@ class Translator:
                     Operand(AddrMode.REG_DIRECT, R0)
                 ])
                 self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, loop_addr)])
+                self.add_instruction(Opcode.MOVE, [
+                    Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)
+    ])
 
             elif token in {"=", "<", ">"}:
                 self.add_instruction(Opcode.MOVE, [
@@ -523,8 +526,6 @@ class Translator:
                 end_jmp.operands[0].value = self.instr_addr
 
             elif token == "if":
-                # ( flag -- flag )
-                # if R0 == 0, jump to else/endif
                 self.add_instruction(Opcode.CMP, [
                     Operand(AddrMode.IMMEDIATE, 0),
                     Operand(AddrMode.REG_DIRECT, R0)
@@ -532,6 +533,9 @@ class Translator:
                 jmp_inst = self.add_instruction(
                     Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, 0)]
                 )
+                self.add_instruction(Opcode.MOVE, [
+                    Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)
+                ])
                 self.control_flow_stack.append(("if", jmp_inst))
 
             elif token == "else":
