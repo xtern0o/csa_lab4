@@ -610,24 +610,73 @@ EXEC_OUT = add_block(
     ],
 )
 
-EXEC_IN = add_block(
-    "EXEC_IN",
-    [
-        # 1) port = TMP1
-        MicroInstruction(
-            alu_op=AluOp.PASS_L,
-            port_latch=1,
-            seq_branch=BranchCode.NEXT,
-        ),
-        # 2) in[port] -> src_reg
-        MicroInstruction(
-            reg_dst_sel=0xE,
-            latch_reg=1,
-            reg_wr_sel=RegWrSel.INPUT_DATA,
-            seq_branch=BranchCode.END_MICRO,
-        ),
-    ],
-)
+EXEC_IN = add_block("EXEC_IN", [
+    # 1) port = TMP2 (src содержит порт)
+    MicroInstruction(
+        alu_right_sel=AluRightSel.TMP2,
+        alu_op=AluOp.PASS_R,
+        port_latch=1,
+        seq_branch=BranchCode.NEXT,
+    ),
+    # 2) читаем в dst_reg
+    MicroInstruction(
+        reg_dst_sel=0xF,
+        latch_reg=1, reg_wr_sel=RegWrSel.INPUT_DATA,
+        seq_branch=BranchCode.END_MICRO,
+    ),
+])
+
+EXEC_JSR = add_block("EXEC_JSR", [
+    # 1) RSP -= 4
+    MicroInstruction(
+        reg_dst_sel=7,
+        latch_tmp1=1, tmp1_sel=Tmp1Sel.DST_REG,
+        alu_right_sel=AluRightSel.FOUR,
+        alu_op=AluOp.SUB,
+        alu_res_latch=1,
+        latch_reg=1, reg_wr_sel=RegWrSel.ALU_OUT,
+        seq_branch=BranchCode.NEXT,
+    ),
+    # 2) AR = RSP-4, mem[AR] = PC
+    MicroInstruction(
+        reg_src_sel=7,
+        ar_latch=1, mem_addr_sel=MemAddrSel.SRC_REG,
+        mem_wr=1, mem_data_sel=MemDataSel.PC,
+        seq_branch=BranchCode.NEXT,
+    ),
+    # 3) PC = TMP2
+    MicroInstruction(
+        alu_right_sel=AluRightSel.TMP2,
+        alu_op=AluOp.PASS_R,
+        alu_res_latch=1,
+        pc_sel=PcSel.ALU_RES, pc_latch=1,
+        seq_branch=BranchCode.END_MICRO,
+    ),
+])
+
+EXEC_RET = add_block("EXEC_RET", [
+    # 1) RSP -= 4
+    MicroInstruction(
+        reg_dst_sel=7,
+        latch_tmp1=1, tmp1_sel=Tmp1Sel.DST_REG,
+        alu_right_sel=AluRightSel.FOUR,
+        alu_op=AluOp.SUB,
+        alu_res_latch=1,
+        latch_reg=1, reg_wr_sel=RegWrSel.ALU_OUT,
+        seq_branch=BranchCode.NEXT,
+    ),
+    # 2) AR = RSP
+    MicroInstruction(
+        reg_src_sel=7,
+        ar_latch=1, mem_addr_sel=MemAddrSel.SRC_REG,
+        seq_branch=BranchCode.NEXT,
+    ),
+    # 3) PC = mem[AR]
+    MicroInstruction(
+        pc_sel=PcSel.MEM_OUT, pc_latch=1,
+        seq_branch=BranchCode.END_MICRO,
+    ),
+])
 
 # --- N-ary ops
 
@@ -969,6 +1018,8 @@ opcode_to_mpc = {
     Opcode.BGT: EXEC_BGT,
     Opcode.IN: EXEC_IN,
     Opcode.OUT: EXEC_OUT,
+    Opcode.JSR: EXEC_JSR,
+    Opcode.RET: EXEC_RET,
     Opcode.NADD: NADD_INIT,
     Opcode.NMUL: NMUL_INIT,
 }

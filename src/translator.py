@@ -485,23 +485,12 @@ class Translator:
                 self.control_flow_stack.append(("begin", loop_addr))
 
             elif token == "until":
-                # ( flag -- )
-                # if flag == 0, loop back to begin; else exit
-                if (
-                    not self.control_flow_stack
-                    or self.control_flow_stack[-1][0] != "begin"
-                ):
-                    raise Exception("until without matching begin")
-
                 _, loop_addr = self.control_flow_stack.pop()
-
-                self.add_instruction(
-                    Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, loop_addr)]
-                )
-                self.add_instruction(
-                    Opcode.MOVE,
-                    [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)],
-                )
+                self.add_instruction(Opcode.CMP, [
+                    Operand(AddrMode.IMMEDIATE, 0),
+                    Operand(AddrMode.REG_DIRECT, R0)
+                ])
+                self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, loop_addr)])
 
             elif token in {"=", "<", ">"}:
                 self.add_instruction(Opcode.MOVE, [
@@ -512,22 +501,34 @@ class Translator:
                 ])
 
                 jmp_opcode = None
-                if token == "=":  jmp_opcode = Opcode.BNE
+                if token == "=":   jmp_opcode = Opcode.BNE
                 elif token == ">": jmp_opcode = Opcode.BLE
                 elif token == "<": jmp_opcode = Opcode.BGE
 
+                # if not -> jump to false branch
                 jmp_inst = self.add_instruction(jmp_opcode, [Operand(AddrMode.IMMEDIATE, 0)])
 
-                self.add_instruction(Opcode.CLR, [Operand(AddrMode.REG_DIRECT, R0)])
-                self.add_instruction(Opcode.ADD, [
+                # true: R0 = 1
+                self.add_instruction(Opcode.MOVE, [
                     Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.REG_DIRECT, R0)
                 ])
+                end_jmp = self.add_instruction(Opcode.JMP, [Operand(AddrMode.IMMEDIATE, 0)])
 
+                # false: R0 = 0
                 jmp_inst.operands[0].value = self.instr_addr
+                self.add_instruction(Opcode.MOVE, [
+                    Operand(AddrMode.IMMEDIATE, 0), Operand(AddrMode.REG_DIRECT, R0)
+                ])
+
+                end_jmp.operands[0].value = self.instr_addr
 
             elif token == "if":
-                # ( flag -- )
+                # ( flag -- flag )
                 # if R0 == 0, jump to else/endif
+                self.add_instruction(Opcode.CMP, [
+                    Operand(AddrMode.IMMEDIATE, 0),
+                    Operand(AddrMode.REG_DIRECT, R0)
+                ])
                 jmp_inst = self.add_instruction(
                     Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, 0)]
                 )
@@ -554,12 +555,6 @@ class Translator:
                 _, jmp_inst = self.control_flow_stack.pop()
 
                 jmp_inst.operands[0].value = self.instr_addr
-
-                # drop flag after if/else
-                self.add_instruction(
-                    Opcode.MOVE,
-                    [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)],
-                )
 
             # variable processing
             elif token in self.variables:
