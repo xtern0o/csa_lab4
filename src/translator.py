@@ -149,11 +149,21 @@ class Translator:
                     self.data_memory.extend(b"\x00" * self.WORD_SIZE)
 
             elif token == ":":
+                # JMP over the function body so it doesn't execute sequentially
+                jmp_inst = self.add_instruction(Opcode.JMP, [Operand(AddrMode.IMMEDIATE, 0)])
+                self.control_flow_stack.append(('function', jmp_inst))
+                
                 func_name = next(tokens_iter)
                 self.functions[func_name] = self.instr_addr
 
             elif token == ";":
                 self.add_instruction(Opcode.RET)
+                
+                if not self.control_flow_stack or self.control_flow_stack[-1][0] != 'function':
+                    raise Exception("; without matching :")
+                
+                _, jmp_inst = self.control_flow_stack.pop()
+                jmp_inst.operands[0].value = self.instr_addr
 
             elif token == "!":
                 self.add_instruction(
@@ -539,21 +549,19 @@ class Translator:
                 self.control_flow_stack.append(("if", jmp_inst))
 
             elif token == "else":
-                if (
-                    not self.control_flow_stack
-                    or self.control_flow_stack[-1][0] != "if"
-                ):
+                if not self.control_flow_stack or self.control_flow_stack[-1][0] != "if":
                     raise Exception("else without matching if")
 
                 _, if_jmp = self.control_flow_stack.pop()
                 else_jmp = self.add_instruction(Opcode.JMP, [Operand(AddrMode.IMMEDIATE, 0)])
                 if_jmp.operands[0].value = self.instr_addr
+                self.add_instruction(Opcode.MOVE, [
+                    Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)
+                ])
                 self.control_flow_stack.append(("else", else_jmp))
 
             elif token == "endif":
-                if not self.control_flow_stack or self.control_flow_stack[-1][
-                    0
-                ] not in ("if", "else"):
+                if not self.control_flow_stack or self.control_flow_stack[-1][0] not in ("if", "else"):
                     raise Exception("endif without matching if/else")
 
                 _, jmp_inst = self.control_flow_stack.pop()

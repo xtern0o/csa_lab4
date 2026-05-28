@@ -1,15 +1,9 @@
-var result
-var n
-
-nkey n !
-1 result !
-
-begin
-  n @ 0 = if
-    result @ . 1
+: fact ( n -- res )
+  dup 0 = if
+    1 swap drop
   else
-    n @ result @ * result !
-    n @ 1 - n !
-    0
+    dup 1 - fact *
   endif
-until
+;
+
+nkey fact .

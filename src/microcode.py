@@ -656,29 +656,28 @@ EXEC_JSR = add_block("EXEC_JSR", [
 ])
 
 EXEC_RET = add_block("EXEC_RET", [
-    # 1) RSP -= 4
-    MicroInstruction(
-        reg_dst_sel=7,
-        latch_tmp1=1, tmp1_sel=Tmp1Sel.DST_REG,
-        alu_right_sel=AluRightSel.FOUR,
-        alu_op=AluOp.SUB,
-        alu_res_latch=1,
-        latch_reg=1, reg_wr_sel=RegWrSel.ALU_OUT,
-        seq_branch=BranchCode.NEXT,
-    ),
-    # 2) AR = RSP
+    # 1) AR = RSP
     MicroInstruction(
         reg_src_sel=7,
         ar_latch=1, mem_addr_sel=MemAddrSel.SRC_REG,
         seq_branch=BranchCode.NEXT,
     ),
-    # 3) PC = mem[AR]
+    # 2) PC = mem[AR]
     MicroInstruction(
         pc_sel=PcSel.MEM_OUT, pc_latch=1,
+        seq_branch=BranchCode.NEXT,
+    ),
+    # 3) RSP += 4
+    MicroInstruction(
+        reg_dst_sel=7,
+        latch_tmp1=1, tmp1_sel=Tmp1Sel.DST_REG,
+        alu_right_sel=AluRightSel.FOUR,
+        alu_op=AluOp.ADD,
+        latch_reg=1, reg_wr_sel=RegWrSel.ALU_OUT,
         seq_branch=BranchCode.END_MICRO,
     ),
 ])
-
+ 
 # --- N-ary ops
 
 NADD_INIT = add_block("NADD_INIT", [
@@ -776,8 +775,8 @@ microcode_memory[NMUL_LOOP + 2].next_addr = NMUL_LOOP
 # --- Оптимизированные частовстречаемые операции
 # --- Все математические операции ALU с адресацией IMM_REG и REG_REG
 #     не подчиняются общему флоу, так как могут быть выполнены
-#     за 1 такт, минуя выборку операндов и writeback 
-#
+#     за 1 такт, минуя выборку операндов и writeback
+#     благодаря оптимизациям ниже
 
 def make_fast_rr(alu_op: AluOp, label: str) -> int:
     """src=REG, dst=REG - 1 такт"""
@@ -856,19 +855,19 @@ def make_fast_unary_r(alu_op: AluOp, label: str) -> int:
 
 # ALU бинарные: (opcode, alu_op, label)
 _BINARY_ALU = [
-    (Opcode.MOVE, AluOp.PASS_R, "MOVE"),
-    (Opcode.ADD,  AluOp.ADD,    "ADD"),
-    (Opcode.ADC,  AluOp.ADC,    "ADC"),
-    (Opcode.SUB,  AluOp.SUB,    "SUB"),
-    (Opcode.SBC,  AluOp.SBC,    "SBC"),
-    (Opcode.MUL,  AluOp.MUL,    "MUL"),
-    (Opcode.AND_OP, AluOp.AND,  "AND"),
-    (Opcode.OR_OP,  AluOp.OR,   "OR"),
-    (Opcode.XOR,    AluOp.XOR,  "XOR"),
-    (Opcode.ASL,    AluOp.ASL,  "ASL"),
-    (Opcode.ASR,    AluOp.ASR,  "ASR"),
-    (Opcode.LSL,    AluOp.LSL,  "LSL"),
-    (Opcode.LSR,    AluOp.LSR,  "LSR"),
+    (Opcode.MOVE, AluOp.PASS_R,"MOVE"),
+    (Opcode.ADD, AluOp.ADD, "ADD"),
+    (Opcode.ADC, AluOp.ADC, "ADC"),
+    (Opcode.SUB, AluOp.SUB, "SUB"),
+    (Opcode.SBC, AluOp.SBC, "SBC"),
+    (Opcode.MUL, AluOp.MUL, "MUL"),
+    (Opcode.AND_OP, AluOp.AND, "AND"),
+    (Opcode.OR_OP, AluOp.OR, "OR"),
+    (Opcode.XOR, AluOp.XOR, "XOR"),
+    (Opcode.ASL, AluOp.ASL, "ASL"),
+    (Opcode.ASR, AluOp.ASR, "ASR"),
+    (Opcode.LSL, AluOp.LSL, "LSL"),
+    (Opcode.LSR, AluOp.LSR, "LSR"),
 ]
 
 fast_exec_table: dict[tuple, int] = {}
