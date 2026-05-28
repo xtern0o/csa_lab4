@@ -81,7 +81,6 @@ def make_datapath(
         if i < data_mem_size:
             dp.data_memory[i] = b & 0xFF
 
-    # инициализация стековых указателей
     dp.registers[6] = data_mem_size     # DSP - конец памяти, стек растёт вниз
     dp.registers[7] = STATIC_DATA_START # RSP - начало памяти, стек растёт вверх
     return dp
@@ -119,12 +118,8 @@ def fmt_tick(tick: int, cu: ControlUnit, dp: DataPath) -> str:
     mir = cu.mir
     label = mir.label if mir else "?"
     return (
-        f"tick={tick:5d}  "
-        f"pc={dp.pc:#06x}  "
-        f"mpc={cu.mpc:3d}  "
-        f"{label:<25}  "
-        f"{fmt_regs(dp)}  "
-        f"{fmt_flags(dp)}"
+        f"tick={tick:5d}  pc={dp.pc:#06x} mpc={cu.mpc:3d} [{fmt_flags(dp)}] @ {label}\n"
+        f"{fmt_regs(dp)}\n"
     )
 
 
@@ -135,7 +130,7 @@ def run_silent(cu: ControlUnit, dp: DataPath, tick_limit: int) -> int:
             cu.tick()
             tick += 1
             if tick > tick_limit:
-                raise RuntimeError(f"Tick limit {tick_limit} exceeded")
+                raise RuntimeError(f"tick limit {tick_limit} exceeded")
     except StopIteration:
         pass
     return tick
@@ -149,7 +144,7 @@ def run_verbose(cu: ControlUnit, dp: DataPath, tick_limit: int) -> int:
             cu.tick()
             tick += 1
             if tick > tick_limit:
-                raise RuntimeError(f"Tick limit {tick_limit} exceeded")
+                raise RuntimeError(f"tick limit {tick_limit} exceeded")
     except StopIteration:
         print(fmt_tick(tick, cu, dp))
     return tick
@@ -165,16 +160,16 @@ def run_instr_trace(cu: ControlUnit, dp: DataPath, tick_limit: int) -> int:
                 last_pc = dp.pc
                 opcode = cu.decoded.opcode if cu.decoded else "?"
                 print(
-                    f"  pc={dp.pc:#06x}  "
-                    f"tick={tick:5d}  "
-                    f"{str(opcode):<8}  "
-                    f"{fmt_regs(dp)}  "
+                    f"tick={tick:5d} "
+                    f"pc={dp.pc:#06x} "
+                    f"{str(opcode):<8} "
+                    f"{fmt_regs(dp)} "
                     f"{fmt_flags(dp)}"
                 )
             cu.tick()
             tick += 1
             if tick > tick_limit:
-                raise RuntimeError(f"Tick limit {tick_limit} exceeded")
+                raise RuntimeError(f"tick limit {tick_limit} exceeded")
     except StopIteration:
         pass
     return tick
@@ -182,7 +177,7 @@ def run_instr_trace(cu: ControlUnit, dp: DataPath, tick_limit: int) -> int:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="CSA Lab4: forth | cisc | harv | mc | tick | binary | stream | port | pstr | prob1 | (cache) ",
+        description="CSA Lab4: forth | cisc | harv | mc | tick | binary | stream | port | pstr | prob1 | ~~cache~~ ",
         formatter_class=argparse.RawTextHelpFormatter,
     )
     parser.add_argument("bin_file",
@@ -210,7 +205,7 @@ def main():
     try:
         instr_bytes = load_bytes(args.bin_file)
     except FileNotFoundError:
-        print(f"Error: '{args.bin_file}' not found", file=sys.stderr)
+        print(f"[!] error: '{args.bin_file}' not found", file=sys.stderr)
         sys.exit(1)
 
     data_bytes = b""
@@ -219,7 +214,7 @@ def main():
         try:
             data_bytes = load_bytes(args.data)
         except FileNotFoundError:
-            print(f"Error: data file '{args.data}' not found", file=sys.stderr)
+            print(f"[!] error: data file '{args.data}' not found", file=sys.stderr)
             sys.exit(1)
 
     port_buffers: dict[int, list] = {}
@@ -227,15 +222,15 @@ def main():
         try:
             port_buffers = load_input(args.input)
         except FileNotFoundError:
-            print(f"Error: input file '{args.input}' not found", file=sys.stderr)
+            print(f"[!] error: input file '{args.input}' not found", file=sys.stderr)
             sys.exit(1)
         except ValueError as e:
-            print(f"Error in input file: {e}", file=sys.stderr)
+            print(f"[!] error in input file: {e}", file=sys.stderr)
             sys.exit(1)
 
     # листинг 
     if args.listing:
-        print(f"=== Listing: {args.bin_file} ===")
+        print(f"--- listing: {args.bin_file} ---")
         try:
             instructions = Instruction.decode_all(instr_bytes)
             addr = 0
@@ -269,15 +264,15 @@ def main():
         print(f"\nSimulation aborted: {e}", file=sys.stderr)
         sys.exit(1)
 
-    # --- вывод ---
+    # вывод
     if args.verbose or args.trace:
         print()
-        print("=== Output ===")
+        print("--- Output ---")
 
     output = format_output(io.output_buffer)
     print(output)
 
-    print(f"\nTicks: {ticks}", file=sys.stderr)
+    print(f"\n> ticks: {ticks}", file=sys.stderr)
 
 
 if __name__ == "__main__":

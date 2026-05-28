@@ -295,7 +295,6 @@ class ControlUnit:
                 return fast
             return self.src_dispatch_table[self.decoded.src_mode]
         if code == BranchCode.DISPATCH_SRC:
-            # TODO: сделать fast path для бренчей (долго выполняются)
             return self.src_dispatch_table[self.decoded.src_mode]
         if code == BranchCode.DISPATCH_DST:
             return self.dst_dispatch_table[self.decoded.dst_mode]

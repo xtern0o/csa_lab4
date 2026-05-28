@@ -301,9 +301,10 @@ WB_PRE_DEC = add_block(
 WB_POST_INC = add_block(
     "WB_POST_INC",
     [
-        # AR contains original address of dst
+        # AR contains addr of dst
         MicroInstruction(
-            mem_wr=1, mem_data_sel=MemDataSel.ALU_RES, seq_branch=BranchCode.END_MICRO
+            mem_wr=1, mem_data_sel=MemDataSel.ALU_RES, 
+            seq_branch=BranchCode.END_MICRO
         ),
     ],
 )
