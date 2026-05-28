@@ -500,10 +500,15 @@ class Translator:
                     Operand(AddrMode.IMMEDIATE, 0),
                     Operand(AddrMode.REG_DIRECT, R0)
                 ])
-                self.add_instruction(Opcode.BEQ, [Operand(AddrMode.IMMEDIATE, loop_addr)])
+                exit_jmp = self.add_instruction(Opcode.BNE, [Operand(AddrMode.IMMEDIATE, 0)])
                 self.add_instruction(Opcode.MOVE, [
                     Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)
-    ])
+                ])
+                self.add_instruction(Opcode.JMP, [Operand(AddrMode.IMMEDIATE, loop_addr)])
+                exit_jmp.operands[0].value = self.instr_addr
+                self.add_instruction(Opcode.MOVE, [
+                    Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)
+                ])
 
             elif token in {"=", "<", ">"}:
                 self.add_instruction(Opcode.MOVE, [

@@ -775,7 +775,7 @@ microcode_memory[NMUL_LOOP + 2].next_addr = NMUL_LOOP
 # --- Оптимизированные частовстречаемые операции
 # --- Все математические операции ALU с адресацией IMM_REG и REG_REG
 #     не подчиняются общему флоу, так как могут быть выполнены
-#     за 1 такт, минуя выборку операндов и writeback
+#     за 1 такт (не включая IF), минуя выборку операндов и writeback
 #     благодаря оптимизациям ниже
 
 def make_fast_rr(alu_op: AluOp, label: str) -> int:
@@ -810,7 +810,7 @@ def make_fast_ir(alu_op: AluOp, label: str) -> int:
     ])
 
 def make_fast_cmp_rr(label: str) -> int:
-    """CMP REG/REG - без WB, только флаги"""
+    """CMP REG/REG без WB"""
     return add_block(f"FAST_{label}_RR", [
         MicroInstruction(
             reg_src_sel=0xF, reg_dst_sel=0xF,
@@ -824,7 +824,7 @@ def make_fast_cmp_rr(label: str) -> int:
     ])
 
 def make_fast_cmp_ir(label: str) -> int:
-    """CMP IMM/REG - без WB"""
+    """CMP IMM/REG без WB"""
     return add_block(f"FAST_{label}_IR", [
         MicroInstruction(
             reg_dst_sel=0xF,
@@ -839,7 +839,7 @@ def make_fast_cmp_ir(label: str) -> int:
     ])
 
 def make_fast_unary_r(alu_op: AluOp, label: str) -> int:
-    """унарные CLR/NEG/NOT - src=REG (операнд в src через DISPATCH_WB_UNARY)"""
+    """унарные CLR/NEG/NOT src=REG (операнд в src через DISPATCH_WB_UNARY)"""
     return add_block(f"FAST_{label}_R", [
         MicroInstruction(
             reg_src_sel=0xF,
