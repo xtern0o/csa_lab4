@@ -1,0 +1,296 @@
+source: |
+  var vpal_orig
+  var vpal_rev
+  var vi
+  var vj
+  var vbest
+  var vp
+
+  : palindrome? ( n -- flag )
+    dup vpal_orig !
+    0 vpal_rev !
+    begin
+      dup 10 mod
+      vpal_rev @ 10 * +
+      vpal_rev !
+      10 /
+      dup 0 =
+    until
+    vpal_orig @ vpal_rev @ =
+    swap drop
+  ;
+
+  0 vbest !
+  999 vi !
+
+  begin
+
+    vi @ vj !                 \ vj = vi
+
+    begin
+      vi @ vj @ * vp !
+
+      vp @ vbest @ > if       \ if (vp := vi * vj > vbest)
+
+        vp @ palindrome? if   \ if (palindrome?(vp))
+          vp @ vbest !        \ vbest = bp
+        endif
+
+      endif
+
+      vj @ 1 - vj !
+
+      vj @ 100 <              \ vj < 100
+      vp @ vbest @ <          \ vp < vbest
+      |                       \ vj < 100 || vp < vbest
+    until                     \ (vj < 100 || vp < vbest) -> break
+
+    vi @ 1 - vi !             \ vi--
+    vi @ 100 <                \ vi < 100
+  until                       \ (vi < 100) -> break
+
+  vbest @ .
+
+input: {}
+head: 1000
+log: |-
+  DEBUG    simulator_cli:simulator_cli.py:286 === Instruction trace (first 1000 ticks) ===
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=    0 pc=0x0000 ?        R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=    2 pc=0x0174 jmp      R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=    8 pc=0x0178 move     R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   10 pc=0x0180 move     R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   16 pc=0x0184 move     R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   18 pc=0x018c move     R0=       272  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   24 pc=0x0190 move     R0=       272  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   30 pc=0x0194 move     R0=       272  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   36 pc=0x0198 move     R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   42 pc=0x019c move     R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   44 pc=0x01a4 move     R0=       999  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   50 pc=0x01a8 move     R0=       999  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   52 pc=0x01b0 move     R0=       264  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   58 pc=0x01b4 move     R0=       264  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   64 pc=0x01b8 move     R0=       264  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   70 pc=0x01bc move     R0=         0  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   76 pc=0x01c0 move     R0=         0  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   78 pc=0x01c8 move     R0=       264  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   84 pc=0x01cc move     R0=       999  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   90 pc=0x01d0 move     R0=       999  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   92 pc=0x01d8 move     R0=       268  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=   98 pc=0x01dc move     R0=       268  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  104 pc=0x01e0 move     R0=       268  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  110 pc=0x01e4 move     R0=         0  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  116 pc=0x01e8 move     R0=         0  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  118 pc=0x01f0 move     R0=       264  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  124 pc=0x01f4 move     R0=       999  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  130 pc=0x01f8 move     R0=       999  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  132 pc=0x0200 move     R0=       268  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  138 pc=0x0204 move     R0=       999  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  144 pc=0x0208 move     R0=       999  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  146 pc=0x020c mul      R0=    998001  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  152 pc=0x0210 move     R0=    998001  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  154 pc=0x0218 move     R0=       276  R1=       999  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  160 pc=0x021c move     R0=       276  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  166 pc=0x0220 move     R0=       276  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  172 pc=0x0224 move     R0=         0  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  178 pc=0x0228 move     R0=         0  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  180 pc=0x0230 move     R0=       276  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  186 pc=0x0234 move     R0=    998001  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  192 pc=0x0238 move     R0=    998001  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  194 pc=0x0240 move     R0=       272  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  200 pc=0x0244 move     R0=         0  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  206 pc=0x0248 move     R0=         0  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  208 pc=0x024c cmp      R0=         0  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  210 pc=0x0254 ble      R0=         0  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  212 pc=0x025c move     R0=         1  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  214 pc=0x026c jmp      R0=         1  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  216 pc=0x0274 cmp      R0=         1  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  218 pc=0x027c beq      R0=         1  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  224 pc=0x0280 move     R0=         0  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  230 pc=0x0284 move     R0=         0  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  232 pc=0x028c move     R0=       276  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  238 pc=0x0290 move     R0=    998001  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200 N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  244 pc=0x0008 jsr      R0=    998001  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  250 pc=0x000c move     R0=    998001  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  256 pc=0x0010 move     R0=    998001  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  258 pc=0x0018 move     R0=       256  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  264 pc=0x001c move     R0=       256  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  270 pc=0x0020 move     R0=       256  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  276 pc=0x0024 move     R0=    998001  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  282 pc=0x0028 move     R0=    998001  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  284 pc=0x0030 move     R0=         0  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  290 pc=0x0034 move     R0=         0  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  292 pc=0x003c move     R0=       260  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  298 pc=0x0040 move     R0=       260  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  304 pc=0x0044 move     R0=       260  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  310 pc=0x0048 move     R0=    998001  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  316 pc=0x004c move     R0=    998001  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  322 pc=0x0050 move     R0=    998001  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  324 pc=0x0058 move     R0=        10  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  330 pc=0x005c move     R0=        10  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  335 pc=0x0060 rem      R0=        10  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  337 pc=0x0064 move     R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  343 pc=0x0068 move     R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  345 pc=0x0070 move     R0=       260  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  351 pc=0x0074 move     R0=         0  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  357 pc=0x0078 move     R0=         0  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  359 pc=0x0080 move     R0=        10  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  365 pc=0x0084 move     R0=        10  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  367 pc=0x0088 mul      R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  373 pc=0x008c move     R0=         0  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  375 pc=0x0090 add      R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  381 pc=0x0094 move     R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  383 pc=0x009c move     R0=       260  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  389 pc=0x00a0 move     R0=       260  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  395 pc=0x00a4 move     R0=       260  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  401 pc=0x00a8 move     R0=    998001  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  407 pc=0x00ac move     R0=    998001  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  409 pc=0x00b4 move     R0=        10  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  415 pc=0x00b8 move     R0=        10  R1=    998001  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  420 pc=0x00bc div      R0=        10  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  422 pc=0x00c0 move     R0=     99800  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  428 pc=0x00c4 move     R0=     99800  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  434 pc=0x00c8 move     R0=     99800  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  436 pc=0x00d0 move     R0=         0  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  442 pc=0x00d4 move     R0=         0  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  444 pc=0x00d8 cmp      R0=         0  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  447 pc=0x00f0 bne      R0=         0  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  449 pc=0x00f8 move     R0=         0  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  451 pc=0x0100 cmp      R0=         0  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  453 pc=0x0108 bne      R0=         0  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  459 pc=0x010c move     R0=     99800  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  461 pc=0x0048 jmp      R0=     99800  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  467 pc=0x004c move     R0=     99800  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  473 pc=0x0050 move     R0=     99800  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  475 pc=0x0058 move     R0=        10  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  481 pc=0x005c move     R0=        10  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  486 pc=0x0060 rem      R0=        10  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  488 pc=0x0064 move     R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  494 pc=0x0068 move     R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  496 pc=0x0070 move     R0=       260  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  502 pc=0x0074 move     R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  508 pc=0x0078 move     R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  510 pc=0x0080 move     R0=        10  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  516 pc=0x0084 move     R0=        10  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  518 pc=0x0088 mul      R0=        10  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  524 pc=0x008c move     R0=        10  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  526 pc=0x0090 add      R0=        10  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  532 pc=0x0094 move     R0=        10  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  534 pc=0x009c move     R0=       260  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  540 pc=0x00a0 move     R0=       260  R1=        10  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  546 pc=0x00a4 move     R0=       260  R1=        10  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  552 pc=0x00a8 move     R0=     99800  R1=        10  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  558 pc=0x00ac move     R0=     99800  R1=        10  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  560 pc=0x00b4 move     R0=        10  R1=        10  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  566 pc=0x00b8 move     R0=        10  R1=     99800  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  571 pc=0x00bc div      R0=        10  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  573 pc=0x00c0 move     R0=      9980  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  579 pc=0x00c4 move     R0=      9980  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  585 pc=0x00c8 move     R0=      9980  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  587 pc=0x00d0 move     R0=         0  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  593 pc=0x00d4 move     R0=         0  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  595 pc=0x00d8 cmp      R0=         0  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  598 pc=0x00f0 bne      R0=         0  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  600 pc=0x00f8 move     R0=         0  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  602 pc=0x0100 cmp      R0=         0  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  604 pc=0x0108 bne      R0=         0  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  610 pc=0x010c move     R0=      9980  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  612 pc=0x0048 jmp      R0=      9980  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  618 pc=0x004c move     R0=      9980  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  624 pc=0x0050 move     R0=      9980  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  626 pc=0x0058 move     R0=        10  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  632 pc=0x005c move     R0=        10  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  637 pc=0x0060 rem      R0=        10  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  639 pc=0x0064 move     R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  645 pc=0x0068 move     R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  647 pc=0x0070 move     R0=       260  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  653 pc=0x0074 move     R0=        10  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  659 pc=0x0078 move     R0=        10  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  661 pc=0x0080 move     R0=        10  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  667 pc=0x0084 move     R0=        10  R1=        10  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  669 pc=0x0088 mul      R0=       100  R1=        10  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  675 pc=0x008c move     R0=       100  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  677 pc=0x0090 add      R0=       100  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  683 pc=0x0094 move     R0=       100  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  685 pc=0x009c move     R0=       260  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  691 pc=0x00a0 move     R0=       260  R1=       100  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  697 pc=0x00a4 move     R0=       260  R1=       100  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  703 pc=0x00a8 move     R0=      9980  R1=       100  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  709 pc=0x00ac move     R0=      9980  R1=       100  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  711 pc=0x00b4 move     R0=        10  R1=       100  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  717 pc=0x00b8 move     R0=        10  R1=      9980  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  722 pc=0x00bc div      R0=        10  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  724 pc=0x00c0 move     R0=       998  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  730 pc=0x00c4 move     R0=       998  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  736 pc=0x00c8 move     R0=       998  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  738 pc=0x00d0 move     R0=         0  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  744 pc=0x00d4 move     R0=         0  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  746 pc=0x00d8 cmp      R0=         0  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  749 pc=0x00f0 bne      R0=         0  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  751 pc=0x00f8 move     R0=         0  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  753 pc=0x0100 cmp      R0=         0  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  755 pc=0x0108 bne      R0=         0  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  761 pc=0x010c move     R0=       998  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  763 pc=0x0048 jmp      R0=       998  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  769 pc=0x004c move     R0=       998  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  775 pc=0x0050 move     R0=       998  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  777 pc=0x0058 move     R0=        10  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  783 pc=0x005c move     R0=        10  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  788 pc=0x0060 rem      R0=        10  R1=         8  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  790 pc=0x0064 move     R0=         8  R1=         8  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  796 pc=0x0068 move     R0=         8  R1=         8  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  798 pc=0x0070 move     R0=       260  R1=         8  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  804 pc=0x0074 move     R0=       100  R1=         8  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  810 pc=0x0078 move     R0=       100  R1=         8  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  812 pc=0x0080 move     R0=        10  R1=         8  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  818 pc=0x0084 move     R0=        10  R1=       100  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  820 pc=0x0088 mul      R0=      1000  R1=       100  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  826 pc=0x008c move     R0=      1000  R1=         8  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  828 pc=0x0090 add      R0=      1008  R1=         8  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  834 pc=0x0094 move     R0=      1008  R1=         8  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  836 pc=0x009c move     R0=       260  R1=         8  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  842 pc=0x00a0 move     R0=       260  R1=      1008  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  848 pc=0x00a4 move     R0=       260  R1=      1008  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  854 pc=0x00a8 move     R0=       998  R1=      1008  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  860 pc=0x00ac move     R0=       998  R1=      1008  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  862 pc=0x00b4 move     R0=        10  R1=      1008  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  868 pc=0x00b8 move     R0=        10  R1=       998  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  873 pc=0x00bc div      R0=        10  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  875 pc=0x00c0 move     R0=        99  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  881 pc=0x00c4 move     R0=        99  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  887 pc=0x00c8 move     R0=        99  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  889 pc=0x00d0 move     R0=         0  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  895 pc=0x00d4 move     R0=         0  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  897 pc=0x00d8 cmp      R0=         0  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  900 pc=0x00f0 bne      R0=         0  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  902 pc=0x00f8 move     R0=         0  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  904 pc=0x0100 cmp      R0=         0  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  906 pc=0x0108 bne      R0=         0  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=1 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  912 pc=0x010c move     R0=        99  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  914 pc=0x0048 jmp      R0=        99  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  920 pc=0x004c move     R0=        99  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  926 pc=0x0050 move     R0=        99  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  928 pc=0x0058 move     R0=        10  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  934 pc=0x005c move     R0=        10  R1=        99  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  939 pc=0x0060 rem      R0=        10  R1=         9  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  941 pc=0x0064 move     R0=         9  R1=         9  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  947 pc=0x0068 move     R0=         9  R1=         9  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  949 pc=0x0070 move     R0=       260  R1=         9  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  955 pc=0x0074 move     R0=      1008  R1=         9  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  961 pc=0x0078 move     R0=      1008  R1=         9  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  963 pc=0x0080 move     R0=        10  R1=         9  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  969 pc=0x0084 move     R0=        10  R1=      1008  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  971 pc=0x0088 mul      R0=     10080  R1=      1008  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  977 pc=0x008c move     R0=     10080  R1=         9  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  979 pc=0x0090 add      R0=     10089  R1=         9  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  985 pc=0x0094 move     R0=     10089  R1=         9  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  987 pc=0x009c move     R0=       260  R1=         9  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  993 pc=0x00a0 move     R0=       260  R1=     10089  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+  DEBUG    simulator_cli:simulator_cli.py:191 tick=  999 pc=0x00a4 move     R0=       260  R1=     10089  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc N=0 Z=0 V=0 C=0
+machine_err: |
+  output: ['906609']
+  ticks: 8522007
+machine_output: |
+  906609
+translator_output: |
+  source: 213 instructions, 1164 bytes
+  data:   280 bytes

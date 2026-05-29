@@ -463,20 +463,6 @@ python translator.py programs/hello.fth out/hello.bin \
     --data out/hello.data
 ```
 
-| Аргумент | Обязательный | Описание |
-|----------|--------------|----------|
-| `source` | да | Путь к файлу с исходным кодом (`.fth`) |
-| `output` | да | Путь к выходному бинарному файлу с кодом инструкций |
-| `--listing <file>` | нет | Путь к файлу листинга в человекочитаемом формате |
-| `--data <file>` | нет | Путь к бинарному файлу статической памяти данных |
-
-**Пример:**
-```bash
-python translator.py programs/hello.fth out/hello.bin \
-    --listing out/hello.lst \
-    --data out/hello.data
-```
-
 **Формат листинга** (`.lst`):
 ```
 ; Source: programs/hello.fth

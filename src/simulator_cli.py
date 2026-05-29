@@ -1,6 +1,7 @@
 import sys
 import yaml
 import argparse
+import logging
 
 from datapath import *
 from control_unit import *
@@ -9,6 +10,8 @@ from microcode import *
 
 
 STATIC_DATA_START = 0x200
+
+log = logging.getLogger(__name__)
 
 
 def load_bytes(path: str) -> bytes:
@@ -141,13 +144,13 @@ def run_verbose(cu: ControlUnit, dp: DataPath, tick_limit: int) -> int:
     tick = 0
     try:
         while cu.current_micro:
-            print(fmt_tick(tick, cu, dp))
+            log.debug(fmt_tick(tick, cu, dp))
             cu.tick()
             tick += 1
             if tick > tick_limit:
                 raise RuntimeError(f"tick limit {tick_limit} exceeded")
     except StopIteration:
-        print(fmt_tick(tick, cu, dp))
+        log.debug(fmt_tick(tick, cu, dp))
     return tick
 
 
@@ -160,7 +163,32 @@ def run_instr_trace(cu: ControlUnit, dp: DataPath, tick_limit: int) -> int:
             if dp.pc != last_pc and cu.mpc == FETCH_IR:
                 last_pc = dp.pc
                 opcode = cu.decoded.opcode if cu.decoded else "?"
-                print(
+                log.debug(
+                    f"tick={tick:5d} "
+                    f"pc={dp.pc:#06x} "
+                    f"{str(opcode):<8} "
+                    f"{fmt_regs(dp)} "
+                    f"{fmt_flags(dp)}"
+                )
+            cu.tick()
+            tick += 1
+            if tick > tick_limit:
+                raise RuntimeError(f"tick limit {tick_limit} exceeded")
+    except StopIteration:
+        pass
+    return tick
+
+
+def run_head_trace(cu: ControlUnit, dp: DataPath, tick_limit: int, head: int) -> int:
+    """Трассировка первых N тиков, затем silent режим"""
+    tick = 0
+    last_pc = -1
+    try:
+        while cu.current_micro:
+            if tick < head and dp.pc != last_pc and cu.mpc == FETCH_IR:
+                last_pc = dp.pc
+                opcode = cu.decoded.opcode if cu.decoded else "?"
+                log.debug(
                     f"tick={tick:5d} "
                     f"pc={dp.pc:#06x} "
                     f"{str(opcode):<8} "
@@ -194,9 +222,11 @@ def main():
 
     trace = parser.add_mutually_exclusive_group()
     trace.add_argument("--verbose", "-v", action="store_true",
-                       help="Print every microinstruction tick")
+                       help="Выводить каждый тик (каждую микрокоманду)")
     trace.add_argument("--trace", "-t", action="store_true",
-                       help="Print every ISA instruction (coarser than --verbose)")
+                       help="Выводить каждую инструкцию ISA (покомандно)")
+    trace.add_argument("--head", "-H", type=int, metavar="N", default=None,
+                       help="Выводить первые N тиков")
 
     parser.add_argument("--listing", "-l", action="store_true",
                         help="Print decoded instruction listing before run")
@@ -231,18 +261,17 @@ def main():
 
     # листинг 
     if args.listing:
-        print(f"--- listing: {args.bin_file} ---")
+        log.info(f"--- listing: {args.bin_file} ---")
         try:
             instructions = Instruction.decode_all(instr_bytes)
             addr = 0
             for instr in instructions:
                 size = instr.size_bytes()
                 raw  = " ".join(f"{b:02x}" for b in instr_bytes[addr:addr + size])
-                print(f"  {addr:#06x}  {str(instr):<35}  ; {raw}")
+                log.info(f"  {addr:#06x}  {str(instr):<35}  ; {raw}")
                 addr += size
         except ValueError as e:
-            print(f"  Decode error: {e}", file=sys.stderr)
-        print()
+            print(f"[!] decode error: {e}", file=sys.stderr)
 
     io = make_io(port_buffers)
     dp = make_datapath(instr_bytes, data_bytes, io, args.data_mem_size)
@@ -250,31 +279,30 @@ def main():
 
     # запуск
     if args.verbose:
-        print("=== Tick trace ===")
+        log.debug("=== Tick trace ===")
     elif args.trace:
-        print("=== Instruction trace ===")
+        log.debug("=== Instruction trace ===")
+    elif args.head:
+        log.debug(f"=== Instruction trace (first {args.head} ticks) ===")
 
     try:
         if args.verbose:
             ticks = run_verbose(cu, dp, args.tick_limit)
         elif args.trace:
             ticks = run_instr_trace(cu, dp, args.tick_limit)
+        elif args.head:
+            ticks = run_head_trace(cu, dp, args.tick_limit, args.head)
         else:
             ticks = run_silent(cu, dp, args.tick_limit)
     except RuntimeError as e:
-        print(f"\nSimulation aborted: {e}", file=sys.stderr)
+        print(f"\nsimulation aborted: {e}", file=sys.stderr)
         sys.exit(1)
-
-    # вывод
-    if args.verbose or args.trace:
-        print()
-        print("--- Output ---")
 
     output = format_output(io.output_buffer)
     print(output)
 
-    print(f"\n> ticks: {ticks}")
-    print(f"\n> ticks: {ticks}", file=sys.stderr)
+    print(f"output: {io.output_buffer}", file=sys.stderr)
+    print(f"ticks: {ticks}", file=sys.stderr)
 
 
 if __name__ == "__main__":

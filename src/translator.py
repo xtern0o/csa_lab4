@@ -100,7 +100,7 @@ class Translator:
         self.instr_addr = 0
 
         # статическая память данных
-        self.data_memory: bytearray = bytearray()
+        self.data_memory: bytearray = bytearray(STATIC_DATA_START)
         self.data_addr = STATIC_DATA_START
 
         # linking maps
@@ -843,7 +843,7 @@ class Translator:
         self.add_instruction(Opcode.HALT)
 
 
-if __name__ == "__main__":
+def main():
     parser_cli = argparse.ArgumentParser(description="Forth -> CISC binary translator")
     parser_cli.add_argument("source", help="source .forth file")
     parser_cli.add_argument("output", help="output binary file")
@@ -872,12 +872,12 @@ if __name__ == "__main__":
 
     with open(args.output, "wb") as f:
         f.write(binary)
-    print(f"written: {args.output} ({len(binary)} bytes, {len(t.instr_memory)} instructions)")
+    print(f"source: {len(t.instr_memory)} instructions, {len(binary)} bytes")
 
     if args.data:
         with open(args.data, "wb") as f:
             f.write(t.data_memory)
-        print(f"data written:   {args.data} ({len(t.data_memory)} bytes)")
+        print(f"data:   {len(t.data_memory)} bytes")
 
     if args.listing:
         with open(args.listing, "w", encoding="utf-8") as f:
@@ -902,4 +902,8 @@ if __name__ == "__main__":
                 f.write(f"  0x{addr:04x}  {str(instr):<30}  ; {raw}\n")
                 addr += size
 
-        print(f"listing written: {args.listing}")
+        # print(f"listing written: {args.listing}")
+
+
+if __name__ == "__main__":
+    main()
