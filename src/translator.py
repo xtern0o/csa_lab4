@@ -851,7 +851,6 @@ if __name__ == "__main__":
     parser_cli.add_argument("--data", help="output static data binary file")
     args = parser_cli.parse_args()
 
-    # читаем исходник
     try:
         with open(args.source, "r", encoding="utf-8") as f:
             src = f.read()
@@ -859,7 +858,6 @@ if __name__ == "__main__":
         print(f"[!] error: src file '{args.source}' not found :((((", file=sys.stderr)
         sys.exit(1)
 
-    # транслируем
     tokens = Parser.tokenize(src)
     t = Translator()
     try:
@@ -868,7 +866,6 @@ if __name__ == "__main__":
         print(f"[!] translation error: {e}", file=sys.stderr)
         sys.exit(1)
 
-    # бинарник инструкций
     binary = bytearray()
     for instr in t.instr_memory:
         binary.extend(instr.to_bytes())
@@ -877,13 +874,11 @@ if __name__ == "__main__":
         f.write(binary)
     print(f"written: {args.output} ({len(binary)} bytes, {len(t.instr_memory)} instructions)")
 
-    # бинарник статических данных
     if args.data:
         with open(args.data, "wb") as f:
             f.write(t.data_memory)
         print(f"data written:   {args.data} ({len(t.data_memory)} bytes)")
 
-    # человекочитаемый листинг
     if args.listing:
         with open(args.listing, "w", encoding="utf-8") as f:
             f.write(f"; source: {args.source}\n")

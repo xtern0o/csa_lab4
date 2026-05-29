@@ -1,7 +1,8 @@
 var vpal_orig
 var vpal_rev
 
-: palindrome?  ( n -- flag )
+\ буквально s == s[::-1]
+: palindrome? ( n -- flag )
   dup vpal_orig !
   0 vpal_rev !
   begin

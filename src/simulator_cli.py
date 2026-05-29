@@ -137,6 +137,7 @@ def run_silent(cu: ControlUnit, dp: DataPath, tick_limit: int) -> int:
 
 
 def run_verbose(cu: ControlUnit, dp: DataPath, tick_limit: int) -> int:
+    """Потактовая трасировка - печатает каждый такт (все микрокоманды)"""
     tick = 0
     try:
         while cu.current_micro:
@@ -272,6 +273,7 @@ def main():
     output = format_output(io.output_buffer)
     print(output)
 
+    print(f"\n> ticks: {ticks}")
     print(f"\n> ticks: {ticks}", file=sys.stderr)
 
 
