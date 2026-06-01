@@ -9,8 +9,6 @@ from isa import *
 from microcode import *
 
 
-STATIC_DATA_START = 0x200
-
 log = logging.getLogger(__name__)
 
 
@@ -84,8 +82,6 @@ def make_datapath(
         if i < data_mem_size:
             dp.data_memory[i] = b & 0xFF
 
-    dp.registers[6] = data_mem_size     # DSP - конец памяти, стек растёт вниз
-    dp.registers[7] = STATIC_DATA_START # RSP - начало памяти, стек растёт вверх
     return dp
 
 
@@ -216,7 +212,7 @@ def main():
     trace.add_argument("--verbose", "-v", action="store_true",
                        help="Выводить каждый тик (каждую микрокоманду)")
     trace.add_argument("--trace", "-t", action="store_true",
-                       help="Выводить каждую инструкцию ISA (покомандно)")
+                       help="Выводить состояния процессора по результатам инструкци ISA (покомандно)")
     trace.add_argument("--head", "-H", type=int, metavar="N", default=None,
                        help="Выводить первые N тиков")
 

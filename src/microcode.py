@@ -919,7 +919,6 @@ def make_fast_branch_imm(skip_code: BranchCode, label: str) -> int:
             seq_branch=skip_code,
             next_addr=0,
         ),
-        # 2) перезаписываем PC адресом перехода
         MicroInstruction(
             pc_sel=PcSel.ALU_RES, pc_latch=1,
             seq_branch=BranchCode.END_MICRO,

@@ -2,6 +2,7 @@ from enum import IntEnum
 
 WORD32_MASK = 0xFFFFFFFF
 BYTE_MASK = 0xFF
+STATIC_DATA_START = 0x200
 
 
 def mask_word(word: int) -> int:
@@ -183,6 +184,10 @@ class DataPath:
 
         # R0-R4 + DSP + RSP
         self.registers = [0] * 8
+        
+        self.registers[6] = data_memory_size    # DSP - конец памяти, стек растёт вниз
+        self.registers[7] = STATIC_DATA_START   # RSP - начало памяти, стек растёт вверх
+
         self.src_sel = 0
         self.dst_sel = 0
 
