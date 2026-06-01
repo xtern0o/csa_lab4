@@ -180,27 +180,19 @@ def run_instr_trace(cu: ControlUnit, dp: DataPath, tick_limit: int) -> int:
 
 
 def run_head_trace(cu: ControlUnit, dp: DataPath, tick_limit: int, head: int) -> int:
-    """Трассировка первых N тиков, затем silent режим"""
+    """Трассировка первых N тиков, затем silent mode"""
     tick = 0
-    last_pc = -1
     try:
         while cu.current_micro:
-            if tick < head and dp.pc != last_pc and cu.mpc == FETCH_IR:
-                last_pc = dp.pc
-                opcode = cu.decoded.opcode if cu.decoded else "?"
-                log.debug(
-                    f"tick={tick:5d} "
-                    f"pc={dp.pc:#06x} "
-                    f"{str(opcode):<8} "
-                    f"{fmt_regs(dp)} "
-                    f"{fmt_flags(dp)}"
-                )
+            if tick < head:
+                log.debug(fmt_tick(tick, cu, dp))
             cu.tick()
             tick += 1
             if tick > tick_limit:
                 raise RuntimeError(f"tick limit {tick_limit} exceeded")
     except StopIteration:
-        pass
+        if tick < head:
+            log.debug(fmt_tick(tick, cu, dp))
     return tick
 
 
@@ -283,7 +275,7 @@ def main():
     elif args.trace:
         log.debug("=== Instruction trace ===")
     elif args.head:
-        log.debug(f"=== Instruction trace (first {args.head} ticks) ===")
+        log.debug(f"=== Tick trace (first {args.head} ticks) ===")
 
     try:
         if args.verbose:

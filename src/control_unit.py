@@ -241,7 +241,7 @@ class ControlUnit:
         Выходы:
           - линия next_addr
         """
-        mir: MicroInstruction | None = self.current_micro
+        mir: MicroInstruction = self.current_micro
         code: int = mir.seq_branch
 
         if code == BranchCode.JMP:

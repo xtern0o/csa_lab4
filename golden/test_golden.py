@@ -102,8 +102,8 @@ def test_golden(golden, caplog):
         )
 
         log_lines = caplog.text.splitlines()
-        if len(log_lines) > 400:
-            log_text = "\n".join([*log_lines[:200], "...", *log_lines[-200:]])
+        if len(log_lines) > 1000:
+            log_text = "\n".join([*log_lines[:500], "...", *log_lines[-500:]])
         else:
             log_text = "\n".join(log_lines)
         

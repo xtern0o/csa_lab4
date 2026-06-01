@@ -15,6 +15,7 @@ RSP = 7
 class Parser:
     RESERVED_WORDS = {
         "var",
+        "allot",
         "!",
         "@",
         "dup",
@@ -149,12 +150,28 @@ class Translator:
                     self.data_memory.extend(b"\x00" * self.WORD_SIZE)
 
             elif token == ":":
-                # JMP over the function body so it doesn't execute sequentially
                 jmp_inst = self.add_instruction(Opcode.JMP, [Operand(AddrMode.IMMEDIATE, 0)])
                 self.control_flow_stack.append(('function', jmp_inst))
                 
                 func_name = next(tokens_iter)
                 self.functions[func_name] = self.instr_addr
+            
+            elif token == "allot":
+                n_inst = self.instr_memory.pop()      # MOVE #20, R0  (последняя)
+                self.instr_addr -= n_inst.size_bytes()
+
+                push_inst = self.instr_memory.pop()   # MOVE R0, -(DSP)  (первая)
+                self.instr_addr -= push_inst.size_bytes()
+
+                if (
+                    n_inst.opcode != Opcode.MOVE
+                    or n_inst.operands[0].mode != AddrMode.IMMEDIATE
+                ):
+                    raise Exception("allot expects a literal number before it; example: `var mybuf 8 allot`")
+
+                n = n_inst.operands[0].value
+                self.data_memory.extend(b"\x00" * self.WORD_SIZE * n)
+                self.data_addr += self.WORD_SIZE * n
 
             elif token == ";":
                 self.add_instruction(Opcode.RET)
