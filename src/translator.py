@@ -420,9 +420,6 @@ class Translator:
                 )
 
             elif token in {"n+", "n*"}:
-                # 3 n+ -> POP the N literal, then POP the N operands
-
-                # pop literal n
                 n_inst = self.instr_memory.pop()
                 self.instr_addr -= n_inst.size_bytes()
 
@@ -457,7 +454,13 @@ class Translator:
 
                 opcode = Opcode.NADD if token == "n+" else Opcode.NMUL
 
+                self.add_instruction(
+                    Opcode.MOVE,
+                    [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.PRE_DEC, DSP)],
+                )
+                nadd_start = self.instr_addr
                 self.add_instruction(opcode, n_op_list)
+                self.instr_addr = nadd_start + 4 + len(n_op_list) * 4
 
             elif token == "~":
                 self.add_instruction(Opcode.NOT_OP, [Operand(AddrMode.REG_DIRECT, R0)])
@@ -677,10 +680,19 @@ class Translator:
                 )
 
             elif token == "execute":
-                self.add_instruction(Opcode.JSR, [Operand(AddrMode.REG_DIRECT, R0)])
+                # R0 = func_addr, (DSP) = arg
+                self.add_instruction(
+                    Opcode.MOVE,
+                    [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.REG_DIRECT, R1)],
+                )
+                # R1 = addr
                 self.add_instruction(
                     Opcode.MOVE,
                     [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)],
+                )  
+                # R0 = arg
+                self.add_instruction(
+                    Opcode.JSR, [Operand(AddrMode.REG_DIRECT, R1)]
                 )
 
             # port-mapped i/o control
@@ -727,7 +739,7 @@ class Translator:
                     [Operand(AddrMode.IMMEDIATE, 1), Operand(AddrMode.REG_DIRECT, R0)],
                 )
 
-            elif token in {"type", "s."}:  # noqa: S105
+            elif token in {"type", "s."}:
                 # print string from address in TOS to port 2
                 # R0 = string address (pstr)
                 self.add_instruction(

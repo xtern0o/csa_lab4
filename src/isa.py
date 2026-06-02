@@ -254,10 +254,10 @@ class Instruction:
         )
         offset += 4
 
-        dest_byte   = word & 0xFF
-        src_byte    = (word >> 8)  & 0xFF
-        reserve     = (word >> 16) & 0xFF
-        opcode_num  = (word >> 24) & 0xFF
+        dest_byte = word & 0xFF
+        src_byte = (word >> 8)  & 0xFF
+        reserve = (word >> 16) & 0xFF
+        opcode_num = (word >> 24) & 0xFF
 
         opcode = list(Opcode)[opcode_num]
 

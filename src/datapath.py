@@ -182,9 +182,9 @@ class DataPath:
 
         self.io_controller = io_controller
 
-        # R0-R4 + DSP + RSP
+        # R0-R5 + DSP + RSP
         self.registers = [0] * 8
-        
+
         self.registers[6] = data_memory_size    # DSP - конец памяти, стек растёт вниз
         self.registers[7] = STATIC_DATA_START   # RSP - начало памяти, стек растёт вверх
 
