@@ -180,8 +180,10 @@ class ControlUnit:
         self.fast_exec_table = fast_exec_table
 
     @property
-    def current_micro(self) -> MicroInstruction | None:
+    def current_micro(self) -> MicroInstruction:
         """Шина current_micro: идет от MIR на Sequencer и другие компоненты"""
+        if self.mir is None:
+            return MicroInstruction()
         return self.mir
 
     @property

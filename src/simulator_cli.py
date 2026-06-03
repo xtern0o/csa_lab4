@@ -1,13 +1,13 @@
-import sys
-import yaml
 import argparse
 import logging
+import sys
 
-from datapath import *
+import yaml
+
 from control_unit import *
+from datapath import *
 from isa import *
 from microcode import *
-
 
 log = logging.getLogger(__name__)
 
@@ -117,7 +117,7 @@ def fmt_tick(tick: int, cu: ControlUnit, dp: DataPath) -> str:
     mir = cu.mir
     label = mir.label if mir else "?"
     return (
-        f"tick={tick:5d}  pc={dp.pc:#06x} mpc={cu.mpc:3d} [{fmt_flags(dp)}] @ {label}\n"
+        f"--- tick={tick:5d} pc={dp.pc:#06x} ir_opcode=({str(cu.decoded.opcode) if cu.decoded is not None else "":<8}) mpc={cu.mpc:3d} [{fmt_flags(dp)}] @ {label}\n"
         f"{fmt_regs(dp)}\n"
     )
 
@@ -247,7 +247,7 @@ def main():
             print(f"[!] error in input file: {e}", file=sys.stderr)
             sys.exit(1)
 
-    # листинг 
+    # листинг
     if args.listing:
         log.info(f"--- listing: {args.bin_file} ---")
         try:

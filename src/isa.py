@@ -236,7 +236,7 @@ class Instruction:
 
         operands_str = ", ".join(str(op) for op in self.operands)
         return f"{opcode_str:<6} {operands_str}"
-    
+
     @classmethod
     def from_bytes(cls, data: bytes | list[int], offset: int = 0) -> tuple["Instruction", int]:
         """
@@ -245,7 +245,7 @@ class Instruction:
         """
         if offset + 4 > len(data):
             raise ValueError(f"Not enough bytes at offset {offset:#x}")
-        
+
         word = (
             data[offset]
             | (data[offset + 1] << 8)
@@ -261,7 +261,7 @@ class Instruction:
 
         opcode = list(Opcode)[opcode_num]
 
-        def read_imm() -> tuple[int, int]:
+        def read_imm() -> int:
             nonlocal offset
             if offset + 4 > len(data):
                 raise ValueError(f"Expected immediate at offset {offset:#x}")
@@ -275,17 +275,17 @@ class Instruction:
                 val -= 0x100000000
             offset += 4
             return val
-        
+
         # n-арные
         if OPCODE_NARG[opcode] == -1:
             n = reserve
             operands = [Operand(AddrMode.IMMEDIATE, read_imm()) for _ in range(n)]
             return cls(opcode, operands), offset
-        
+
         # noarg
         if OPCODE_NARG[opcode] == 0:
             return cls(opcode, []), offset
-        
+
         src_mode = AddrMode((src_byte >> 4) & 0xF)
         src_val  = src_byte & 0xF
         dst_mode = AddrMode((dest_byte >> 4) & 0xF)
@@ -297,16 +297,16 @@ class Instruction:
                 val = read_imm()
                 return cls(opcode, [Operand(AddrMode.IMMEDIATE, val)]), offset
             return cls(opcode, [Operand(src_mode, src_val)]), offset
-        
+
         # 2arg
-        src_imm_val = read_imm() if src_mode == AddrMode.IMMEDIATE else None
-        dst_imm_val = read_imm() if dst_mode == AddrMode.IMMEDIATE else None
+        src_imm_val = read_imm() if src_mode == AddrMode.IMMEDIATE else 0
+        dst_imm_val = read_imm() if dst_mode == AddrMode.IMMEDIATE else 0
 
         src_op = Operand(src_mode, src_imm_val if src_mode == AddrMode.IMMEDIATE else src_val)
         dst_op = Operand(dst_mode, dst_imm_val if dst_mode == AddrMode.IMMEDIATE else dst_val)
 
         return cls(opcode, [src_op, dst_op]), offset
-    
+
     @classmethod
     def decode_all(cls, data: bytes | list[int]) -> list["Instruction"]:
         """Десериализация всех инструкций из байтового потока"""

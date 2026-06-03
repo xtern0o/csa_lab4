@@ -4,7 +4,6 @@ import sys
 
 from isa import *
 
-
 STATIC_DATA_START = 0x100
 
 R0, R1, R2, R3, R4, R5 = range(6)
@@ -152,10 +151,10 @@ class Translator:
             elif token == ":":
                 jmp_inst = self.add_instruction(Opcode.JMP, [Operand(AddrMode.IMMEDIATE, 0)])
                 self.control_flow_stack.append(('function', jmp_inst))
-                
+
                 func_name = next(tokens_iter)
                 self.functions[func_name] = self.instr_addr
-            
+
             elif token == "allot":
                 n_inst = self.instr_memory.pop()      # MOVE #20, R0  (последняя)
                 self.instr_addr -= n_inst.size_bytes()
@@ -175,10 +174,10 @@ class Translator:
 
             elif token == ";":
                 self.add_instruction(Opcode.RET)
-                
+
                 if not self.control_flow_stack or self.control_flow_stack[-1][0] != 'function':
                     raise Exception("; without matching :")
-                
+
                 _, jmp_inst = self.control_flow_stack.pop()
                 jmp_inst.operands[0].value = self.instr_addr
 
@@ -539,9 +538,12 @@ class Translator:
                 ])
 
                 jmp_opcode = None
-                if token == "=":   jmp_opcode = Opcode.BNE
-                elif token == ">": jmp_opcode = Opcode.BLE
-                elif token == "<": jmp_opcode = Opcode.BGE
+                if token == "=":
+                    jmp_opcode = Opcode.BNE
+                elif token == ">":
+                    jmp_opcode = Opcode.BLE
+                else: # "<"
+                    jmp_opcode = Opcode.BGE
 
                 # if not -> jump to false branch
                 jmp_inst = self.add_instruction(jmp_opcode, [Operand(AddrMode.IMMEDIATE, 0)])
@@ -683,13 +685,16 @@ class Translator:
                 # R0 = func_addr, (DSP) = arg
                 self.add_instruction(
                     Opcode.MOVE,
-                    [Operand(AddrMode.REG_DIRECT, R0), Operand(AddrMode.REG_DIRECT, R1)],
+                    [
+                        Operand(AddrMode.REG_DIRECT, R0),
+                        Operand(AddrMode.REG_DIRECT, R1)
+                    ],
                 )
                 # R1 = addr
                 self.add_instruction(
                     Opcode.MOVE,
                     [Operand(AddrMode.POST_INC, DSP), Operand(AddrMode.REG_DIRECT, R0)],
-                )  
+                )
                 # R0 = arg
                 self.add_instruction(
                     Opcode.JSR, [Operand(AddrMode.REG_DIRECT, R1)]
@@ -911,7 +916,8 @@ def main():
     if args.listing:
         with open(args.listing, "w", encoding="utf-8") as f:
             f.write(f"; source: {args.source}\n")
-            f.write(f"; instructions: {len(t.instr_memory)}, binary size: {len(binary)} bytes\n")
+            f.write(f"; instructions: {len(t.instr_memory)}, "
+                    f"binary size: {len(binary)} bytes\n")
 
             if t.variables:
                 f.write("\n; variables (static data):\n")

@@ -303,7 +303,7 @@ WB_POST_INC = add_block(
     [
         # AR contains addr of dst
         MicroInstruction(
-            mem_wr=1, mem_data_sel=MemDataSel.ALU_RES, 
+            mem_wr=1, mem_data_sel=MemDataSel.ALU_RES,
             seq_branch=BranchCode.END_MICRO
         ),
     ],
@@ -677,7 +677,7 @@ EXEC_RET = add_block("EXEC_RET", [
         seq_branch=BranchCode.END_MICRO,
     ),
 ])
- 
+
 # --- N-ary ops
 
 NADD_INIT = add_block("NADD_INIT", [
@@ -912,7 +912,7 @@ def make_fast_branch_imm(skip_code: BranchCode, label: str) -> int:
     return add_block(f"FAST_{label}_IMM", [
         MicroInstruction(
             latch_tmp2=1, tmp2_sel=Tmp2Sel.INSTR_WORD,
-            pc_sel=PcSel.PC_INC, pc_latch=1,   
+            pc_sel=PcSel.PC_INC, pc_latch=1,
             alu_right_sel=AluRightSel.TMP2,
             alu_op=AluOp.PASS_R,
             alu_res_latch=1,
