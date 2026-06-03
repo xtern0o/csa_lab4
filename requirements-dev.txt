@@ -1,3 +1,5 @@
 ruff
 mypy
+pytest
 pytest-golden
+pyyaml
