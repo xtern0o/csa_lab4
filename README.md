@@ -380,45 +380,45 @@ a @ type            \ получаем значение переменной a (
 
 | Мнемоника | Opcode | Аргументы | Описание               | Такты |
 |-----------|--------|-----------|------------------------|-------|
-| `MOVE`    | 0x00   | src, dst  | `dst <- src`; set NZVC | 2–7   |
-| `CLR`     | 0x01   | dst       | `dst <- 0`; set NZVC    | 2–7   |
-| `NEG`     | 0x02   | dst       | `dst <- -dst`; set NZVC | 2–7   |
-| `ADD`     | 0x03   | src, dst  | `dst + src`; set NZVC               | 2–8   |
-| `ADC`     | 0x04   | src, dst  | `dst + src + C`; set NZVC           | 2–8   |
-| `SUB`     | 0x05   | src, dst  | `dst - src`; set NZVC               | 2–8   |
-| `SBC`     | 0x06   | src, dst  | `dst - src - C`; set NZVC           | 2–8   |
-| `MUL`     | 0x07   | src, dst  | `dst * src`; set NZVC    | 2–8   |
-| `DIV`     | 0x08   | src, dst  | `dst / src`; set NZVC    | 2–8   |
-| `REM`     | 0x09   | src, dst  | `dst mod src`; set NZVC  | 2–8   |
-| `CMP`     | 0x0A   | src, dst  | `dst - src`; set NZVC | 2–7   |
-| `NOT`     | 0x0D   | dst       | `dst <- ~dst`; set NZVC   | 2–7   |
-| `AND`     | 0x0E   | src, dst  | `dst <- dst & src`        | 2–8   |
-| `OR`      | 0x0F   | src, dst  | `dst <- dst \| src`       | 2–8   |
-| `XOR`     | 0x10   | src, dst  | `dst <- dst ^ src`        | 2–8   |
-| `ASL`     | 0x11   | src, dst  | Арифметический сдвиг влево             | 2–8   |
-| `ASR`     | 0x12   | src, dst  | Арифметический сдвиг вправо | 2–8   |
-| `LSL`     | 0x13   | src, dst  | Логический сдвиг влево                 | 2–8   |
-| `LSR`     | 0x14   | src, dst  | Логический сдвиг вправо  | 2–8   |
+| `MOVE`    | 0x00   | src, dst  | `dst <- src`; set NZVC | 2-7   |
+| `CLR`     | 0x01   | dst       | `dst <- 0`; set NZVC    | 2-7   |
+| `NEG`     | 0x02   | dst       | `dst <- -dst`; set NZVC | 2-7   |
+| `ADD`     | 0x03   | src, dst  | `dst + src`; set NZVC               | 2-8   |
+| `ADC`     | 0x04   | src, dst  | `dst + src + C`; set NZVC           | 2-8   |
+| `SUB`     | 0x05   | src, dst  | `dst - src`; set NZVC               | 2-8   |
+| `SBC`     | 0x06   | src, dst  | `dst - src - C`; set NZVC           | 2-8   |
+| `MUL`     | 0x07   | src, dst  | `dst * src`; set NZVC    | 2-8   |
+| `DIV`     | 0x08   | src, dst  | `dst / src`; set NZVC    | 2-8   |
+| `REM`     | 0x09   | src, dst  | `dst mod src`; set NZVC  | 2-8   |
+| `CMP`     | 0x0A   | src, dst  | `dst - src`; set NZVC | 2-7   |
+| `NOT`     | 0x0D   | dst       | `dst <- ~dst`; set NZVC   | 2-7   |
+| `AND`     | 0x0E   | src, dst  | `dst <- dst & src`        | 2-8   |
+| `OR`      | 0x0F   | src, dst  | `dst <- dst \| src`       | 2-8   |
+| `XOR`     | 0x10   | src, dst  | `dst <- dst ^ src`        | 2-8   |
+| `ASL`     | 0x11   | src, dst  | Арифметический сдвиг влево             | 2-8   |
+| `ASR`     | 0x12   | src, dst  | Арифметический сдвиг вправо | 2-8   |
+| `LSL`     | 0x13   | src, dst  | Логический сдвиг влево                 | 2-8   |
+| `LSR`     | 0x14   | src, dst  | Логический сдвиг вправо  | 2-8   |
 | `NADD #a1, #a2, …, #an`        | 0x0B   | - | `R0 <- a1_ + a2 + … + an`        | 2 + 3*N     |
 | `NMUL #a1, #a2, …, #an`        | 0x0C   | - | `R0 <- a1 * a2 * … * an`        | 2 + 3*N     |
-| `JMP`     | 0x15   | src       | `PC <- src`                            | 2–6   |
-| `BCC`     | 0x16   | src       | `if C=0: PC <- src`                    | 2–7   |
-| `BCS`     | 0x17   | src       | `if C=1: PC <- src`                    | 2–7   |
-| `BEQ`     | 0x18   | src       | `if Z=1: PC <- src`                    | 2–7   |
-| `BNE`     | 0x19   | src       | `if Z=0: PC <- src`                    | 2–7   |
-| `BLT`     | 0x1A   | src       | `if N≠V: PC <- src`                    | 2–7   |
-| `BGT`     | 0x1B   | src       | `if Z=0 and N=V: PC <- src`            | 2–7   |
-| `BLE`     | 0x1C   | src       | `if Z=1 or N≠V: PC <- src`             | 2–7   |
-| `BGE`     | 0x1D   | src       | `if N=V: PC <- src`                    | 2–7   |
-| `BMI`     | 0x1E   | src       | `if N=1: PC <- src`                    | 2–7   |
-| `BPL`     | 0x1F   | src       | `if N=0: PC <- src`                    | 2–7   |
-| `BVC`     | 0x20   | src       | `if V=0: PC <- src`                    | 2–7   |
-| `BVS`     | 0x21   | src       | `if V=1: PC <- src`                    | 2–7   |
-| `JSR`     | 0x22   | src       | Push PC -> RSP, `PC <- src`             | 2–7   |
+| `JMP`     | 0x15   | src       | `PC <- src`                            | 2-6   |
+| `BCC`     | 0x16   | src       | `if C=0: PC <- src`                    | 2-7   |
+| `BCS`     | 0x17   | src       | `if C=1: PC <- src`                    | 2-7   |
+| `BEQ`     | 0x18   | src       | `if Z=1: PC <- src`                    | 2-7   |
+| `BNE`     | 0x19   | src       | `if Z=0: PC <- src`                    | 2-7   |
+| `BLT`     | 0x1A   | src       | `if N≠V: PC <- src`                    | 2-7   |
+| `BGT`     | 0x1B   | src       | `if Z=0 and N=V: PC <- src`            | 2-7   |
+| `BLE`     | 0x1C   | src       | `if Z=1 or N≠V: PC <- src`             | 2-7   |
+| `BGE`     | 0x1D   | src       | `if N=V: PC <- src`                    | 2-7   |
+| `BMI`     | 0x1E   | src       | `if N=1: PC <- src`                    | 2-7   |
+| `BPL`     | 0x1F   | src       | `if N=0: PC <- src`                    | 2-7   |
+| `BVC`     | 0x20   | src       | `if V=0: PC <- src`                    | 2-7   |
+| `BVS`     | 0x21   | src       | `if V=1: PC <- src`                    | 2-7   |
+| `JSR`     | 0x22   | src       | Push PC -> RSP, `PC <- src`             | 2-7   |
 | `RET`     | 0x23   | -         | Pop RSP -> PC                           | 3     |
 | `HALT`    | 0x24   | -         | Останов                                | 2     |
-| `IN`      | 0x25   | port, dst  | `dst ← IN[port]`      | 4–8   |
-| `OUT`     | 0x26   | src, port  | `OUT[port] ← src`     | 4–8   |
+| `IN`      | 0x25   | port, dst  | `dst ← IN[port]`      | 4-8   |
+| `OUT`     | 0x26   | src, port  | `OUT[port] ← src`     | 4-8   |
 
 Флаги обновляются всеми арифметическими, логическими и операциями сдвига.
 `CMP` обновляет только флаги, не записывая результат.
@@ -670,28 +670,28 @@ python translator.py programs/hello.fth out/hello.bin \
 - `[counter == 0]` - сигнал от регистра `COUNTER`
 
 Выходы:
-- `next_addr` - вычисленный адрес следующей микрокоманды (подается на MUX)
 - `next_mpc_sel` - управляющий сигнал для MUX
 
 Анализирует поле `seq_branch` из `MIR` и выбирает поведение:
-- `NEXT` —  `mpc + 1`
-- `JMP` — безусловный переход на `next_addr` из поля микрокоманды
+- `NEXT` -  `mpc + 1`
+- `JMP` - безусловный переход на `next_addr` из поля микрокоманды
 - `JZ`, `JNZ`, `JN`, `JC` и другие - условные переходы по флагам `NZVC`
 - `JGE`, `JLT`, `JLE`, `JGT` - переходы по комбинациям флагов N и V (для сравнений со знаком)
-- `JCNT_Z` — переход если `COUNTER == 0` (используется в цикле NADD/NMUL)
-- `END_MICRO` — завершение микропрограммы, возврат на адрес 0 (INSTRUCTION_FETCH)
-- `DISPATCH_*` — передать управление в Dispatch Logic для выбора нужной ветки
+- `JCNT_Z` - переход если `COUNTER == 0` (используется в цикле NADD/NMUL)
+- `END_MICRO` - завершение микропрограммы, возврат на адрес 0 (INSTRUCTION_FETCH)
+- `DISPATCH_*` - передать управление в Dispatch Logic для выбора нужной ветки
 
 ### MUX (MPC MUX)
 
 Мультиплексор выбора следующего значения `MPC`.
 
 Входы:
-- `mpc_inc` — значение `MPC + 1` (инкремент)
-- `next_addr` — адрес от Sequencer
-- `dispatch_addr` — адрес от Dispatch Logic
+- `mpc_inc` - значение `MPC + 1` (инкремент)
+- `next_addr` - адрес от Sequencer
+- `dispatch_addr` - адрес от Dispatch Logic
 
-Управляющий сигнал: `next_mpc_sel` (от Sequencer).
+- Управляющий сигнал: `next_mpc_sel` (от Sequencer).
+
 Выход: новое значение `MPC`, которое защелкивается в регистр и используется
 для выборки следующей микрокоманды из Microcode Memory.
 
@@ -711,9 +711,46 @@ INSTR_FETCH -+-> SRC_FETCH ---> DST_FETCH ---> EXEC ---> WB
 5. **Exec** - выполнение операции через ALU
 6. **Write Back** - запись результата обратно в регистр или память
 
-## Формат микрокоманд
+## Микропрограммное управление
 
-Микрокоманды я сделал гибридными с тем, чтобы уменьшить число занимаемых байт. 
+- Формат микрокоманд: **горизонтальный** с кодированными полями
+- Количество микрокоманд в памяти: `142`
+
+Запуск `microcode.py` с припиской для вычисления итогового размера памяти микрокоманд
+![n_of_mir](img/len_mim.png)
+
+### Формат микроинструкций
+
+| Сигнал          | Биты (BE) | Бит | Диапазон значений | Описание значений                                                      |
+|-----------------|-----------|----:|-------------------|------------------------------------------------------------------------|
+| `hlt`           | 60        |   1 | 0-1               | `1` = HALT, остановить процессор                                         |
+| `reg_src_sel`   | 59-56     |   4 | 0-7, 0xF          | Номер src-регистра; 0xF = взять из IR.src_reg                          |
+| `reg_dst_sel`   | 55-52     |   4 | 0-7, 0xE, 0xF     | Номер dst-регистра; 0xE = IR.src_reg; 0xF = IR.dst_reg       |
+| `reg_wr_sel`    | 51-49     |   3 | 0-5               | Источник записи в регистр: `input_data`/`mem_out`/`alu_res`/`nzvc`/`instr_word`/alu_out |
+| `latch_reg`     | 48        |   1 | 0-1               | `1` = защелкнуть значение в регистр                                      |
+| `tmp1_sel`      | 47-45     |   3 | 0-4               | Источник TMP1: `alu_res`/`dst_reg`/`instr_word`/`mem_out`/`0`                    |
+| `tmp2_sel`      | 44-43     |   2 | 0-2               | Источник TMP2: `src_reg`/in`str_word/`mem_out`                              |
+| `latch_tmp1`    | 42        |   1 | 0-1               | `1` = защелкнуть TMP1                                                    |
+| `latch_tmp2`    | 41        |   1 | 0-1               | `1` = защелкнуть TMP2                                                    |
+| `alu_op`        | 40-36     |   5 | 0-19              | Операция ALU: `add`/`sub`/`mul`/`div`/`rem`/`and`/`or`/`xor`/`not`/`asl`/`asr`/`adc`/`sbc`/`pass` |
+| `nzvc_latch`    | 35        |   1 | 0-1               | `1` = обновить флаги `NZVC` из результата ALU                              |
+| `alu_res_latch` | 34        |   1 | 0-1               | `1` = защелкнуть `ALU_OUT` в A`LU_RES                                       |
+| `alu_right_sel` | 33-32     |   2 | 0-3               | Правый вход ALU: `tmp2`/`0`/`1`/`4`                                            |
+| `mem_addr_sel`  | 31-30     |   2 | 0-3               | Источник адреса `AR`: `instr_word`/`src_reg`/`dst_reg`/`alu_out`                 |
+| `ar_latch`      | 29        |   1 | 0-1               | `1` = защелкнуть `AR`                                                      |
+| `mem_data_sel`  | 28-26     |   3 | 0-5               | Данные для записи в память: `src_reg`/`dst_reg`/`alu_out`/`alu_res`/`instr_word`/`pc` |
+| `mem_wr`        | 25        |   1 | 0-1               | `1` = запись в Data Memory                                               |
+| `pc_sel`        | 24-22     |   3 | 0-4               | Источник `PC`: `pc_inc`/`dst_reg`/`mem_out`/`instr_word`/`alu_res`                 |
+| `pc_latch`      | 21        |   1 | 0-1               | `1` = защелкнуть `PC`                                                      |
+| `ir_latch`      | 20        |   1 | 0-1               | `1` = загрузить `instr_word` в IR и декодировать                           |
+| `port_latch`    | 19        |   1 | 0-1               | `1` = защелкнуть номер порта из `alu_out` в `PORT`                           |
+| `out_sel`       | 18-17     |   2 | 0-3               | Источник вывода в `I/O`: `src_reg`/`mem_out`/`instr_word`/`alu_res`              |
+| `out_latch`     | 16        |   1 | 0-1               | `1` = отправить значение в I/O Controller                                |
+| `latch_cnt`     | 15        |   1 | 0-1               | `1` = загрузить n-арность из `IR` в `COUNTER`                                |
+| `counter_dec`   | 14        |   1 | 0-1               | `1` = `COUNTER -= 1`                                                       |
+| `seq_branch`    | 13-9      |   5 | 0-21              | Тип перехода Sequencer: `NEXT`/`JMP`/`Jx`/`JCNT_Z`/`END_MICRO`/`DISPATCH_*`       |
+| `next_addr`     | 8-1       |   8 | 0-255             | Адрес перехода в `Microcode Memory`                                      |
+| **Итого**       |           |**60 + 4 = 64**|                  | Свободно: биты 63-61 (3 бита запаса, выравнивание)                                   |
 
 # Тестирование
 

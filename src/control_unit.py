@@ -66,7 +66,7 @@ class MicroInstruction:
             f"{self.latch_reg:01b}"
             # TMP
             f"{self.tmp1_sel:03b}"
-            f"{self.tmp2_sel:03b}"
+            f"{self.tmp2_sel:02b}"
             f"{self.latch_tmp1:01b}"
             f"{self.latch_tmp2:01b}"
             # ALU
