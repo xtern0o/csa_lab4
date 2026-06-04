@@ -937,8 +937,6 @@ def main():
                 f.write(f"  0x{addr:04x}  {str(instr):<30}  ; {raw}\n")
                 addr += size
 
-        # print(f"listing written: {args.listing}")
-
 
 if __name__ == "__main__":
     main()

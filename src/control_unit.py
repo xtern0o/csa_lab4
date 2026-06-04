@@ -133,14 +133,14 @@ class FlatInstruction:
     (по сути обычное чтение нужных битов с IR)
     """
 
-    opcode: Opcode
+    opcode: Opcode = Opcode.NOP
 
-    src_mode: int | None
-    dst_mode: int | None
-    src_reg: int | None
-    dst_reg: int | None
+    src_mode: int = 0
+    dst_mode: int = 0
+    src_reg: int = 0
+    dst_reg: int = 0
 
-    n: int | None  # для n-арных инструкций
+    n: int = 0  # для n-арных инструкций
     has_src_imm: bool = False
     has_dst_imm: bool = False
 
@@ -164,7 +164,7 @@ class ControlUnit:
         self.mpc = 0
         self.ir = 0
         self.counter = 0
-        self.decoded: FlatInstruction | None = None
+        self.decoded: FlatInstruction = FlatInstruction()
 
         self.mir: MicroInstruction | None
         if self.microcode_memory:
@@ -216,7 +216,7 @@ class ControlUnit:
         dst_mode = (dst_desc >> 4) & 0xF
         dst_reg = dst_desc & 0xF
 
-        n = None
+        n = 0
         if opcode in {Opcode.NADD, Opcode.NMUL}:
             n = reserve
 

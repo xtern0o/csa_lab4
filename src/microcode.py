@@ -957,7 +957,7 @@ FAST_JMP_IMM = add_block("FAST_JMP_IMM", [
 ])
 fast_exec_table[(Opcode.JMP, AddrMode.IMMEDIATE, AddrMode.REG_DIRECT)] = FAST_JMP_IMM
 
-src_dispatch_table = {
+src_dispatch_table: dict[int, int] = {
     AddrMode.REG_DIRECT: SRC_REG,
     AddrMode.IMMEDIATE: SRC_IMM,
     AddrMode.REG_INDIRECT: SRC_INDIRECT,
@@ -965,7 +965,7 @@ src_dispatch_table = {
     AddrMode.POST_INC: SRC_POST_INC,
 }
 
-dst_dispatch_table = {
+dst_dispatch_table: dict[int, int] = {
     AddrMode.REG_DIRECT: DST_REG,
     AddrMode.IMMEDIATE: DST_IMM,
     AddrMode.REG_INDIRECT: DST_INDIRECT,
@@ -973,7 +973,7 @@ dst_dispatch_table = {
     AddrMode.POST_INC: DST_POST_INC,
 }
 
-wb_dispatch_table = {
+wb_dispatch_table: dict[int, int] = {
     AddrMode.REG_DIRECT: WB_REG,
     AddrMode.REG_INDIRECT: WB_INDIRECT,
     AddrMode.PRE_DEC: WB_PRE_DEC,

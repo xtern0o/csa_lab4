@@ -6,7 +6,7 @@ class Opcode(str, Enum):
     """
     Структура команд CISC-процессора
     """
-
+    NOP = "nop"
     MOVE = "move"
 
     CLR = "clr"

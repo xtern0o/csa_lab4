@@ -27,7 +27,7 @@ def load_input(path: str) -> dict[int, list]:
         return {}
     result = {}
     for port, tokens in raw.items():
-        parsed = []
+        parsed: list[str|int] = []
         for token in tokens:
             if isinstance(token, str):
                 parsed.append(token)
@@ -41,21 +41,19 @@ def load_input(path: str) -> dict[int, list]:
 
 def make_io(port_buffers: dict[int, list]) -> IOController:
     """
-    Создание IOController на основе поданных буферов
+    Создание IOController на основе поданных буферов (абстракция над CLI)
     """
-    io = IOController()
+    class CLI_IOController(IOController):
+        def read_token(self, port: int) -> int:
+            buf = port_buffers.get(port, [])
+            if not buf:
+                raise StopIteration(f"Input buffer for port {port} is empty")
+            raw = buf.pop(0)
+            if port == 3:
+                return ord(raw[0]) if isinstance(raw, str) else int(raw)
+            return int(raw)
 
-    def read_token(port: int) -> int:
-        buf = port_buffers.get(port, [])
-        if not buf:
-            raise StopIteration(f"Input buffer for port {port} is empty")
-        raw = buf.pop(0)
-        if port == 3:
-            return ord(raw[0]) if isinstance(raw, str) else int(raw)
-        return int(raw)
-
-    io.read_token = read_token
-    return io
+    return CLI_IOController()
 
 
 def format_output(buf: list) -> str:

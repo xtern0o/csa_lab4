@@ -14,1005 +14,1005 @@ input:
 
 verbose: true
 log: |
-  DEBUG    simulator_cli:simulator_cli.py:270 === Tick trace ===
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=    0 pc=0x0000 ir_opcode=(        ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:268 === Tick trace ===
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=    0 pc=0x0000 ir_opcode=(nop     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=    1 pc=0x0004 ir_opcode=(jmp     ) mpc=141 [N=0 Z=0 V=0 C=0] @ FAST_JMP_IMM
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=    1 pc=0x0004 ir_opcode=(jmp     ) mpc=141 [N=0 Z=0 V=0 C=0] @ FAST_JMP_IMM
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=    2 pc=0x00ac ir_opcode=(jmp     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=    2 pc=0x00ac ir_opcode=(jmp     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=    3 pc=0x00b0 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=    3 pc=0x00b0 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=    4 pc=0x00b0 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=    4 pc=0x00b0 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=    5 pc=0x00b0 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=    5 pc=0x00b0 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=    6 pc=0x00b0 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=    6 pc=0x00b0 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=    7 pc=0x00b0 ir_opcode=(move    ) mpc= 21 [N=0 Z=1 V=0 C=0] @ WB_PRE_DEC
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=    7 pc=0x00b0 ir_opcode=(move    ) mpc= 21 [N=0 Z=1 V=0 C=0] @ WB_PRE_DEC
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=    8 pc=0x00b0 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=    8 pc=0x00b0 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=    9 pc=0x00b4 ir_opcode=(in      ) mpc=  3 [N=0 Z=1 V=0 C=0] @ SRC_IMM_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=    9 pc=0x00b4 ir_opcode=(in      ) mpc=  3 [N=0 Z=1 V=0 C=0] @ SRC_IMM_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   10 pc=0x00b8 ir_opcode=(in      ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   10 pc=0x00b8 ir_opcode=(in      ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   11 pc=0x00b8 ir_opcode=(in      ) mpc= 69 [N=0 Z=1 V=0 C=0] @ EXEC_IN
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   11 pc=0x00b8 ir_opcode=(in      ) mpc= 69 [N=0 Z=1 V=0 C=0] @ EXEC_IN
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   12 pc=0x00b8 ir_opcode=(in      ) mpc= 70 [N=0 Z=1 V=0 C=0] @ EXEC_IN
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   12 pc=0x00b8 ir_opcode=(in      ) mpc= 70 [N=0 Z=1 V=0 C=0] @ EXEC_IN
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   13 pc=0x00b8 ir_opcode=(in      ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   13 pc=0x00b8 ir_opcode=(in      ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   14 pc=0x00bc ir_opcode=(jsr     ) mpc=  3 [N=0 Z=1 V=0 C=0] @ SRC_IMM_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   14 pc=0x00bc ir_opcode=(jsr     ) mpc=  3 [N=0 Z=1 V=0 C=0] @ SRC_IMM_FETCH
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   15 pc=0x00c0 ir_opcode=(jsr     ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   15 pc=0x00c0 ir_opcode=(jsr     ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   16 pc=0x00c0 ir_opcode=(jsr     ) mpc= 71 [N=0 Z=1 V=0 C=0] @ EXEC_JSR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   16 pc=0x00c0 ir_opcode=(jsr     ) mpc= 71 [N=0 Z=1 V=0 C=0] @ EXEC_JSR
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   17 pc=0x00c0 ir_opcode=(jsr     ) mpc= 72 [N=0 Z=1 V=0 C=0] @ EXEC_JSR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   17 pc=0x00c0 ir_opcode=(jsr     ) mpc= 72 [N=0 Z=1 V=0 C=0] @ EXEC_JSR
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   18 pc=0x00c0 ir_opcode=(jsr     ) mpc= 73 [N=0 Z=1 V=0 C=0] @ EXEC_JSR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   18 pc=0x00c0 ir_opcode=(jsr     ) mpc= 73 [N=0 Z=1 V=0 C=0] @ EXEC_JSR
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   19 pc=0x0008 ir_opcode=(jsr     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   19 pc=0x0008 ir_opcode=(jsr     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   20 pc=0x000c ir_opcode=(move    ) mpc=  2 [N=0 Z=1 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   20 pc=0x000c ir_opcode=(move    ) mpc=  2 [N=0 Z=1 V=0 C=0] @ SRC_REG_FETCH
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   21 pc=0x000c ir_opcode=(move    ) mpc= 14 [N=0 Z=1 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   21 pc=0x000c ir_opcode=(move    ) mpc= 14 [N=0 Z=1 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   22 pc=0x000c ir_opcode=(move    ) mpc= 15 [N=0 Z=1 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   22 pc=0x000c ir_opcode=(move    ) mpc= 15 [N=0 Z=1 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   23 pc=0x000c ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   23 pc=0x000c ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   24 pc=0x000c ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   24 pc=0x000c ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   25 pc=0x000c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   25 pc=0x000c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   26 pc=0x0010 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   26 pc=0x0010 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   27 pc=0x0010 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   27 pc=0x0010 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   28 pc=0x0010 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   28 pc=0x0010 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   29 pc=0x0010 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   29 pc=0x0010 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   30 pc=0x0010 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   30 pc=0x0010 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   31 pc=0x0010 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   31 pc=0x0010 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   32 pc=0x0014 ir_opcode=(move    ) mpc= 88 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_IR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   32 pc=0x0014 ir_opcode=(move    ) mpc= 88 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_IR
   R0=         6  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   33 pc=0x0018 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   33 pc=0x0018 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   34 pc=0x001c ir_opcode=(move    ) mpc=  8 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   34 pc=0x001c ir_opcode=(move    ) mpc=  8 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   35 pc=0x001c ir_opcode=(move    ) mpc=  9 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   35 pc=0x001c ir_opcode=(move    ) mpc=  9 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   36 pc=0x001c ir_opcode=(move    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   36 pc=0x001c ir_opcode=(move    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   37 pc=0x001c ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   37 pc=0x001c ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   38 pc=0x001c ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   38 pc=0x001c ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   39 pc=0x001c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   39 pc=0x001c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   40 pc=0x0020 ir_opcode=(cmp     ) mpc=113 [N=0 Z=0 V=0 C=0] @ FAST_CMP_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   40 pc=0x0020 ir_opcode=(cmp     ) mpc=113 [N=0 Z=0 V=0 C=0] @ FAST_CMP_RR
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   41 pc=0x0020 ir_opcode=(cmp     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   41 pc=0x0020 ir_opcode=(cmp     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   42 pc=0x0024 ir_opcode=(bne     ) mpc=119 [N=0 Z=0 V=0 C=0] @ FAST_BNE_IMM
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   42 pc=0x0024 ir_opcode=(bne     ) mpc=119 [N=0 Z=0 V=0 C=0] @ FAST_BNE_IMM
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   43 pc=0x0028 ir_opcode=(bne     ) mpc=120 [N=0 Z=0 V=0 C=0] @ FAST_BNE_IMM
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   43 pc=0x0028 ir_opcode=(bne     ) mpc=120 [N=0 Z=0 V=0 C=0] @ FAST_BNE_IMM
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   44 pc=0x0038 ir_opcode=(bne     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   44 pc=0x0038 ir_opcode=(bne     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   45 pc=0x003c ir_opcode=(move    ) mpc= 88 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_IR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   45 pc=0x003c ir_opcode=(move    ) mpc= 88 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_IR
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   46 pc=0x0040 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   46 pc=0x0040 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   47 pc=0x0044 ir_opcode=(cmp     ) mpc=114 [N=0 Z=1 V=0 C=0] @ FAST_CMP_IR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   47 pc=0x0044 ir_opcode=(cmp     ) mpc=114 [N=0 Z=1 V=0 C=0] @ FAST_CMP_IR
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   48 pc=0x0048 ir_opcode=(cmp     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   48 pc=0x0048 ir_opcode=(cmp     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   49 pc=0x004c ir_opcode=(beq     ) mpc=117 [N=0 Z=1 V=0 C=0] @ FAST_BEQ_IMM
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   49 pc=0x004c ir_opcode=(beq     ) mpc=117 [N=0 Z=1 V=0 C=0] @ FAST_BEQ_IMM
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   50 pc=0x0050 ir_opcode=(beq     ) mpc=118 [N=0 Z=1 V=0 C=0] @ FAST_BEQ_IMM
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   50 pc=0x0050 ir_opcode=(beq     ) mpc=118 [N=0 Z=1 V=0 C=0] @ FAST_BEQ_IMM
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   51 pc=0x0078 ir_opcode=(beq     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   51 pc=0x0078 ir_opcode=(beq     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   52 pc=0x007c ir_opcode=(move    ) mpc=  8 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   52 pc=0x007c ir_opcode=(move    ) mpc=  8 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   53 pc=0x007c ir_opcode=(move    ) mpc=  9 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   53 pc=0x007c ir_opcode=(move    ) mpc=  9 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   54 pc=0x007c ir_opcode=(move    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   54 pc=0x007c ir_opcode=(move    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   55 pc=0x007c ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   55 pc=0x007c ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   56 pc=0x007c ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   56 pc=0x007c ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   57 pc=0x007c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   57 pc=0x007c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   58 pc=0x0080 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   58 pc=0x0080 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   59 pc=0x0080 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   59 pc=0x0080 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   60 pc=0x0080 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   60 pc=0x0080 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   61 pc=0x0080 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   61 pc=0x0080 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   62 pc=0x0080 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   62 pc=0x0080 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   63 pc=0x0080 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   63 pc=0x0080 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   64 pc=0x0084 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   64 pc=0x0084 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   65 pc=0x0084 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   65 pc=0x0084 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   66 pc=0x0084 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   66 pc=0x0084 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   67 pc=0x0084 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   67 pc=0x0084 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   68 pc=0x0084 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   68 pc=0x0084 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   69 pc=0x0084 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   69 pc=0x0084 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   70 pc=0x0088 ir_opcode=(move    ) mpc= 88 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_IR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   70 pc=0x0088 ir_opcode=(move    ) mpc= 88 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_IR
   R0=         6  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   71 pc=0x008c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   71 pc=0x008c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   72 pc=0x0090 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   72 pc=0x0090 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         1  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   73 pc=0x0090 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   73 pc=0x0090 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         1  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   74 pc=0x0090 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   74 pc=0x0090 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         1  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   75 pc=0x0090 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   75 pc=0x0090 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         1  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   76 pc=0x0090 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   76 pc=0x0090 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
   R0=         1  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   77 pc=0x0090 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   77 pc=0x0090 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   78 pc=0x0094 ir_opcode=(sub     ) mpc= 93 [N=0 Z=0 V=0 C=0] @ FAST_SUB_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   78 pc=0x0094 ir_opcode=(sub     ) mpc= 93 [N=0 Z=0 V=0 C=0] @ FAST_SUB_RR
   R0=         1  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   79 pc=0x0094 ir_opcode=(sub     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   79 pc=0x0094 ir_opcode=(sub     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   80 pc=0x0098 ir_opcode=(move    ) mpc= 87 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   80 pc=0x0098 ir_opcode=(move    ) mpc= 87 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_RR
   R0=         1  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   81 pc=0x0098 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   81 pc=0x0098 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   82 pc=0x009c ir_opcode=(jsr     ) mpc=  3 [N=0 Z=0 V=0 C=0] @ SRC_IMM_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   82 pc=0x009c ir_opcode=(jsr     ) mpc=  3 [N=0 Z=0 V=0 C=0] @ SRC_IMM_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   83 pc=0x00a0 ir_opcode=(jsr     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   83 pc=0x00a0 ir_opcode=(jsr     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   84 pc=0x00a0 ir_opcode=(jsr     ) mpc= 71 [N=0 Z=0 V=0 C=0] @ EXEC_JSR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   84 pc=0x00a0 ir_opcode=(jsr     ) mpc= 71 [N=0 Z=0 V=0 C=0] @ EXEC_JSR
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   85 pc=0x00a0 ir_opcode=(jsr     ) mpc= 72 [N=0 Z=0 V=0 C=0] @ EXEC_JSR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   85 pc=0x00a0 ir_opcode=(jsr     ) mpc= 72 [N=0 Z=0 V=0 C=0] @ EXEC_JSR
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   86 pc=0x00a0 ir_opcode=(jsr     ) mpc= 73 [N=0 Z=0 V=0 C=0] @ EXEC_JSR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   86 pc=0x00a0 ir_opcode=(jsr     ) mpc= 73 [N=0 Z=0 V=0 C=0] @ EXEC_JSR
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   87 pc=0x0008 ir_opcode=(jsr     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   87 pc=0x0008 ir_opcode=(jsr     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   88 pc=0x000c ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   88 pc=0x000c ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   89 pc=0x000c ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   89 pc=0x000c ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   90 pc=0x000c ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   90 pc=0x000c ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   91 pc=0x000c ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   91 pc=0x000c ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   92 pc=0x000c ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   92 pc=0x000c ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   93 pc=0x000c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   93 pc=0x000c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   94 pc=0x0010 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   94 pc=0x0010 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   95 pc=0x0010 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   95 pc=0x0010 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   96 pc=0x0010 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   96 pc=0x0010 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   97 pc=0x0010 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   97 pc=0x0010 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   98 pc=0x0010 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   98 pc=0x0010 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=   99 pc=0x0010 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=   99 pc=0x0010 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  100 pc=0x0014 ir_opcode=(move    ) mpc= 88 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_IR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  100 pc=0x0014 ir_opcode=(move    ) mpc= 88 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_IR
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  101 pc=0x0018 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  101 pc=0x0018 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  102 pc=0x001c ir_opcode=(move    ) mpc=  8 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  102 pc=0x001c ir_opcode=(move    ) mpc=  8 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  103 pc=0x001c ir_opcode=(move    ) mpc=  9 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  103 pc=0x001c ir_opcode=(move    ) mpc=  9 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  104 pc=0x001c ir_opcode=(move    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  104 pc=0x001c ir_opcode=(move    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  105 pc=0x001c ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  105 pc=0x001c ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  106 pc=0x001c ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  106 pc=0x001c ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  107 pc=0x001c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  107 pc=0x001c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  108 pc=0x0020 ir_opcode=(cmp     ) mpc=113 [N=0 Z=0 V=0 C=0] @ FAST_CMP_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  108 pc=0x0020 ir_opcode=(cmp     ) mpc=113 [N=0 Z=0 V=0 C=0] @ FAST_CMP_RR
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  109 pc=0x0020 ir_opcode=(cmp     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  109 pc=0x0020 ir_opcode=(cmp     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  110 pc=0x0024 ir_opcode=(bne     ) mpc=119 [N=0 Z=0 V=0 C=0] @ FAST_BNE_IMM
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  110 pc=0x0024 ir_opcode=(bne     ) mpc=119 [N=0 Z=0 V=0 C=0] @ FAST_BNE_IMM
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  111 pc=0x0028 ir_opcode=(bne     ) mpc=120 [N=0 Z=0 V=0 C=0] @ FAST_BNE_IMM
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  111 pc=0x0028 ir_opcode=(bne     ) mpc=120 [N=0 Z=0 V=0 C=0] @ FAST_BNE_IMM
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  112 pc=0x0038 ir_opcode=(bne     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  112 pc=0x0038 ir_opcode=(bne     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  113 pc=0x003c ir_opcode=(move    ) mpc= 88 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_IR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  113 pc=0x003c ir_opcode=(move    ) mpc= 88 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_IR
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  114 pc=0x0040 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  114 pc=0x0040 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  115 pc=0x0044 ir_opcode=(cmp     ) mpc=114 [N=0 Z=1 V=0 C=0] @ FAST_CMP_IR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  115 pc=0x0044 ir_opcode=(cmp     ) mpc=114 [N=0 Z=1 V=0 C=0] @ FAST_CMP_IR
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  116 pc=0x0048 ir_opcode=(cmp     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  116 pc=0x0048 ir_opcode=(cmp     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  117 pc=0x004c ir_opcode=(beq     ) mpc=117 [N=0 Z=1 V=0 C=0] @ FAST_BEQ_IMM
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  117 pc=0x004c ir_opcode=(beq     ) mpc=117 [N=0 Z=1 V=0 C=0] @ FAST_BEQ_IMM
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  118 pc=0x0050 ir_opcode=(beq     ) mpc=118 [N=0 Z=1 V=0 C=0] @ FAST_BEQ_IMM
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  118 pc=0x0050 ir_opcode=(beq     ) mpc=118 [N=0 Z=1 V=0 C=0] @ FAST_BEQ_IMM
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  119 pc=0x0078 ir_opcode=(beq     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  119 pc=0x0078 ir_opcode=(beq     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  120 pc=0x007c ir_opcode=(move    ) mpc=  8 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  120 pc=0x007c ir_opcode=(move    ) mpc=  8 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  121 pc=0x007c ir_opcode=(move    ) mpc=  9 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  121 pc=0x007c ir_opcode=(move    ) mpc=  9 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  122 pc=0x007c ir_opcode=(move    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  122 pc=0x007c ir_opcode=(move    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  123 pc=0x007c ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  123 pc=0x007c ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  124 pc=0x007c ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  124 pc=0x007c ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
   R0=         0  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  125 pc=0x007c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  125 pc=0x007c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  126 pc=0x0080 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  126 pc=0x0080 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  127 pc=0x0080 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  127 pc=0x0080 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  128 pc=0x0080 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  128 pc=0x0080 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  129 pc=0x0080 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  129 pc=0x0080 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  130 pc=0x0080 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  130 pc=0x0080 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  131 pc=0x0080 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  131 pc=0x0080 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  132 pc=0x0084 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  132 pc=0x0084 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  133 pc=0x0084 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  133 pc=0x0084 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  134 pc=0x0084 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  134 pc=0x0084 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  135 pc=0x0084 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  135 pc=0x0084 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  136 pc=0x0084 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  136 pc=0x0084 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  137 pc=0x0084 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  137 pc=0x0084 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  138 pc=0x0088 ir_opcode=(move    ) mpc= 88 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_IR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  138 pc=0x0088 ir_opcode=(move    ) mpc= 88 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_IR
   R0=         5  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  139 pc=0x008c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  139 pc=0x008c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  140 pc=0x0090 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  140 pc=0x0090 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         1  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  141 pc=0x0090 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  141 pc=0x0090 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         1  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  142 pc=0x0090 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  142 pc=0x0090 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         1  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  143 pc=0x0090 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  143 pc=0x0090 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         1  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  144 pc=0x0090 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  144 pc=0x0090 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
   R0=         1  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  145 pc=0x0090 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  145 pc=0x0090 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  146 pc=0x0094 ir_opcode=(sub     ) mpc= 93 [N=0 Z=0 V=0 C=0] @ FAST_SUB_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  146 pc=0x0094 ir_opcode=(sub     ) mpc= 93 [N=0 Z=0 V=0 C=0] @ FAST_SUB_RR
   R0=         1  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  147 pc=0x0094 ir_opcode=(sub     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  147 pc=0x0094 ir_opcode=(sub     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  148 pc=0x0098 ir_opcode=(move    ) mpc= 87 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  148 pc=0x0098 ir_opcode=(move    ) mpc= 87 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_RR
   R0=         1  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  149 pc=0x0098 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  149 pc=0x0098 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  150 pc=0x009c ir_opcode=(jsr     ) mpc=  3 [N=0 Z=0 V=0 C=0] @ SRC_IMM_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  150 pc=0x009c ir_opcode=(jsr     ) mpc=  3 [N=0 Z=0 V=0 C=0] @ SRC_IMM_FETCH
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  151 pc=0x00a0 ir_opcode=(jsr     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  151 pc=0x00a0 ir_opcode=(jsr     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  152 pc=0x00a0 ir_opcode=(jsr     ) mpc= 71 [N=0 Z=0 V=0 C=0] @ EXEC_JSR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  152 pc=0x00a0 ir_opcode=(jsr     ) mpc= 71 [N=0 Z=0 V=0 C=0] @ EXEC_JSR
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  153 pc=0x00a0 ir_opcode=(jsr     ) mpc= 72 [N=0 Z=0 V=0 C=0] @ EXEC_JSR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  153 pc=0x00a0 ir_opcode=(jsr     ) mpc= 72 [N=0 Z=0 V=0 C=0] @ EXEC_JSR
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  154 pc=0x00a0 ir_opcode=(jsr     ) mpc= 73 [N=0 Z=0 V=0 C=0] @ EXEC_JSR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  154 pc=0x00a0 ir_opcode=(jsr     ) mpc= 73 [N=0 Z=0 V=0 C=0] @ EXEC_JSR
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  155 pc=0x0008 ir_opcode=(jsr     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  155 pc=0x0008 ir_opcode=(jsr     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  156 pc=0x000c ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  156 pc=0x000c ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  157 pc=0x000c ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  157 pc=0x000c ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  158 pc=0x000c ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  158 pc=0x000c ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  159 pc=0x000c ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  159 pc=0x000c ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  160 pc=0x000c ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  160 pc=0x000c ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  161 pc=0x000c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  161 pc=0x000c ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  162 pc=0x0010 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  162 pc=0x0010 ir_opcode=(move    ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  163 pc=0x0010 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  163 pc=0x0010 ir_opcode=(move    ) mpc= 14 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  164 pc=0x0010 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  164 pc=0x0010 ir_opcode=(move    ) mpc= 15 [N=0 Z=0 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  165 pc=0x0010 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  165 pc=0x0010 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         4  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  166 pc=0x0010 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  166 pc=0x0010 ir_opcode=(move    ) mpc= 21 [N=0 Z=0 V=0 C=0] @ WB_PRE_DEC
   ...
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  435 pc=0x0010 ir_opcode=(move    ) mpc= 14 [N=0 Z=1 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  435 pc=0x0010 ir_opcode=(move    ) mpc= 14 [N=0 Z=1 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  436 pc=0x0010 ir_opcode=(move    ) mpc= 15 [N=0 Z=1 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  436 pc=0x0010 ir_opcode=(move    ) mpc= 15 [N=0 Z=1 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffdc  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  437 pc=0x0010 ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  437 pc=0x0010 ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffdc  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  438 pc=0x0010 ir_opcode=(move    ) mpc= 21 [N=0 Z=1 V=0 C=0] @ WB_PRE_DEC
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  438 pc=0x0010 ir_opcode=(move    ) mpc= 21 [N=0 Z=1 V=0 C=0] @ WB_PRE_DEC
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffdc  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  439 pc=0x0010 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  439 pc=0x0010 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffdc  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  440 pc=0x0014 ir_opcode=(move    ) mpc= 88 [N=0 Z=1 V=0 C=0] @ FAST_MOVE_IR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  440 pc=0x0014 ir_opcode=(move    ) mpc= 88 [N=0 Z=1 V=0 C=0] @ FAST_MOVE_IR
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffdc  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  441 pc=0x0018 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  441 pc=0x0018 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffdc  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  442 pc=0x001c ir_opcode=(move    ) mpc=  8 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  442 pc=0x001c ir_opcode=(move    ) mpc=  8 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffdc  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  443 pc=0x001c ir_opcode=(move    ) mpc=  9 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  443 pc=0x001c ir_opcode=(move    ) mpc=  9 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffdc  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  444 pc=0x001c ir_opcode=(move    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  444 pc=0x001c ir_opcode=(move    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  445 pc=0x001c ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  445 pc=0x001c ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  446 pc=0x001c ir_opcode=(move    ) mpc= 19 [N=0 Z=1 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  446 pc=0x001c ir_opcode=(move    ) mpc= 19 [N=0 Z=1 V=0 C=0] @ WB_REG
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  447 pc=0x001c ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  447 pc=0x001c ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  448 pc=0x0020 ir_opcode=(cmp     ) mpc=113 [N=0 Z=1 V=0 C=0] @ FAST_CMP_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  448 pc=0x0020 ir_opcode=(cmp     ) mpc=113 [N=0 Z=1 V=0 C=0] @ FAST_CMP_RR
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  449 pc=0x0020 ir_opcode=(cmp     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  449 pc=0x0020 ir_opcode=(cmp     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  450 pc=0x0024 ir_opcode=(bne     ) mpc=119 [N=0 Z=1 V=0 C=0] @ FAST_BNE_IMM
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  450 pc=0x0024 ir_opcode=(bne     ) mpc=119 [N=0 Z=1 V=0 C=0] @ FAST_BNE_IMM
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  451 pc=0x0028 ir_opcode=(bne     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  451 pc=0x0028 ir_opcode=(bne     ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  452 pc=0x002c ir_opcode=(move    ) mpc= 88 [N=0 Z=1 V=0 C=0] @ FAST_MOVE_IR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  452 pc=0x002c ir_opcode=(move    ) mpc= 88 [N=0 Z=1 V=0 C=0] @ FAST_MOVE_IR
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  453 pc=0x0030 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  453 pc=0x0030 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  454 pc=0x0034 ir_opcode=(jmp     ) mpc=141 [N=0 Z=0 V=0 C=0] @ FAST_JMP_IMM
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  454 pc=0x0034 ir_opcode=(jmp     ) mpc=141 [N=0 Z=0 V=0 C=0] @ FAST_JMP_IMM
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  455 pc=0x0040 ir_opcode=(jmp     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  455 pc=0x0040 ir_opcode=(jmp     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  456 pc=0x0044 ir_opcode=(cmp     ) mpc=114 [N=0 Z=0 V=0 C=0] @ FAST_CMP_IR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  456 pc=0x0044 ir_opcode=(cmp     ) mpc=114 [N=0 Z=0 V=0 C=0] @ FAST_CMP_IR
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  457 pc=0x0048 ir_opcode=(cmp     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  457 pc=0x0048 ir_opcode=(cmp     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  458 pc=0x004c ir_opcode=(beq     ) mpc=117 [N=0 Z=0 V=0 C=0] @ FAST_BEQ_IMM
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  458 pc=0x004c ir_opcode=(beq     ) mpc=117 [N=0 Z=0 V=0 C=0] @ FAST_BEQ_IMM
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  459 pc=0x0050 ir_opcode=(beq     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  459 pc=0x0050 ir_opcode=(beq     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  460 pc=0x0054 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  460 pc=0x0054 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  461 pc=0x0054 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  461 pc=0x0054 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  462 pc=0x0054 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  462 pc=0x0054 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  463 pc=0x0054 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  463 pc=0x0054 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  464 pc=0x0054 ir_opcode=(move    ) mpc= 19 [N=0 Z=1 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  464 pc=0x0054 ir_opcode=(move    ) mpc= 19 [N=0 Z=1 V=0 C=0] @ WB_REG
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  465 pc=0x0054 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  465 pc=0x0054 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  466 pc=0x0058 ir_opcode=(move    ) mpc=  2 [N=0 Z=1 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  466 pc=0x0058 ir_opcode=(move    ) mpc=  2 [N=0 Z=1 V=0 C=0] @ SRC_REG_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  467 pc=0x0058 ir_opcode=(move    ) mpc= 14 [N=0 Z=1 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  467 pc=0x0058 ir_opcode=(move    ) mpc= 14 [N=0 Z=1 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  468 pc=0x0058 ir_opcode=(move    ) mpc= 15 [N=0 Z=1 V=0 C=0] @ DST_PRE_DEC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  468 pc=0x0058 ir_opcode=(move    ) mpc= 15 [N=0 Z=1 V=0 C=0] @ DST_PRE_DEC_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  469 pc=0x0058 ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  469 pc=0x0058 ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  470 pc=0x0058 ir_opcode=(move    ) mpc= 21 [N=0 Z=1 V=0 C=0] @ WB_PRE_DEC
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  470 pc=0x0058 ir_opcode=(move    ) mpc= 21 [N=0 Z=1 V=0 C=0] @ WB_PRE_DEC
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  471 pc=0x0058 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  471 pc=0x0058 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  472 pc=0x005c ir_opcode=(move    ) mpc= 88 [N=0 Z=1 V=0 C=0] @ FAST_MOVE_IR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  472 pc=0x005c ir_opcode=(move    ) mpc= 88 [N=0 Z=1 V=0 C=0] @ FAST_MOVE_IR
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  473 pc=0x0060 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  473 pc=0x0060 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  474 pc=0x0064 ir_opcode=(move    ) mpc=  4 [N=0 Z=0 V=0 C=0] @ SRC_INDIRECT_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  474 pc=0x0064 ir_opcode=(move    ) mpc=  4 [N=0 Z=0 V=0 C=0] @ SRC_INDIRECT_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  475 pc=0x0064 ir_opcode=(move    ) mpc=  5 [N=0 Z=0 V=0 C=0] @ SRC_INDIRECT_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  475 pc=0x0064 ir_opcode=(move    ) mpc=  5 [N=0 Z=0 V=0 C=0] @ SRC_INDIRECT_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  476 pc=0x0064 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  476 pc=0x0064 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  477 pc=0x0064 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  477 pc=0x0064 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  478 pc=0x0064 ir_opcode=(move    ) mpc= 19 [N=0 Z=1 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  478 pc=0x0064 ir_opcode=(move    ) mpc= 19 [N=0 Z=1 V=0 C=0] @ WB_REG
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  479 pc=0x0064 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  479 pc=0x0064 ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  480 pc=0x0068 ir_opcode=(move    ) mpc=  2 [N=0 Z=1 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  480 pc=0x0068 ir_opcode=(move    ) mpc=  2 [N=0 Z=1 V=0 C=0] @ SRC_REG_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  481 pc=0x0068 ir_opcode=(move    ) mpc= 12 [N=0 Z=1 V=0 C=0] @ DST_INDIRECT_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  481 pc=0x0068 ir_opcode=(move    ) mpc= 12 [N=0 Z=1 V=0 C=0] @ DST_INDIRECT_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  482 pc=0x0068 ir_opcode=(move    ) mpc= 13 [N=0 Z=1 V=0 C=0] @ DST_INDIRECT_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  482 pc=0x0068 ir_opcode=(move    ) mpc= 13 [N=0 Z=1 V=0 C=0] @ DST_INDIRECT_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  483 pc=0x0068 ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  483 pc=0x0068 ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  484 pc=0x0068 ir_opcode=(move    ) mpc= 20 [N=0 Z=0 V=0 C=0] @ WB_INDIRECT
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  484 pc=0x0068 ir_opcode=(move    ) mpc= 20 [N=0 Z=0 V=0 C=0] @ WB_INDIRECT
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  485 pc=0x0068 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  485 pc=0x0068 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  486 pc=0x006c ir_opcode=(move    ) mpc= 87 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  486 pc=0x006c ir_opcode=(move    ) mpc= 87 [N=0 Z=0 V=0 C=0] @ FAST_MOVE_RR
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  487 pc=0x006c ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  487 pc=0x006c ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  488 pc=0x0070 ir_opcode=(move    ) mpc=  8 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  488 pc=0x0070 ir_opcode=(move    ) mpc=  8 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  489 pc=0x0070 ir_opcode=(move    ) mpc=  9 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  489 pc=0x0070 ir_opcode=(move    ) mpc=  9 [N=0 Z=1 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe0  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  490 pc=0x0070 ir_opcode=(move    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  490 pc=0x0070 ir_opcode=(move    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  491 pc=0x0070 ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  491 pc=0x0070 ir_opcode=(move    ) mpc= 23 [N=0 Z=1 V=0 C=0] @ EXEC_MOVE
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  492 pc=0x0070 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  492 pc=0x0070 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
   R0=         0  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  493 pc=0x0070 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  493 pc=0x0070 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  494 pc=0x0074 ir_opcode=(jmp     ) mpc=141 [N=0 Z=0 V=0 C=0] @ FAST_JMP_IMM
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  494 pc=0x0074 ir_opcode=(jmp     ) mpc=141 [N=0 Z=0 V=0 C=0] @ FAST_JMP_IMM
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  495 pc=0x00a8 ir_opcode=(jmp     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  495 pc=0x00a8 ir_opcode=(jmp     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  496 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  496 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  497 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  497 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  498 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  498 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  499 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  499 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  500 pc=0x00a0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  500 pc=0x00a0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  501 pc=0x00a0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  501 pc=0x00a0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  502 pc=0x00a4 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  502 pc=0x00a4 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  503 pc=0x00a4 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  503 pc=0x00a4 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe4  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  504 pc=0x00a4 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  504 pc=0x00a4 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  505 pc=0x00a4 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  505 pc=0x00a4 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  506 pc=0x00a4 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  506 pc=0x00a4 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
   R0=         1  R1=         0  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  507 pc=0x00a4 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  507 pc=0x00a4 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  508 pc=0x00a8 ir_opcode=(mul     ) mpc= 97 [N=0 Z=0 V=0 C=0] @ FAST_MUL_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  508 pc=0x00a8 ir_opcode=(mul     ) mpc= 97 [N=0 Z=0 V=0 C=0] @ FAST_MUL_RR
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  509 pc=0x00a8 ir_opcode=(mul     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  509 pc=0x00a8 ir_opcode=(mul     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  510 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  510 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  511 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  511 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  512 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  512 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  513 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  513 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  514 pc=0x00a0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  514 pc=0x00a0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01e8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  515 pc=0x00a0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  515 pc=0x00a0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  516 pc=0x00a4 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  516 pc=0x00a4 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  517 pc=0x00a4 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  517 pc=0x00a4 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffe8  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  518 pc=0x00a4 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  518 pc=0x00a4 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  519 pc=0x00a4 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  519 pc=0x00a4 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  520 pc=0x00a4 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  520 pc=0x00a4 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
   R0=         1  R1=         1  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  521 pc=0x00a4 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  521 pc=0x00a4 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         1  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  522 pc=0x00a8 ir_opcode=(mul     ) mpc= 97 [N=0 Z=0 V=0 C=0] @ FAST_MUL_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  522 pc=0x00a8 ir_opcode=(mul     ) mpc= 97 [N=0 Z=0 V=0 C=0] @ FAST_MUL_RR
   R0=         1  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  523 pc=0x00a8 ir_opcode=(mul     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  523 pc=0x00a8 ir_opcode=(mul     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         2  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  524 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  524 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         2  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  525 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  525 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         2  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  526 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  526 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=         2  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  527 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  527 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=         2  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  528 pc=0x00a0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  528 pc=0x00a0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=         2  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01ec
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  529 pc=0x00a0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  529 pc=0x00a0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         2  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  530 pc=0x00a4 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  530 pc=0x00a4 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         2  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  531 pc=0x00a4 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  531 pc=0x00a4 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         2  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xffec  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  532 pc=0x00a4 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  532 pc=0x00a4 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         2  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  533 pc=0x00a4 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  533 pc=0x00a4 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         2  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  534 pc=0x00a4 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  534 pc=0x00a4 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
   R0=         2  R1=         2  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  535 pc=0x00a4 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  535 pc=0x00a4 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         2  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  536 pc=0x00a8 ir_opcode=(mul     ) mpc= 97 [N=0 Z=0 V=0 C=0] @ FAST_MUL_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  536 pc=0x00a8 ir_opcode=(mul     ) mpc= 97 [N=0 Z=0 V=0 C=0] @ FAST_MUL_RR
   R0=         2  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  537 pc=0x00a8 ir_opcode=(mul     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  537 pc=0x00a8 ir_opcode=(mul     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         6  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  538 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  538 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=         6  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  539 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  539 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         6  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  540 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  540 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=         6  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  541 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  541 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=         6  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  542 pc=0x00a0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  542 pc=0x00a0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=         6  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f0
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  543 pc=0x00a0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  543 pc=0x00a0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         6  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  544 pc=0x00a4 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  544 pc=0x00a4 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         6  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  545 pc=0x00a4 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  545 pc=0x00a4 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=         6  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff0  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  546 pc=0x00a4 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  546 pc=0x00a4 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=         6  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  547 pc=0x00a4 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  547 pc=0x00a4 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=         6  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  548 pc=0x00a4 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  548 pc=0x00a4 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
   R0=         6  R1=         3  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  549 pc=0x00a4 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  549 pc=0x00a4 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         6  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  550 pc=0x00a8 ir_opcode=(mul     ) mpc= 97 [N=0 Z=0 V=0 C=0] @ FAST_MUL_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  550 pc=0x00a8 ir_opcode=(mul     ) mpc= 97 [N=0 Z=0 V=0 C=0] @ FAST_MUL_RR
   R0=         6  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  551 pc=0x00a8 ir_opcode=(mul     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  551 pc=0x00a8 ir_opcode=(mul     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=        24  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  552 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  552 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=        24  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  553 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  553 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=        24  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  554 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  554 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=        24  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  555 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  555 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=        24  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  556 pc=0x00a0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  556 pc=0x00a0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=        24  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f4
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  557 pc=0x00a0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  557 pc=0x00a0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=        24  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  558 pc=0x00a4 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  558 pc=0x00a4 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=        24  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  559 pc=0x00a4 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  559 pc=0x00a4 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=        24  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff4  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  560 pc=0x00a4 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  560 pc=0x00a4 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=        24  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  561 pc=0x00a4 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  561 pc=0x00a4 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=        24  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  562 pc=0x00a4 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  562 pc=0x00a4 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
   R0=        24  R1=         4  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  563 pc=0x00a4 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  563 pc=0x00a4 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=        24  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  564 pc=0x00a8 ir_opcode=(mul     ) mpc= 97 [N=0 Z=0 V=0 C=0] @ FAST_MUL_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  564 pc=0x00a8 ir_opcode=(mul     ) mpc= 97 [N=0 Z=0 V=0 C=0] @ FAST_MUL_RR
   R0=        24  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  565 pc=0x00a8 ir_opcode=(mul     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  565 pc=0x00a8 ir_opcode=(mul     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=       120  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  566 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  566 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=       120  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  567 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  567 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=       120  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  568 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  568 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=       120  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  569 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  569 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=       120  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  570 pc=0x00a0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  570 pc=0x00a0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=       120  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01f8
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  571 pc=0x00a0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  571 pc=0x00a0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=       120  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  572 pc=0x00a4 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  572 pc=0x00a4 ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=       120  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  573 pc=0x00a4 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  573 pc=0x00a4 ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=       120  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfff8  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  574 pc=0x00a4 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  574 pc=0x00a4 ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=       120  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  575 pc=0x00a4 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  575 pc=0x00a4 ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=       120  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  576 pc=0x00a4 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  576 pc=0x00a4 ir_opcode=(move    ) mpc= 19 [N=0 Z=0 V=0 C=0] @ WB_REG
   R0=       120  R1=         5  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  577 pc=0x00a4 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  577 pc=0x00a4 ir_opcode=(move    ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=       120  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  578 pc=0x00a8 ir_opcode=(mul     ) mpc= 97 [N=0 Z=0 V=0 C=0] @ FAST_MUL_RR
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  578 pc=0x00a8 ir_opcode=(mul     ) mpc= 97 [N=0 Z=0 V=0 C=0] @ FAST_MUL_RR
   R0=       120  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  579 pc=0x00a8 ir_opcode=(mul     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  579 pc=0x00a8 ir_opcode=(mul     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  580 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  580 pc=0x00ac ir_opcode=(ret     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  581 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  581 pc=0x00ac ir_opcode=(ret     ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  582 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  582 pc=0x00ac ir_opcode=(ret     ) mpc= 74 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  583 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  583 pc=0x00ac ir_opcode=(ret     ) mpc= 75 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  584 pc=0x00c0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  584 pc=0x00c0 ir_opcode=(ret     ) mpc= 76 [N=0 Z=0 V=0 C=0] @ EXEC_RET
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x01fc
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  585 pc=0x00c0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  585 pc=0x00c0 ir_opcode=(ret     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  586 pc=0x00c4 ir_opcode=(out     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  586 pc=0x00c4 ir_opcode=(out     ) mpc=  2 [N=0 Z=0 V=0 C=0] @ SRC_REG_FETCH
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  587 pc=0x00c4 ir_opcode=(out     ) mpc= 11 [N=0 Z=0 V=0 C=0] @ DST_IMM_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  587 pc=0x00c4 ir_opcode=(out     ) mpc= 11 [N=0 Z=0 V=0 C=0] @ DST_IMM_FETCH
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  588 pc=0x00c8 ir_opcode=(out     ) mpc= 67 [N=0 Z=0 V=0 C=0] @ EXEC_OUT
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  588 pc=0x00c8 ir_opcode=(out     ) mpc= 67 [N=0 Z=0 V=0 C=0] @ EXEC_OUT
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  589 pc=0x00c8 ir_opcode=(out     ) mpc= 68 [N=0 Z=0 V=0 C=0] @ EXEC_OUT
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  589 pc=0x00c8 ir_opcode=(out     ) mpc= 68 [N=0 Z=0 V=0 C=0] @ EXEC_OUT
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  590 pc=0x00c8 ir_opcode=(out     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  590 pc=0x00c8 ir_opcode=(out     ) mpc=  0 [N=0 Z=0 V=0 C=0] @ FETCH_INSTRUCTION
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  591 pc=0x00cc ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  591 pc=0x00cc ir_opcode=(move    ) mpc=  8 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  592 pc=0x00cc ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  592 pc=0x00cc ir_opcode=(move    ) mpc=  9 [N=0 Z=0 V=0 C=0] @ SRC_POST_INC_FETCH
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0xfffc  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  593 pc=0x00cc ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  593 pc=0x00cc ir_opcode=(move    ) mpc= 10 [N=0 Z=0 V=0 C=0] @ DST_REG_FETCH
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  594 pc=0x00cc ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  594 pc=0x00cc ir_opcode=(move    ) mpc= 23 [N=0 Z=0 V=0 C=0] @ EXEC_MOVE
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  595 pc=0x00cc ir_opcode=(move    ) mpc= 19 [N=0 Z=1 V=0 C=0] @ WB_REG
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  595 pc=0x00cc ir_opcode=(move    ) mpc= 19 [N=0 Z=1 V=0 C=0] @ WB_REG
   R0=       720  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  596 pc=0x00cc ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  596 pc=0x00cc ir_opcode=(move    ) mpc=  0 [N=0 Z=1 V=0 C=0] @ FETCH_INSTRUCTION
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  597 pc=0x00d0 ir_opcode=(halt    ) mpc=  2 [N=0 Z=1 V=0 C=0] @ SRC_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  597 pc=0x00d0 ir_opcode=(halt    ) mpc=  2 [N=0 Z=1 V=0 C=0] @ SRC_REG_FETCH
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  598 pc=0x00d0 ir_opcode=(halt    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  598 pc=0x00d0 ir_opcode=(halt    ) mpc= 10 [N=0 Z=1 V=0 C=0] @ DST_REG_FETCH
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:143 --- tick=  599 pc=0x00d0 ir_opcode=(halt    ) mpc=  1 [N=0 Z=1 V=0 C=0] @ HALT
+  DEBUG    simulator_cli:simulator_cli.py:141 --- tick=  599 pc=0x00d0 ir_opcode=(halt    ) mpc=  1 [N=0 Z=1 V=0 C=0] @ HALT
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200
 
-  DEBUG    simulator_cli:simulator_cli.py:149 --- tick=  599 pc=0x00d0 ir_opcode=(halt    ) mpc=  1 [N=0 Z=1 V=0 C=0] @ HALT
+  DEBUG    simulator_cli:simulator_cli.py:147 --- tick=  599 pc=0x00d0 ir_opcode=(halt    ) mpc=  1 [N=0 Z=1 V=0 C=0] @ HALT
   R0=         0  R1=         6  R2=         0  R3=         0  R4=         0  DSP=0x10000  RSP=0x0200
 machine_err: |
   output: ['720']
